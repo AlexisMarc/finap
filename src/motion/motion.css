@@ -1,0 +1,75 @@
+/* Finap motion — keyframes, clases de entrada y reveal on scroll. */
+
+@keyframes finap-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes finap-slide-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes finap-slide-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(-24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.finap-fade-in {
+  animation: finap-fade-in var(--finap-motion-duration-normal)
+    var(--finap-motion-easing-standard) both;
+}
+
+.finap-slide-in-up {
+  animation: finap-slide-in-up var(--finap-motion-duration-normal)
+    var(--finap-motion-easing-emphasized) both;
+}
+
+.finap-slide-in-left {
+  animation: finap-slide-in-left var(--finap-motion-duration-normal)
+    var(--finap-motion-easing-emphasized) both;
+}
+
+/* Reveal on scroll: estado inicial oculto, se revela con .finap-revealed */
+.finap-reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity var(--finap-motion-duration-slow) var(--finap-motion-easing-standard),
+    transform var(--finap-motion-duration-slow)
+      var(--finap-motion-easing-standard);
+}
+
+.finap-reveal.finap-revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Accesibilidad: sin animaciones cuando el usuario lo prefiere */
+@media (prefers-reduced-motion: reduce) {
+  .finap-fade-in,
+  .finap-slide-in-up,
+  .finap-slide-in-left,
+  .finap-reveal {
+    animation: none;
+    transition: none;
+    opacity: 1;
+    transform: none;
+  }
+}

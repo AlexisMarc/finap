@@ -1,0 +1,11 @@
+/* Finap design tokens — motion (duraciones y easings). */
+
+:root {
+  --finap-motion-duration-fast: 120ms;
+  --finap-motion-duration-normal: 250ms;
+  --finap-motion-duration-slow: 500ms;
+
+  --finap-motion-easing-standard: cubic-bezier(0.2, 0, 0, 1);
+  --finap-motion-easing-emphasized: cubic-bezier(0.05, 0.7, 0.1, 1);
+  --finap-motion-easing-decelerate: cubic-bezier(0, 0, 0.2, 1);
+}
