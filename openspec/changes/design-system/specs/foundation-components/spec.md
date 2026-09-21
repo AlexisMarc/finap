@@ -1,0 +1,90 @@
+# Spec Delta
+
+## Purpose
+
+Define los componentes web base reutilizables (botón, tarjeta, títulos, texto, icono y contenedor) construidos con Lit, que consumen los tokens de diseño y que la landing y las páginas de la SPA reutilizarán.
+
+## ADDED Requirements
+
+### Requirement: finap-button
+
+El sistema SHALL proporcionar un componente `<finap-button>` con variantes (primaria, secundaria, texto), estado deshabilitado y soporte de teclado/accesibilidad.
+
+#### Scenario: Render con variante por defecto
+
+- **WHEN** se renderiza `<finap-button>` sin atributo de variante
+- **THEN** el botón se muestra con el estilo de variante primaria
+
+#### Scenario: Variante explícita
+
+- **WHEN** se renderiza `<finap-button variant="secondary">`
+- **THEN** el botón se muestra con el estilo de la variante secundaria
+
+#### Scenario: Botón deshabilitado
+
+- **WHEN** se renderiza `<finap-button disabled>`
+- **THEN** el botón no responde a clics y se muestra con estilo deshabilitado
+
+#### Scenario: Activación por teclado
+
+- **WHEN** el botón tiene el foco y se presiona Enter o Space
+- **THEN** se dispara el mismo comportamiento que un clic
+
+### Requirement: finap-card
+
+El sistema SHALL proporcionar un componente `<finap-card>` contenedor con elevación y esquinas redondeadas consistentes, con un slot para contenido.
+
+#### Scenario: Contenido proyectado en el slot
+
+- **WHEN** se renderiza `<finap-card>` con contenido en su slot
+- **THEN** el contenido se muestra dentro de la tarjeta con el estilo del design system
+
+### Requirement: finap-heading
+
+El sistema SHALL proporcionar un componente `<finap-heading>` para títulos con niveles semánticos (h1-h6) y estilo tipográfico consistente.
+
+#### Scenario: Nivel semántico
+
+- **WHEN** se renderiza `<finap-heading level="2">`
+- **THEN** el componente renderiza un elemento `h2` con el estilo tipográfico correspondiente
+
+### Requirement: finap-text
+
+El sistema SHALL proporcionar un componente `<finap-text>` para texto de cuerpo con variantes de tamaño.
+
+#### Scenario: Texto de cuerpo
+
+- **WHEN** se renderiza `<finap-text>` con contenido
+- **THEN** el contenido se muestra con el estilo de texto de cuerpo del design system
+
+### Requirement: finap-icon
+
+El sistema SHALL proporcionar un componente `<finap-icon>` que renderiza un icono por nombre desde un conjunto de iconos del design system.
+
+#### Scenario: Icono por nombre
+
+- **WHEN** se renderiza `<finap-icon name="home">`
+- **THEN** se muestra el icono correspondiente al nombre indicado
+
+#### Scenario: Nombre de icono desconocido
+
+- **WHEN** se renderiza `<finap-icon name="no-existe">`
+- **THEN** el componente no renderiza contenido visual roto (icono vacío o fallback)
+
+### Requirement: finap-container
+
+El sistema SHALL proporcionar un componente `<finap-container>` que limita el ancho de contenido y aplica el espaciado responsivo del design system.
+
+#### Scenario: Ancho máximo consistente
+
+- **WHEN** se renderiza `<finap-container>` con contenido
+- **THEN** el contenido queda limitado al ancho máximo definido y centrado
+
+### Requirement: Consumo de tokens de diseño
+
+Todos los componentes base SHALL usar los tokens de diseño (`--finap-*`) para color, tipografía, espaciado y elevación, sin valores hardcodeados.
+
+#### Scenario: Estilos derivados de tokens
+
+- **WHEN** se cambia un token de color (por ejemplo, al alternar el tema)
+- **THEN** los componentes base reflejan el nuevo valor automáticamente
