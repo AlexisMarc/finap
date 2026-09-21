@@ -1,17 +1,13 @@
 import { describe, it, expect } from 'vitest';
 
 import { FinapCard } from './index.js';
+import { fixture, teardown } from '../../test/fixture.js';
 
 describe('finap-card', () => {
   it('proyecta el contenido en el slot', async () => {
-    const el = document.createElement('finap-card') as FinapCard;
-    el.textContent = 'Contenido';
-    document.body.appendChild(el);
-    await el.updateComplete;
-
-    const slot = el.shadowRoot?.querySelector('slot');
-    expect(slot).not.toBeNull();
-    el.remove();
+    const el = await fixture(new FinapCard());
+    expect(el.shadowRoot?.querySelector('slot')).not.toBeNull();
+    teardown(el);
   });
 
   it('usa tokens de diseño para superficie y elevación', () => {

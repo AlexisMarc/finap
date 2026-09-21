@@ -1,30 +1,25 @@
 import { describe, it, expect } from 'vitest';
 
 import { FinapText } from './index.js';
+import { fixture, teardown } from '../../test/fixture.js';
 
 describe('finap-text', () => {
   it('renderiza un <p> con variante body por defecto', async () => {
-    const el = document.createElement('finap-text') as FinapText;
-    el.textContent = 'Texto';
-    document.body.appendChild(el);
-    await el.updateComplete;
+    const el = await fixture(new FinapText());
 
     const p = el.shadowRoot?.querySelector('p');
     expect(p).not.toBeNull();
     expect(p?.classList.contains('body')).toBe(true);
-    el.remove();
+    teardown(el);
   });
 
   it('aplica la variante muted', async () => {
-    const el = document.createElement('finap-text') as FinapText;
+    const el = new FinapText();
     el.variant = 'muted';
-    document.body.appendChild(el);
-    await el.updateComplete;
+    await fixture(el);
 
-    expect(el.shadowRoot?.querySelector('p')?.classList.contains('muted')).toBe(
-      true,
-    );
-    el.remove();
+    expect(el.shadowRoot?.querySelector('p')?.classList.contains('muted')).toBe(true);
+    teardown(el);
   });
 
   it('usa tokens de texto', () => {

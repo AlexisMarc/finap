@@ -1,7 +1,8 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 
-const motionCss = readFileSync(new URL('./motion.css', import.meta.url), 'utf8');
+const motionCss = readFileSync(join(import.meta.dirname, 'motion.css'), 'utf8');
 
 describe('motion.css', () => {
   it('define keyframes de fade y slide', () => {

@@ -4,7 +4,13 @@ import type { ReactiveController } from 'lit';
 import { RevealController } from './reveal.js';
 
 class TestHost extends HTMLElement {
+  updateComplete: Promise<boolean> = Promise.resolve(true);
+
   addController(_controller: ReactiveController): void {}
+
+  removeController(_controller: ReactiveController): void {}
+
+  requestUpdate(_name?: PropertyKey, _oldValue?: unknown): void {}
 }
 
 if (!customElements.get('reveal-test-host')) {
@@ -84,6 +90,7 @@ describe('RevealController', () => {
   });
 
   it('se revela inmediatamente si no hay IntersectionObserver', () => {
+    vi.stubGlobal('IntersectionObserver', undefined);
     const host = document.createElement('reveal-test-host') as TestHost;
     const controller = new RevealController(host);
     controller.hostConnected();

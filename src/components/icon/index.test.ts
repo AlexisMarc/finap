@@ -1,25 +1,24 @@
 import { describe, it, expect } from 'vitest';
 
 import { FinapIcon } from './index.js';
+import { fixture, teardown } from '../../test/fixture.js';
 
 describe('finap-icon', () => {
   it('renderiza un <svg> para un nombre de icono conocido', async () => {
-    const el = document.createElement('finap-icon') as FinapIcon;
+    const el = new FinapIcon();
     el.name = 'home';
-    document.body.appendChild(el);
-    await el.updateComplete;
+    await fixture(el);
 
     expect(el.shadowRoot?.querySelector('svg')).not.toBeNull();
-    el.remove();
+    teardown(el);
   });
 
   it('no renderiza un svg para un nombre desconocido', async () => {
-    const el = document.createElement('finap-icon') as FinapIcon;
+    const el = new FinapIcon();
     el.name = 'no-existe';
-    document.body.appendChild(el);
-    await el.updateComplete;
+    await fixture(el);
 
     expect(el.shadowRoot?.querySelector('svg')).toBeNull();
-    el.remove();
+    teardown(el);
   });
 });

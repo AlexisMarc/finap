@@ -1,8 +1,9 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 
 const typographyCss = readFileSync(
-  new URL('./typography.css', import.meta.url),
+  join(import.meta.dirname, 'typography.css'),
   'utf8',
 );
 

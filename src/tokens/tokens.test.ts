@@ -1,7 +1,8 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 
-const tokensCss = readFileSync(new URL('./tokens.css', import.meta.url), 'utf8');
+const tokensCss = readFileSync(join(import.meta.dirname, 'tokens.css'), 'utf8');
 
 const REQUIRED_TOKENS = [
   '--finap-color-primary',
