@@ -22,9 +22,9 @@ El design system y la landing actuales (gradiente de marca de fondo, logo de cí
 
 ### 0. Skills del proyecto (obligatorio)
 
-- **Decisión**: el rediseño aplica las skills de `.agents/skills/`:
-  - `frontend-design` (`.agents/skills/frontend-design/SKILL.md`) guía la identidad visual: decisiones deliberadas de paleta, tipografía y layout; evitar defaults templados (cards SaaS idénticas, eyebrow ALL-CAPS, gradientes decorativos, un solo border-radius en todo). Grounding en el subject matter (finanzas personales).
-  - `canvas-design` (`.agents/skills/canvas-design/SKILL.md`) produce la **filosofía de diseño** de Finap (`docs/design-philosophy.md`): un movimiento estético propio (forma, color, espacio, composición, jerarquía) que da alma a la identidad.
+- **Decisión**: el rediseño aplica las skills de OpenCode:
+  - `frontend-design` guía la identidad visual: decisiones deliberadas de paleta, tipografía y layout; evitar defaults templados (cards SaaS idénticas, eyebrow ALL-CAPS, gradientes decorativos, un solo border-radius en todo). Grounding en el subject matter (finanzas personales).
+  - `canvas-design` produce la **filosofía de diseño** de Finap (`docs/design-philosophy.md`): un movimiento estético propio (forma, color, espacio, composición, jerarquía) que da alma a la identidad.
 - **Alternativas**: diseñar sin estas guías. Se descarta: son las skills del proyecto y definen el criterio de "distintivo, no templado".
 - **Racional**: el rediseño busca una identidad propia; las skills son la fuente de criterio visual del proyecto.
 

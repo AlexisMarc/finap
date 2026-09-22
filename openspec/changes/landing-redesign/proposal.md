@@ -6,7 +6,7 @@ La landing y el design system actuales no reflejan el estilo esperado (referenci
 
 ## What Changes
 
-- **Skills del proyecto (obligatorio)**: aplicar las skills `frontend-design` y `canvas-design` de `.agents/skills/` para guiar la identidad visual (diseño distintivo, no templado) y crear la filosofía de diseño de Finap.
+- **Skills del proyecto (obligatorio)**: aplicar las skills `frontend-design` y `canvas-design` de OpenCode para guiar la identidad visual (diseño distintivo, no templado) y crear la filosofía de diseño de Finap.
 - **Logo de Finap**: cambiar `finap-brand-mark` de dos círculos a **dos rombos** (identidad propia, no una copia de Mastercard), y usarlo en el header de la landing.
 - **Modo claro/oscuro**: añadir un componente `finap-theme-toggle` (alternar claro/oscuro, persistir y respetar `prefers-color-scheme`) y completar el soporte oscuro de tokens y componentes (cards, botones, gradiente, fondos).
 - **Contenido y estilo de la landing** (referencia Mastercard): header con logo + navegación + toggle, hero con tagline y headline, secciones de contenido en cards, y footer; estilo limpio (fondo claro, acentos rojo/naranja, tipografía grande).

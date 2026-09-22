@@ -2,8 +2,8 @@
 
 ## 0. Skills del proyecto (OBLIGATORIO)
 
-- [ ] 0.1 Aplicar la skill `frontend-design` (`.agents/skills/frontend-design/SKILL.md`) a todo el rediseño: identidad visual deliberada (paleta, tipografía, layout), grounding en finanzas personales, y evitar defaults templados (cards SaaS idénticas, eyebrow ALL-CAPS, gradientes decorativos, single border-radius); verificar que las decisiones de diseño quedan reflejadas en el código y en `design.md`
-- [ ] 0.2 Crear la filosofía de diseño de Finap en `docs/design-philosophy.md` siguiendo la skill `canvas-design` (`.agents/skills/canvas-design/SKILL.md`): un movimiento estético propio (forma, color, espacio, composición, jerarquía); verificar que el documento existe y define la identidad visual
+- [ ] 0.1 Cargar la skill `frontend-design` (OpenCode) y aplicarla a todo el rediseño: identidad visual deliberada (paleta, tipografía, layout), grounding en finanzas personales, y evitar defaults templados (cards SaaS idénticas, eyebrow ALL-CAPS, gradientes decorativos, single border-radius); verificar que las decisiones de diseño quedan reflejadas en el código y en `design.md`
+- [ ] 0.2 Cargar la skill `canvas-design` (OpenCode) y crear la filosofía de diseño de Finap en `docs/design-philosophy.md`: un movimiento estético propio (forma, color, espacio, composición, jerarquía); verificar que el documento existe y define la identidad visual
 
 ## 1. Logo de Finap (dos rombos)
 

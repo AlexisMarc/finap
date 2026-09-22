@@ -9,25 +9,26 @@ export class FinapBrandMark extends LitElement {
     .mark {
       position: relative;
       width: 48px;
-      height: 48px;
+      height: 32px;
       display: block;
     }
 
-    .circle {
+    .rhombus {
       position: absolute;
-      top: 8px;
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
+      top: 4px;
+      width: 24px;
+      height: 24px;
+      transform: rotate(45deg);
+      border-radius: 2px;
     }
 
-    .circle--primary {
-      left: 4px;
+    .rhombus--primary {
+      left: 6px;
       background-color: var(--finap-color-primary);
     }
 
-    .circle--secondary {
-      right: 4px;
+    .rhombus--secondary {
+      right: 6px;
       background-color: var(--finap-color-secondary);
       mix-blend-mode: multiply;
     }
@@ -36,8 +37,8 @@ export class FinapBrandMark extends LitElement {
   render() {
     return html`
       <span class="mark" aria-hidden="true">
-        <span class="circle circle--primary"></span>
-        <span class="circle circle--secondary"></span>
+        <span class="rhombus rhombus--primary"></span>
+        <span class="rhombus rhombus--secondary"></span>
       </span>
     `;
   }

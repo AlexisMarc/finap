@@ -53,6 +53,11 @@ export const styles = css`
     opacity: 0.5;
   }
 
+  button:focus-visible {
+    outline: 2px solid var(--finap-color-secondary);
+    outline-offset: 2px;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     button {
       transition: none;
