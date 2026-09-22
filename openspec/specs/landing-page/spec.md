@@ -6,28 +6,37 @@ Define la landing page de Finap, la página de entrada a la SPA, que presenta el
 
 ## Requirements
 
-### Requirement: Hero con gradiente de marca
+### Requirement: Header con logo, navegación y toggle
 
-El sistema SHALL renderizar una sección hero con titular, subtítulo y llamada a la acción (CTA), usando el gradiente de marca (rojo → naranja → amarillo).
+El sistema SHALL renderizar un header en la landing con el logo de Finap (dos rombos), la navegación principal y el toggle de tema.
+
+#### Scenario: Header visible
+
+- **WHEN** se renderiza la landing
+- **THEN** se muestra un header con logo, navegación y toggle de tema
+
+### Requirement: Hero con tagline y headline
+
+El sistema SHALL renderizar un hero con tagline, headline principal y llamada a la acción (CTA), usando acentos de la paleta de marca sobre fondo claro.
 
 #### Scenario: Hero visible
 
-- **WHEN** se renderiza la landing page
-- **THEN** se muestra un hero con titular y un CTA
+- **WHEN** se renderiza la landing
+- **THEN** se muestra un hero con tagline, headline y un CTA
 
-#### Scenario: Gradiente de marca en el hero
+#### Scenario: Acentos de marca sobre fondo claro
 
 - **WHEN** se renderiza el hero
-- **THEN** el hero aplica el gradiente de marca compuesto por los tres colores de la paleta (rojo, naranja y amarillo)
+- **THEN** el hero usa acentos de la paleta (rojo/naranja) sobre fondo claro, sin un fondo de gradiente completo
 
-### Requirement: Sección de features
+### Requirement: Secciones de contenido
 
-El sistema SHALL presentar las capacidades principales del producto (dashboard, movimientos, presupuestos y categorías) en una sección de features.
+El sistema SHALL presentar el contenido de la landing en secciones (producto, funcionalidades y llamadas a la acción) con cards, siguiendo la estructura de la referencia Mastercard.
 
-#### Scenario: Features listadas
+#### Scenario: Secciones listadas
 
-- **WHEN** se renderiza la landing page
-- **THEN** se muestran las features del producto con título y descripción
+- **WHEN** se renderiza la landing
+- **THEN** se muestran secciones de contenido con título y cards
 
 ### Requirement: Footer
 
