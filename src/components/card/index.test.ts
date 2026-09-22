@@ -13,7 +13,7 @@ describe('finap-card', () => {
   it('usa tokens de diseño para superficie y elevación', () => {
     const cssText = FinapCard.styles.cssText;
     expect(cssText).toContain('var(--finap-color-surface)');
-    expect(cssText).toContain('var(--finap-shadow-md)');
+    expect(cssText).toContain('var(--finap-shadow-sm)');
     expect(cssText).toContain('var(--finap-radius-lg)');
   });
 });

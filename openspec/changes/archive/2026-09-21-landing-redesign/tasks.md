@@ -1,0 +1,38 @@
+# Tasks
+
+## 0. Skills del proyecto (OBLIGATORIO)
+
+- [x] 0.1 Cargar la skill `frontend-design` (OpenCode) y aplicarla a todo el rediseño: identidad visual deliberada (paleta, tipografía, layout), grounding en finanzas personales, y evitar defaults templados (cards SaaS idénticas, eyebrow ALL-CAPS, gradientes decorativos, single border-radius); verificar que las decisiones de diseño quedan reflejadas en el código y en `design.md`
+- [x] 0.2 Cargar la skill `canvas-design` (OpenCode) y crear la filosofía de diseño de Finap en `docs/design-philosophy.md`: un movimiento estético propio (forma, color, espacio, composición, jerarquía); verificar que el documento existe y define la identidad visual
+
+## 1. Logo de Finap (dos rombos)
+
+- [x] 1.1 Cambiar `src/components/brand-mark/index.ts` de dos círculos a dos rombos solapados; verificar que el test de brand-mark valida rombos (no círculos)
+
+## 2. Modo claro/oscuro
+
+- [x] 2.1 Añadir el evento `finap-theme-changed` en `src/theme/theme.ts` al aplicar el tema; verificar que el test de theme cubre el evento
+- [x] 2.2 Crear `src/components/theme-toggle/index.ts` (alterna claro/oscuro, refleja estado y persiste) con su test; verificar que el test de toggle pasa
+- [x] 2.3 Completar la cobertura oscura en `src/theme/theme.css` y tokens (fondos, acentos y gradiente de marca); verificar que el test de contraste/valores oscuros pasa
+
+## 3. Landing al estilo Mastercard
+
+- [x] 3.1 Rehacer el header de `src/pages/landing-page.ts` (logo de rombos + navegación + toggle); verificar que el test de header pasa
+- [x] 3.2 Rehacer el hero (tagline + headline + CTA sobre fondo claro con acentos); verificar que el test de hero pasa
+- [x] 3.3 Rehacer las secciones de contenido (cards) y el footer; verificar que el test de secciones/footer pasa
+
+## 4. Ajustes de estilo del design system
+
+- [x] 4.1 Afinar la escala tipográfica de titulares en `src/tokens/typography.css`; verificar que el test de tipografía pasa
+- [x] 4.2 Refinar estilos de cards y botones (`card`/`button`) hacia un look más limpio; verificar que los tests de card y button siguen pasando
+
+## 5. Tests
+
+- [x] 5.1 Actualizar el test de `landing-page` (header, hero, secciones, footer y toggle presente)
+- [x] 5.2 Añadir tests de `theme-toggle` y de cobertura oscura de tokens
+
+## 6. Validación
+
+- [x] 6.1 Ejecutar `npm run test` y confirmar que toda la suite pasa sin fallos
+- [x] 6.2 Ejecutar `npm run build` y confirmar que el build de producción compila sin errores
+- [x] 6.3 Ejecutar `openspec validate landing-redesign --strict` y confirmar que el change valida correctamente

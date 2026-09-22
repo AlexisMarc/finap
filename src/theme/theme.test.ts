@@ -5,6 +5,7 @@ import {
   setTheme,
   resolveTheme,
   applyTheme,
+  THEME_CHANGED_EVENT,
 } from './theme.js';
 
 function mockMatchMedia(dark: boolean) {
@@ -65,5 +66,16 @@ describe('theme', () => {
   it('applyTheme establece el atributo data-theme', () => {
     applyTheme('dark');
     expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
+  });
+
+  it('emite el evento finap-theme-changed al aplicar el tema', () => {
+    const listener = vi.fn();
+    document.documentElement.addEventListener(THEME_CHANGED_EVENT, listener);
+
+    setTheme('dark');
+
+    expect(listener).toHaveBeenCalledTimes(1);
+    expect((listener.mock.calls[0][0] as CustomEvent).detail).toBe('dark');
+    document.documentElement.removeEventListener(THEME_CHANGED_EVENT, listener);
   });
 });

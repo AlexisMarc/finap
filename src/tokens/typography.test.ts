@@ -16,6 +16,8 @@ describe('typography.css', () => {
     '--finap-font-size-xs',
     '--finap-font-size-md',
     '--finap-font-size-3xl',
+    '--finap-font-size-4xl',
+    '--finap-letter-spacing-tight',
     '--finap-font-weight-regular',
     '--finap-font-weight-bold',
     '--finap-line-height-tight',

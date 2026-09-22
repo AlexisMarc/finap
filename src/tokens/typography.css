@@ -12,6 +12,10 @@
   --finap-font-size-xl: 28px;
   --finap-font-size-2xl: 40px;
   --finap-font-size-3xl: 56px;
+  --finap-font-size-4xl: 80px;
+
+  /* Tracking */
+  --finap-letter-spacing-tight: -0.02em;
 
   /* Pesos */
   --finap-font-weight-regular: 400;

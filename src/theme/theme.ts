@@ -2,6 +2,8 @@ export type Theme = 'light' | 'dark';
 
 const STORAGE_KEY = 'finap-theme';
 
+export const THEME_CHANGED_EVENT = 'finap-theme-changed';
+
 export function getSystemTheme(): Theme {
   return window.matchMedia('(prefers-color-scheme: dark)').matches
     ? 'dark'
@@ -19,6 +21,11 @@ export function resolveTheme(): Theme {
 
 export function applyTheme(theme: Theme): void {
   document.documentElement.setAttribute('data-theme', theme);
+  document.documentElement.dispatchEvent(
+    new CustomEvent<Theme>(THEME_CHANGED_EVENT, {
+      detail: theme,
+    }),
+  );
 }
 
 export function setTheme(theme: Theme): void {

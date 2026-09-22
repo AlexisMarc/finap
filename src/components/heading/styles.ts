@@ -14,6 +14,7 @@ export const styles = css`
     font-family: var(--finap-font-family);
     font-weight: var(--finap-font-weight-bold);
     line-height: var(--finap-line-height-tight);
+    letter-spacing: var(--finap-letter-spacing-tight);
     margin: 0 0 var(--finap-space-3);
     color: var(--finap-color-text);
   }
