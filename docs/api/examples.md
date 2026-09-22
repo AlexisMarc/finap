@@ -143,6 +143,22 @@ Response `200`:
 }
 ```
 
+### GET `/analysis/evolution?from=2025-01-01&to=2025-05-31&interval=month`
+
+Response `200`:
+
+```json
+{
+  "points": [
+    { "label": "Ene", "income": 6100.0, "expense": 3200.0 },
+    { "label": "Feb", "income": 5900.0, "expense": 3600.0 },
+    { "label": "Mar", "income": 6400.0, "expense": 3400.0 },
+    { "label": "Abr", "income": 6050.0, "expense": 3520.0 },
+    { "label": "May", "income": 6200.0, "expense": 3480.0 }
+  ]
+}
+```
+
 ## Dashboard
 
 ### GET `/dashboard?month=2025-05`

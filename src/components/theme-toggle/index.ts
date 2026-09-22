@@ -1,6 +1,7 @@
 import { LitElement, html, css } from 'lit';
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 
+import { LocalizeController } from '../../i18n/localize.js';
 import {
   resolveTheme,
   setTheme,
@@ -54,6 +55,8 @@ export class FinapThemeToggle extends LitElement {
 
   theme: Theme = 'light';
 
+  private _localize = new LocalizeController(this);
+
   private _onThemeChanged = (event: Event) => {
     this.theme = (event as CustomEvent<Theme>).detail;
   };
@@ -82,11 +85,14 @@ export class FinapThemeToggle extends LitElement {
   render() {
     const isDark = this.theme === 'dark';
     const icon = isDark ? SUN_ICON : MOON_ICON;
+    const label = this._localize.t(
+      isDark ? 'theme.toggle.toLight' : 'theme.toggle.toDark',
+    );
     return html`
       <button
         type="button"
         class="toggle"
-        aria-label=${isDark ? 'Cambiar a tema claro' : 'Cambiar a tema oscuro'}
+        aria-label=${label}
         @click=${this._toggle}
       >
         <svg

@@ -19,9 +19,9 @@ Ver `proposal.md`. El proyecto usa Vite; la opción estándar es `vite-plugin-pw
 
 ### 3. Cola de mutaciones (background sync)
 
-- **Decisión**: `src/pwa/offline-queue.ts` usa IndexedDB (vía `idb`) para encolar `POST/PATCH/DELETE` fallidos por falta de red; Workbox `BackgroundSyncPlugin` los reintenta al reconectar. La UI aplica actualización optimista.
-- **Alternativas**: reintentar solo en memoria (se pierde al cerrar). Se descarta.
-- **Racional**: persistencia y sincronización automática.
+- **Decisión**: Workbox `BackgroundSyncPlugin` (configurado en el SW para `POST` a la API) reintenta las mutaciones al reconectar. A nivel de app, `src/pwa/offline-queue.ts` mantiene una cola en `localStorage` (encolar/listar/limpiar/`flush`) que el banner offline puede sincronizar manualmente.
+- **Alternativas**: IndexedDB (diseño original). Se usa `localStorage` por simplicidad y testabilidad en `happy-dom`; IndexedDB queda como mejora para volúmenes grandes.
+- **Racional**: persistencia + sincronización automática (SW) y una vía manual (banner). La UI refresca al confirmarse la operación; la actualización totalmente optimista queda como mejora.
 
 ### 4. Indicador de conexión y actualización
 

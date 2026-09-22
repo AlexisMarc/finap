@@ -97,6 +97,16 @@ export interface AnalysisSummary {
   categories: CategoryBreakdown[];
 }
 
+export interface AnalysisPoint {
+  label: string;
+  income: number;
+  expense: number;
+}
+
+export interface AnalysisEvolution {
+  points: AnalysisPoint[];
+}
+
 export interface DashboardSummary {
   balance: number;
   income: number;

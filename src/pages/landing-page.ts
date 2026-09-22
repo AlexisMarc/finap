@@ -1,6 +1,7 @@
 import { LitElement, html, css } from 'lit';
 
 import { RevealController } from '../motion/reveal.js';
+import { LocalizeController } from '../i18n/localize.js';
 
 import '../components/button/index.js';
 import '../components/heading/index.js';
@@ -9,24 +10,25 @@ import '../components/icon/index.js';
 import '../components/container/index.js';
 import '../components/brand-mark/index.js';
 import '../components/theme-toggle/index.js';
+import '../components/language-toggle/index.js';
 
 const FEATURES = [
   {
     icon: 'home',
-    title: 'Dashboard',
-    description: 'Tu saldo, ingresos y gastos en una sola vista.',
+    titleKey: 'landing.feature.dashboard.title',
+    descriptionKey: 'landing.feature.dashboard.description',
     color: 'var(--finap-color-primary)',
   },
   {
     icon: 'arrow-right',
-    title: 'Movimientos',
-    description: 'Cada transacción, ordenada y filtrable.',
+    titleKey: 'landing.feature.movements.title',
+    descriptionKey: 'landing.feature.movements.description',
     color: 'var(--finap-color-secondary)',
   },
   {
     icon: 'check',
-    title: 'Presupuestos',
-    description: 'Límites por categoría con progreso visible.',
+    titleKey: 'landing.feature.budgets.title',
+    descriptionKey: 'landing.feature.budgets.description',
     color: 'var(--finap-color-accent)',
   },
 ];
@@ -159,6 +161,8 @@ export class LandingPage extends LitElement {
     }
   `;
 
+  private _localize = new LocalizeController(this);
+
   private _scrollTo(id: string) {
     return (event: Event) => {
       event.preventDefault();
@@ -172,18 +176,24 @@ export class LandingPage extends LitElement {
   }
 
   render() {
+    const t = (key: string) => this._localize.t(key);
     return html`
       <header class="site-header">
         <finap-container>
           <div class="header-inner">
             <a class="brand" href="#">
               <finap-brand-mark></finap-brand-mark>
-              <span class="brand__name">Finap</span>
+              <span class="brand__name">${t('app.name')}</span>
             </a>
             <nav class="nav" aria-label="Principal">
-              <a href="#funciones" @click=${this._scrollTo('funciones')}>Funciones</a>
-              <a href="#presupuestos" @click=${this._scrollTo('presupuestos')}>Presupuestos</a>
+              <a href="#funciones" @click=${this._scrollTo('funciones')}>
+                ${t('nav.functions')}
+              </a>
+              <a href="#presupuestos" @click=${this._scrollTo('presupuestos')}>
+                ${t('nav.budgets')}
+              </a>
             </nav>
+            <finap-language-toggle></finap-language-toggle>
             <finap-theme-toggle></finap-theme-toggle>
           </div>
         </finap-container>
@@ -193,14 +203,13 @@ export class LandingPage extends LitElement {
         <finap-container>
           <div class="hero__grid">
             <div class="hero__content">
-              <finap-heading level="1">Tu dinero, en orden.</finap-heading>
-              <finap-text variant="large">
-                Finap reúne saldo, gastos e ingresos en un solo lugar, para que
-                siempre sepas dónde estás.
-              </finap-text>
+              <finap-heading level="1">${t('landing.hero.headline')}</finap-heading>
+              <finap-text variant="large">${t('landing.hero.subtitle')}</finap-text>
               <div class="hero__actions">
-                <finap-button>Empezar</finap-button>
-                <finap-button variant="secondary">Ver cómo funciona</finap-button>
+                <finap-button>${t('landing.hero.cta')}</finap-button>
+                <finap-button variant="secondary">
+                  ${t('landing.hero.secondary')}
+                </finap-button>
               </div>
             </div>
             <div class="hero__mark" aria-hidden="true"></div>
@@ -210,7 +219,7 @@ export class LandingPage extends LitElement {
 
       <section class="section" id="funciones">
         <finap-container>
-          <finap-heading level="2">Funciones</finap-heading>
+          <finap-heading level="2">${t('landing.features.title')}</finap-heading>
           <div class="features">
             ${FEATURES.map(
               (feature) => html`
@@ -219,8 +228,8 @@ export class LandingPage extends LitElement {
                     name=${feature.icon}
                     style="color: ${feature.color}"
                   ></finap-icon>
-                  <finap-heading level="3">${feature.title}</finap-heading>
-                  <finap-text>${feature.description}</finap-text>
+                  <finap-heading level="3">${t(feature.titleKey)}</finap-heading>
+                  <finap-text>${t(feature.descriptionKey)}</finap-text>
                 </div>
               `,
             )}
@@ -231,12 +240,9 @@ export class LandingPage extends LitElement {
       <section class="section section--alt" id="presupuestos">
         <finap-container>
           <div class="highlight">
-            <finap-heading level="2">Presupuestos que se mantienen solos</finap-heading>
-            <finap-text>
-              Define límites por categoría y Finap te muestra el progreso, para
-              que nunca te pases.
-            </finap-text>
-            <finap-button>Empezar</finap-button>
+            <finap-heading level="2">${t('landing.highlight.title')}</finap-heading>
+            <finap-text>${t('landing.highlight.body')}</finap-text>
+            <finap-button>${t('landing.highlight.cta')}</finap-button>
           </div>
         </finap-container>
       </section>
@@ -245,7 +251,7 @@ export class LandingPage extends LitElement {
         <finap-container>
           <div class="footer-inner">
             <finap-brand-mark></finap-brand-mark>
-            <finap-text variant="small">© 2026 Finap — Gestor de finanzas personales.</finap-text>
+            <finap-text variant="small">${t('landing.footer')}</finap-text>
           </div>
         </finap-container>
       </footer>

@@ -3,6 +3,7 @@ export interface SessionUser {
   name: string;
   email: string;
   avatarUrl?: string;
+  currency?: string;
 }
 
 export interface Session {
@@ -36,6 +37,16 @@ export function hasSession(): boolean {
 
 export function getUser(): SessionUser | null {
   return getSession()?.user ?? null;
+}
+
+export function getCurrency(): string {
+  return getSession()?.user.currency ?? 'USD';
+}
+
+export function setCurrency(currency: string): void {
+  const session = getSession();
+  if (!session) return;
+  setSession({ ...session, user: { ...session.user, currency } });
 }
 
 export function setSession(session: Session): void {

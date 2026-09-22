@@ -63,6 +63,7 @@ Ver convenciones en [README](./README.md) y tipos en [types](./types.md).
 |--------|------|---------|----------|
 | GET | `/analysis/summary` | query `from`, `to` | `200 AnalysisSummary` |
 | GET | `/analysis/by-category` | query `from`, `to`, `type` | `200 CategoryBreakdown[]` |
+| GET | `/analysis/evolution` | query `from`, `to`, `interval` (`day`\|`week`\|`month`) | `200 AnalysisEvolution` |
 
 ## Dashboard
 

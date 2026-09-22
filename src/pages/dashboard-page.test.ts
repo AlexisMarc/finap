@@ -58,6 +58,7 @@ describe('dashboard-page', () => {
     expect(root.querySelector('finap-dashboard-categories')).not.toBeNull();
     expect(root.querySelector('finap-dashboard-debts')).not.toBeNull();
     expect(root.querySelector('finap-dashboard-recent')).not.toBeNull();
+    expect(root.querySelector('finap-assistant-chat')).not.toBeNull();
     teardown(el);
   });
 

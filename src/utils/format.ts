@@ -1,6 +1,8 @@
+import { getCurrency } from '../state/session.js';
+
 export function formatCurrency(
   value: number,
-  currency: string = 'USD',
+  currency: string = getCurrency(),
   locale: string = 'en-US',
 ): string {
   return new Intl.NumberFormat(locale, {

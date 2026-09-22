@@ -7,10 +7,12 @@ import '../components/dashboard-summary/index.js';
 import '../components/dashboard-categories/index.js';
 import '../components/dashboard-debts/index.js';
 import '../components/dashboard-recent/index.js';
+import '../components/assistant-chat/index.js';
 
 import { getDashboard } from '../services/dashboard-service.js';
 import { getUser } from '../state/session.js';
 import { TRANSACTIONS_CHANGED_EVENT } from '../state/transactions.js';
+import { DEBTS_CHANGED_EVENT } from '../state/debts.js';
 import type { DashboardSummary } from '../services/types.js';
 
 export class DashboardPage extends LitElement {
@@ -64,6 +66,7 @@ export class DashboardPage extends LitElement {
     super.connectedCallback();
     this._userName = getUser()?.name ?? '';
     window.addEventListener(TRANSACTIONS_CHANGED_EVENT, this._onTransactionsChanged);
+    window.addEventListener(DEBTS_CHANGED_EVENT, this._onTransactionsChanged);
     void this._load();
   }
 
@@ -72,6 +75,7 @@ export class DashboardPage extends LitElement {
       TRANSACTIONS_CHANGED_EVENT,
       this._onTransactionsChanged,
     );
+    window.removeEventListener(DEBTS_CHANGED_EVENT, this._onTransactionsChanged);
     super.disconnectedCallback();
   }
 
@@ -164,6 +168,10 @@ export class DashboardPage extends LitElement {
               ></finap-dashboard-recent>
             </finap-card>
           </div>
+
+          <finap-card>
+            <finap-assistant-chat></finap-assistant-chat>
+          </finap-card>
         </div>
       </finap-container>
     `;

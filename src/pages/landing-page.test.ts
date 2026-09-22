@@ -1,9 +1,15 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 
 import { LandingPage } from './landing-page.js';
 import { fixture, teardown } from '../test/fixture.js';
+import { setLocale } from '../i18n/i18n.js';
 
 describe('landing-page', () => {
+  beforeEach(() => {
+    localStorage.clear();
+    setLocale('es');
+  });
+
   it('renderiza header, hero, funciones y footer', async () => {
     const el = await fixture(new LandingPage());
 
@@ -49,6 +55,26 @@ describe('landing-page', () => {
   it('se revela al conectar (entrada orquestada)', async () => {
     const el = await fixture(new LandingPage());
     expect(el.classList.contains('finap-reveal')).toBe(true);
+    teardown(el);
+  });
+
+  it('muestra el selector de idioma en el header', async () => {
+    const el = await fixture(new LandingPage());
+    expect(
+      el.shadowRoot?.querySelector('.site-header finap-language-toggle'),
+    ).not.toBeNull();
+    teardown(el);
+  });
+
+  it('traduce el contenido al cambiar de idioma', async () => {
+    const el = await fixture(new LandingPage());
+
+    setLocale('en');
+    await el.updateComplete;
+
+    expect(el.shadowRoot?.querySelector('.hero finap-heading')?.textContent).toContain(
+      'Your money',
+    );
     teardown(el);
   });
 });

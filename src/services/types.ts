@@ -74,3 +74,26 @@ export interface Paginated<T> {
   page: number;
   pageSize: number;
 }
+
+export interface AnalysisSummary {
+  income: number;
+  expense: number;
+  debt: number;
+  balance: number;
+  trend: number;
+  categories: CategoryBreakdown[];
+}
+
+export interface AnalysisPoint {
+  label: string;
+  income: number;
+  expense: number;
+}
+
+export interface AnalysisEvolution {
+  points: AnalysisPoint[];
+}
+
+export interface AssistantAnswer {
+  answer: string;
+}
