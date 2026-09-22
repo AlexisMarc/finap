@@ -4,6 +4,7 @@ import '../input/index.js';
 import '../select/index.js';
 import '../chip/index.js';
 import '../button/index.js';
+import { LocalizeController } from '../../i18n/localize.js';
 import type {
   Category,
   Transaction,
@@ -24,10 +25,10 @@ interface FormErrors {
   date?: string;
 }
 
-const TYPE_OPTIONS: Array<{ id: TransactionType; label: string }> = [
-  { id: 'expense', label: 'Gasto' },
-  { id: 'income', label: 'Ingreso' },
-  { id: 'debt', label: 'Deuda' },
+const TYPE_OPTIONS: Array<{ id: TransactionType; labelKey: string }> = [
+  { id: 'expense', labelKey: 'transactions.type.expense' },
+  { id: 'income', labelKey: 'transactions.type.income' },
+  { id: 'debt', labelKey: 'transactions.type.debt' },
 ];
 
 function today(): string {
@@ -102,6 +103,8 @@ export class FinapTransactionForm extends LitElement {
 
   note = '';
 
+  private _localize = new LocalizeController(this);
+
   willUpdate(changed: Map<PropertyKey, unknown>): void {
     if (changed.has('transaction') && this.transaction) {
       this.type = this.transaction.type;
@@ -145,10 +148,12 @@ export class FinapTransactionForm extends LitElement {
     const amount = Number(this.amount);
     const errors: FormErrors = {};
     if (!this.amount || Number.isNaN(amount) || amount <= 0) {
-      errors.amount = 'Introduce un importe válido';
+      errors.amount = this._localize.t('transactions.error.amount');
     }
-    if (!this.categoryId) errors.categoryId = 'Selecciona una categoría';
-    if (!this.date) errors.date = 'Selecciona una fecha';
+    if (!this.categoryId) {
+      errors.categoryId = this._localize.t('transactions.error.category');
+    }
+    if (!this.date) errors.date = this._localize.t('transactions.error.date');
 
     if (Object.keys(errors).length > 0) {
       this.errors = errors;
@@ -172,6 +177,7 @@ export class FinapTransactionForm extends LitElement {
   }
 
   render() {
+    const t = (key: string) => this._localize.t(key);
     return html`
       <div class="form">
         <div class="types">
@@ -182,13 +188,13 @@ export class FinapTransactionForm extends LitElement {
                 ?selected=${this.type === option.id}
                 @click=${() => (this.type = option.id)}
               >
-                ${option.label}
+                ${t(option.labelKey)}
               </finap-chip>
             `,
           )}
         </div>
         <finap-input
-          label="Importe"
+          label=${t('transactions.amount')}
           type="number"
           placeholder="0.00"
           .value=${this.amount}
@@ -196,32 +202,33 @@ export class FinapTransactionForm extends LitElement {
           @finap-input=${this._onAmount}
         ></finap-input>
         <finap-select
-          label="Categoría"
+          label=${t('transactions.category')}
           .value=${this.categoryId}
           .options=${this._categoryOptions}
           error=${this.errors.categoryId ?? ''}
           @finap-change=${this._onCategory}
         ></finap-select>
         <finap-input
-          label="Fecha"
+          label=${t('transactions.date')}
           type="date"
           .value=${this.date}
           error=${this.errors.date ?? ''}
           @finap-input=${this._onDate}
         ></finap-input>
         <finap-input
-          label="Nota (opcional)"
+          label=${t('transactions.note')}
           type="textarea"
+          placeholder=${t('transactions.notePlaceholder')}
           .value=${this.note}
           @finap-input=${this._onNote}
         ></finap-input>
         <p class="error" ?hidden=${!this.error}>${this.error}</p>
         <div class="actions">
           <finap-button variant="secondary" @click=${this._cancel}>
-            Cancelar
+            ${t('common.cancel')}
           </finap-button>
           <finap-button ?disabled=${this.saving} @click=${this._submit}>
-            ${this.saving ? 'Guardando…' : 'Guardar'}
+            ${this.saving ? t('common.saving') : t('common.save')}
           </finap-button>
         </div>
       </div>

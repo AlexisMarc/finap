@@ -2,6 +2,7 @@ import { LitElement, html, css } from 'lit';
 
 import '../input/index.js';
 import '../button/index.js';
+import { LocalizeController } from '../../i18n/localize.js';
 
 const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 
@@ -43,6 +44,8 @@ export class FinapLoginForm extends LitElement {
 
   passwordError = '';
 
+  private _localize = new LocalizeController(this);
+
   private _email = '';
 
   private _password = '';
@@ -69,12 +72,12 @@ export class FinapLoginForm extends LitElement {
 
     const email = this._email.trim();
     if (!email) {
-      this.emailError = 'El email es obligatorio';
+      this.emailError = this._localize.t('login.error.emailRequired');
     } else if (!EMAIL_RE.test(email)) {
-      this.emailError = 'Introduce un email válido';
+      this.emailError = this._localize.t('login.error.emailInvalid');
     }
     if (!this._password) {
-      this.passwordError = 'La contraseña es obligatoria';
+      this.passwordError = this._localize.t('login.error.passwordRequired');
     }
 
     if (this.emailError || this.passwordError) return;
@@ -89,17 +92,18 @@ export class FinapLoginForm extends LitElement {
   }
 
   render() {
+    const t = (key: string) => this._localize.t(key);
     return html`
       <form class="form" @submit=${(e: Event) => e.preventDefault()} @keydown=${this._onKeydown}>
         <finap-input
-          label="Email"
+          label=${t('login.email')}
           type="email"
           placeholder="tu@email.com"
           error=${this.emailError}
           @finap-input=${this._onEmail}
         ></finap-input>
         <finap-input
-          label="Contraseña"
+          label=${t('login.password')}
           type="password"
           placeholder="••••••••"
           error=${this.passwordError}
@@ -107,7 +111,7 @@ export class FinapLoginForm extends LitElement {
         ></finap-input>
         <p class="error" ?hidden=${!this.error}>${this.error}</p>
         <finap-button @click=${this._submit}>
-          ${this.loading ? 'Entrando…' : 'Entrar'}
+          ${this.loading ? t('login.submitting') : t('login.submit')}
         </finap-button>
       </form>
     `;

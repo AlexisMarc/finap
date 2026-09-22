@@ -1,6 +1,7 @@
 import { LitElement, html, css } from 'lit';
 
 import '../progress/index.js';
+import { LocalizeController } from '../../i18n/localize.js';
 import { formatCurrency, formatPercent } from '../../utils/format.js';
 import type { Budget, Category } from '../../services/types.js';
 
@@ -65,6 +66,8 @@ export class FinapBudgetItem extends LitElement {
 
   category: Category | null = null;
 
+  private _localize = new LocalizeController(this);
+
   private get _percent(): number {
     if (!this.budget || this.budget.limit <= 0) return 0;
     return (this.budget.spent / this.budget.limit) * 100;
@@ -93,7 +96,9 @@ export class FinapBudgetItem extends LitElement {
         ></finap-progress>
         <div class="meta">
           <span>${formatPercent(this._percent)}</span>
-          ${over ? html`<span class="over">Excedido</span>` : ''}
+          ${over
+            ? html`<span class="over">${this._localize.t('budgets.over')}</span>`
+            : ''}
         </div>
       </div>
     `;

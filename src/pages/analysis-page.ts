@@ -14,6 +14,7 @@ import {
   getEvolution,
   type AnalysisInterval,
 } from '../services/analysis-service.js';
+import { LocalizeController } from '../i18n/localize.js';
 import type {
   AnalysisPoint,
   AnalysisSummary,
@@ -22,10 +23,10 @@ import type {
 
 type Period = 'month' | 'quarter' | 'year';
 
-const PERIODS: Array<{ id: Period; label: string }> = [
-  { id: 'month', label: 'Mes' },
-  { id: 'quarter', label: 'Trimestre' },
-  { id: 'year', label: 'Año' },
+const PERIODS: Array<{ id: Period; labelKey: string }> = [
+  { id: 'month', labelKey: 'analysis.period.month' },
+  { id: 'quarter', labelKey: 'analysis.period.quarter' },
+  { id: 'year', labelKey: 'analysis.period.year' },
 ];
 
 function iso(date: Date): string {
@@ -124,6 +125,8 @@ export class AnalysisPage extends LitElement {
 
   categories: CategoryBreakdown[] = [];
 
+  private _localize = new LocalizeController(this);
+
   connectedCallback(): void {
     super.connectedCallback();
     void this._load();
@@ -144,7 +147,9 @@ export class AnalysisPage extends LitElement {
       this.categories = categories;
     } catch (error) {
       this.error =
-        error instanceof Error ? error.message : 'No se pudo cargar el análisis';
+        error instanceof Error
+          ? error.message
+          : this._localize.t('analysis.error');
     } finally {
       this.loading = false;
     }
@@ -193,9 +198,10 @@ export class AnalysisPage extends LitElement {
   }
 
   render() {
+    const t = (key: string) => this._localize.t(key);
     if (this.loading) {
       return html`
-        <finap-container><div class="state">Cargando…</div></finap-container>
+        <finap-container><div class="state">${t('common.loading')}</div></finap-container>
       `;
     }
 
@@ -210,7 +216,7 @@ export class AnalysisPage extends LitElement {
       <finap-container>
         <div class="content">
           <div class="head">
-            <finap-heading level="1">Análisis</finap-heading>
+            <finap-heading level="1">${t('analysis.title')}</finap-heading>
             <div class="periods">
               ${PERIODS.map(
                 (period) => html`
@@ -219,7 +225,7 @@ export class AnalysisPage extends LitElement {
                     ?selected=${this.period === period.id}
                     @click=${() => this._setPeriod(period.id)}
                   >
-                    ${period.label}
+                    ${t(period.labelKey)}
                   </finap-chip>
                 `,
               )}
@@ -242,14 +248,14 @@ export class AnalysisPage extends LitElement {
 
           <div class="charts">
             <finap-card>
-              <finap-heading level="3">Evolución</finap-heading>
+              <finap-heading level="3">${t('analysis.evolution')}</finap-heading>
               <finap-chart
                 type="line"
                 .data=${this._evolutionData}
               ></finap-chart>
             </finap-card>
             <finap-card>
-              <finap-heading level="3">Gastos por categoría</finap-heading>
+              <finap-heading level="3">${t('analysis.byCategory')}</finap-heading>
               <finap-chart
                 type="doughnut"
                 .data=${this._categoryData}

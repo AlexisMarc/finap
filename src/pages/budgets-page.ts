@@ -14,6 +14,7 @@ import {
   create as createBudget,
 } from '../services/budgets-service.js';
 import { list as listCategories } from '../services/categories-service.js';
+import { LocalizeController } from '../i18n/localize.js';
 import type { Budget, Category } from '../services/types.js';
 
 function currentMonth(): string {
@@ -111,6 +112,8 @@ export class BudgetsPage extends LitElement {
 
   formError = '';
 
+  private _localize = new LocalizeController(this);
+
   connectedCallback(): void {
     super.connectedCallback();
     void this._init();
@@ -130,7 +133,7 @@ export class BudgetsPage extends LitElement {
       this.error =
         error instanceof Error
           ? error.message
-          : 'No se pudieron cargar los presupuestos';
+          : this._localize.t('budgets.loadError');
     } finally {
       this.loading = false;
     }
@@ -169,11 +172,11 @@ export class BudgetsPage extends LitElement {
   private async _save(): Promise<void> {
     const limit = Number(this.formLimit);
     if (!this.formCategoryId) {
-      this.formError = 'Selecciona una categoría';
+      this.formError = this._localize.t('budgets.error.category');
       return;
     }
     if (!this.formLimit || Number.isNaN(limit) || limit <= 0) {
-      this.formError = 'Introduce un límite válido';
+      this.formError = this._localize.t('budgets.error.limit');
       return;
     }
 
@@ -189,16 +192,19 @@ export class BudgetsPage extends LitElement {
       await this._init();
     } catch (error) {
       this.formError =
-        error instanceof Error ? error.message : 'No se pudo guardar';
+        error instanceof Error
+          ? error.message
+          : this._localize.t('common.saveError');
     } finally {
       this.saving = false;
     }
   }
 
   render() {
+    const t = (key: string) => this._localize.t(key);
     if (this.loading) {
       return html`
-        <finap-container><div class="state">Cargando…</div></finap-container>
+        <finap-container><div class="state">${t('common.loading')}</div></finap-container>
       `;
     }
 
@@ -206,9 +212,9 @@ export class BudgetsPage extends LitElement {
       <finap-container>
         <div class="content">
           <div class="head">
-            <finap-heading level="1">Presupuestos</finap-heading>
+            <finap-heading level="1">${t('budgets.title')}</finap-heading>
             <finap-button @click=${this._openForm}>
-              Definir presupuesto
+              ${t('budgets.new')}
             </finap-button>
           </div>
           <span class="month">${this.month}</span>
@@ -228,18 +234,18 @@ export class BudgetsPage extends LitElement {
 
           <finap-modal
             ?open=${this.formOpen}
-            heading="Definir presupuesto"
+            heading=${t('budgets.new')}
             @finap-close=${this._closeForm}
           >
             <div class="form">
               <finap-select
-                label="Categoría"
+                label=${t('transactions.category')}
                 .value=${this.formCategoryId}
                 .options=${this._categoryOptions}
                 @finap-change=${this._onCategory}
               ></finap-select>
               <finap-input
-                label="Límite mensual"
+                label=${t('budgets.limit')}
                 type="number"
                 placeholder="0.00"
                 .value=${this.formLimit}
@@ -248,10 +254,10 @@ export class BudgetsPage extends LitElement {
               <p class="error" ?hidden=${!this.formError}>${this.formError}</p>
               <div class="actions">
                 <finap-button variant="secondary" @click=${this._closeForm}>
-                  Cancelar
+                  ${t('common.cancel')}
                 </finap-button>
                 <finap-button ?disabled=${this.saving} @click=${this._save}>
-                  ${this.saving ? 'Guardando…' : 'Guardar'}
+                  ${this.saving ? t('common.saving') : t('common.save')}
                 </finap-button>
               </div>
             </div>

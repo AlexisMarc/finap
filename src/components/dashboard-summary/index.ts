@@ -1,6 +1,7 @@
 import { LitElement, html, css } from 'lit';
 
 import '../stat-card/index.js';
+import { LocalizeController } from '../../i18n/localize.js';
 import { formatCurrency, formatPercent } from '../../utils/format.js';
 
 export class FinapDashboardSummary extends LitElement {
@@ -83,31 +84,34 @@ export class FinapDashboardSummary extends LitElement {
 
   trend = 0;
 
+  private _localize = new LocalizeController(this);
+
   render() {
+    const t = (key: string) => this._localize.t(key);
     const trendTone = this.trend >= 0 ? 'up' : 'down';
     return html`
       <section class="summary">
-        <span class="hello">Hola, ${this.name} 👋</span>
-        <span class="balance-label">Balance total</span>
+        <span class="hello">${t('shell.greeting')}, ${this.name} 👋</span>
+        <span class="balance-label">${t('dashboard.balance')}</span>
         <span class="balance">${formatCurrency(this.balance)}</span>
         <span class="trend trend--${trendTone}">
-          ${formatPercent(this.trend)} vs. mes pasado
+          ${formatPercent(this.trend)} ${t('dashboard.vsLastMonth')}
         </span>
         <div class="stats">
           <finap-stat-card
-            label="Ingresos"
+            label=${t('dashboard.income')}
             value=${formatCurrency(this.income)}
             trend="up"
             delta=${`+${formatCurrency(this.income)}`}
           ></finap-stat-card>
           <finap-stat-card
-            label="Gastos"
+            label=${t('dashboard.expense')}
             value=${formatCurrency(this.expense)}
             trend="down"
             delta=${`-${formatCurrency(this.expense)}`}
           ></finap-stat-card>
           <finap-stat-card
-            label="Deudas"
+            label=${t('dashboard.debt')}
             value=${formatCurrency(this.debt)}
             trend="neutral"
           ></finap-stat-card>

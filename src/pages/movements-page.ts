@@ -21,6 +21,7 @@ import {
 } from '../services/transactions-service.js';
 import { list as listCategories } from '../services/categories-service.js';
 import { notifyTransactionsChanged } from '../state/transactions.js';
+import { LocalizeController } from '../i18n/localize.js';
 import type { Category, Transaction } from '../services/types.js';
 
 const PAGE_SIZE = 20;
@@ -110,6 +111,8 @@ export class MovementsPage extends LitElement {
 
   private _page = 1;
 
+  private _localize = new LocalizeController(this);
+
   connectedCallback(): void {
     super.connectedCallback();
     void this._init();
@@ -156,7 +159,7 @@ export class MovementsPage extends LitElement {
       this.error =
         error instanceof Error
           ? error.message
-          : 'No se pudieron cargar los movimientos';
+          : this._localize.t('movements.error');
     } finally {
       this.loading = false;
       this.loadingMore = false;
@@ -233,10 +236,11 @@ export class MovementsPage extends LitElement {
   }
 
   render() {
+    const t = (key: string) => this._localize.t(key);
     if (this.loading) {
       return html`
         <finap-container>
-          <div class="state">Cargando…</div>
+          <div class="state">${t('common.loading')}</div>
         </finap-container>
       `;
     }
@@ -246,7 +250,7 @@ export class MovementsPage extends LitElement {
         <finap-container>
           <div class="state">
             <p>${this.error}</p>
-            <finap-button @click=${this._retry}>Reintentar</finap-button>
+            <finap-button @click=${this._retry}>${t('common.retry')}</finap-button>
           </div>
         </finap-container>
       `;
@@ -255,7 +259,7 @@ export class MovementsPage extends LitElement {
     return html`
       <finap-container>
         <div class="content">
-          <finap-heading level="1">Movimientos</finap-heading>
+          <finap-heading level="1">${t('movements.title')}</finap-heading>
           <finap-card>
             <finap-movements-filters
               .categories=${this.categories}
@@ -268,12 +272,12 @@ export class MovementsPage extends LitElement {
             ${this.transactions.length === 0
               ? html`
                   <div class="state">
-                    <p>No hay movimientos que cumplan los filtros.</p>
+                    <p>${t('movements.empty')}</p>
                     <finap-button
                       variant="secondary"
                       @click=${this._clearFilters}
                     >
-                      Limpiar filtros
+                      ${t('movements.clear')}
                     </finap-button>
                   </div>
                 `
@@ -294,7 +298,9 @@ export class MovementsPage extends LitElement {
                               ?disabled=${this.loadingMore}
                               @click=${this._loadMore}
                             >
-                              ${this.loadingMore ? 'Cargando…' : 'Cargar más'}
+                              ${this.loadingMore
+                                ? t('common.loading')
+                                : t('movements.loadMore')}
                             </finap-button>
                           `
                         : ''}
@@ -305,7 +311,7 @@ export class MovementsPage extends LitElement {
 
           <finap-modal
             ?open=${this.formOpen}
-            heading="Editar movimiento"
+            heading=${t('transactions.editTitle')}
             @finap-close=${this._closeForm}
           >
             <div class="form-body">
@@ -326,9 +332,9 @@ export class MovementsPage extends LitElement {
 
           <finap-confirm-dialog
             ?open=${this.confirmOpen}
-            heading="Eliminar movimiento"
-            message="¿Seguro que quieres eliminar este movimiento? Esta acción no se puede deshacer."
-            confirmLabel="Eliminar"
+            heading=${t('transactions.deleteTitle')}
+            message=${t('transactions.deleteMessage')}
+            confirmLabel=${t('common.delete')}
             @finap-confirm=${this._onConfirmDelete}
             @finap-cancel=${this._closeConfirm}
           ></finap-confirm-dialog>

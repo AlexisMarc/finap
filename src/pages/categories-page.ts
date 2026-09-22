@@ -15,6 +15,7 @@ import {
   update,
   remove,
 } from '../services/categories-service.js';
+import { LocalizeController } from '../i18n/localize.js';
 import type { Category } from '../services/types.js';
 
 export class CategoriesPage extends LitElement {
@@ -104,6 +105,8 @@ export class CategoriesPage extends LitElement {
 
   saveError = '';
 
+  private _localize = new LocalizeController(this);
+
   connectedCallback(): void {
     super.connectedCallback();
     void this._load();
@@ -118,7 +121,7 @@ export class CategoriesPage extends LitElement {
       this.error =
         error instanceof Error
           ? error.message
-          : 'No se pudieron cargar las categorías';
+          : this._localize.t('categories.loadError');
     } finally {
       this.loading = false;
     }
@@ -163,7 +166,9 @@ export class CategoriesPage extends LitElement {
       await this._load();
     } catch (error) {
       this.saveError =
-        error instanceof Error ? error.message : 'No se pudo guardar';
+        error instanceof Error
+          ? error.message
+          : this._localize.t('common.saveError');
     } finally {
       this.saving = false;
     }
@@ -177,15 +182,18 @@ export class CategoriesPage extends LitElement {
       await this._load();
     } catch (error) {
       this.error =
-        error instanceof Error ? error.message : 'No se pudo eliminar';
+        error instanceof Error
+          ? error.message
+          : this._localize.t('common.deleteError');
       this.confirmOpen = false;
     }
   }
 
   render() {
+    const t = (key: string) => this._localize.t(key);
     if (this.loading) {
       return html`
-        <finap-container><div class="state">Cargando…</div></finap-container>
+        <finap-container><div class="state">${t('common.loading')}</div></finap-container>
       `;
     }
 
@@ -193,8 +201,8 @@ export class CategoriesPage extends LitElement {
       <finap-container>
         <div class="content">
           <div class="head">
-            <finap-heading level="1">Categorías</finap-heading>
-            <finap-button @click=${this._new}>Nueva categoría</finap-button>
+            <finap-heading level="1">${t('categories.title')}</finap-heading>
+            <finap-button @click=${this._new}>${t('categories.new')}</finap-button>
           </div>
 
           <finap-card>
@@ -210,13 +218,13 @@ export class CategoriesPage extends LitElement {
                         variant="text"
                         @click=${() => this._edit(category)}
                       >
-                        Editar
+                        ${t('common.edit')}
                       </finap-button>
                       <finap-button
                         variant="text"
                         @click=${() => this._delete(category)}
                       >
-                        Eliminar
+                        ${t('common.delete')}
                       </finap-button>
                     </div>
                   </div>
@@ -227,7 +235,9 @@ export class CategoriesPage extends LitElement {
 
           <finap-modal
             ?open=${this.formOpen}
-            heading=${this.editTarget ? 'Editar categoría' : 'Nueva categoría'}
+            heading=${this.editTarget
+              ? t('categories.editTitle')
+              : t('categories.new')}
             @finap-close=${this._closeForm}
           >
             <div class="form-body">
@@ -247,9 +257,9 @@ export class CategoriesPage extends LitElement {
 
           <finap-confirm-dialog
             ?open=${this.confirmOpen}
-            heading="Eliminar categoría"
-            message="Si la categoría tiene movimientos asociados, quedarán sin categoría. ¿Continuar?"
-            confirmLabel="Eliminar"
+            heading=${t('categories.deleteTitle')}
+            message=${t('categories.deleteMessage')}
+            confirmLabel=${t('common.delete')}
             @finap-confirm=${this._confirmDelete}
             @finap-cancel=${this._closeConfirm}
           ></finap-confirm-dialog>

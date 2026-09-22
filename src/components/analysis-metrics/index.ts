@@ -1,6 +1,7 @@
 import { LitElement, html, css } from 'lit';
 
 import '../stat-card/index.js';
+import { LocalizeController } from '../../i18n/localize.js';
 import { formatCurrency, formatPercent } from '../../utils/format.js';
 
 export class FinapAnalysisMetrics extends LitElement {
@@ -40,26 +41,29 @@ export class FinapAnalysisMetrics extends LitElement {
 
   trend = 0;
 
+  private _localize = new LocalizeController(this);
+
   render() {
+    const t = (key: string) => this._localize.t(key);
     const tone = this.trend >= 0 ? 'up' : 'down';
     return html`
       <div class="metrics">
         <finap-stat-card
-          label="Balance"
+          label=${t('analysis.balance')}
           value=${formatCurrency(this.balance)}
           trend=${tone}
           delta=${formatPercent(this.trend)}
         ></finap-stat-card>
         <finap-stat-card
-          label="Ingresos"
+          label=${t('analysis.income')}
           value=${formatCurrency(this.income)}
         ></finap-stat-card>
         <finap-stat-card
-          label="Gastos"
+          label=${t('analysis.expense')}
           value=${formatCurrency(this.expense)}
         ></finap-stat-card>
         <finap-stat-card
-          label="Deudas"
+          label=${t('analysis.debt')}
           value=${formatCurrency(this.debt)}
         ></finap-stat-card>
       </div>

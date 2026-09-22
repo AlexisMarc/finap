@@ -3,6 +3,7 @@ import { LitElement, html, css } from 'lit';
 import '../chip/index.js';
 import '../input/index.js';
 import '../select/index.js';
+import { LocalizeController } from '../../i18n/localize.js';
 import type { Category, TransactionType } from '../../services/types.js';
 
 export interface MovementFilters {
@@ -21,11 +22,11 @@ const EMPTY_FILTERS: MovementFilters = {
   search: '',
 };
 
-const TYPE_OPTIONS: Array<{ id: TransactionType | ''; label: string }> = [
-  { id: '', label: 'Todos' },
-  { id: 'expense', label: 'Gasto' },
-  { id: 'income', label: 'Ingreso' },
-  { id: 'debt', label: 'Deuda' },
+const TYPE_OPTIONS: Array<{ id: TransactionType | ''; labelKey: string }> = [
+  { id: '', labelKey: 'movements.filter.all' },
+  { id: 'expense', labelKey: 'movements.filter.expense' },
+  { id: 'income', labelKey: 'movements.filter.income' },
+  { id: 'debt', labelKey: 'movements.filter.debt' },
 ];
 
 export class FinapMovementsFilters extends LitElement {
@@ -67,6 +68,8 @@ export class FinapMovementsFilters extends LitElement {
 
   filters: MovementFilters = { ...EMPTY_FILTERS };
 
+  private _localize = new LocalizeController(this);
+
   private _emit(patch: Partial<MovementFilters>): void {
     this.dispatchEvent(
       new CustomEvent('finap-filter-change', {
@@ -95,7 +98,7 @@ export class FinapMovementsFilters extends LitElement {
 
   private get _categoryOptions() {
     return [
-      { value: '', label: 'Todas' },
+      { value: '', label: this._localize.t('movements.filter.all') },
       ...this.categories.map((category) => ({
         value: category.id,
         label: category.name,
@@ -104,6 +107,7 @@ export class FinapMovementsFilters extends LitElement {
   }
 
   render() {
+    const t = (key: string) => this._localize.t(key);
     return html`
       <div class="filters">
         <div class="types">
@@ -114,31 +118,31 @@ export class FinapMovementsFilters extends LitElement {
                 ?selected=${this.filters.type === option.id}
                 @click=${() => this._emit({ type: option.id })}
               >
-                ${option.label}
+                ${t(option.labelKey)}
               </finap-chip>
             `,
           )}
         </div>
         <div class="row">
           <finap-select
-            label="Categoría"
+            label=${t('movements.filter.category')}
             .options=${this._categoryOptions}
             @finap-change=${this._onCategory}
           ></finap-select>
           <finap-input
-            label="Desde"
+            label=${t('movements.filter.from')}
             type="date"
             @finap-input=${this._onFrom}
           ></finap-input>
           <finap-input
-            label="Hasta"
+            label=${t('movements.filter.to')}
             type="date"
             @finap-input=${this._onTo}
           ></finap-input>
           <finap-input
-            label="Buscar"
+            label=${t('movements.filter.search')}
             type="text"
-            placeholder="Buscar..."
+            placeholder=${t('movements.filter.search')}
             @finap-input=${this._onSearch}
           ></finap-input>
         </div>

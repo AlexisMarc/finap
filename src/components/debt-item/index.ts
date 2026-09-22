@@ -2,6 +2,7 @@ import { LitElement, html, css } from 'lit';
 
 import '../progress/index.js';
 import '../button/index.js';
+import { LocalizeController } from '../../i18n/localize.js';
 import { formatCurrency, formatPercent, formatDate } from '../../utils/format.js';
 import type { Debt } from '../../services/types.js';
 
@@ -61,6 +62,8 @@ export class FinapDebtItem extends LitElement {
 
   debt: Debt | null = null;
 
+  private _localize = new LocalizeController(this);
+
   private get _pending(): number {
     return this.debt ? Math.max(this.debt.total - this.debt.paid, 0) : 0;
   }
@@ -79,12 +82,15 @@ export class FinapDebtItem extends LitElement {
   render() {
     if (!this.debt) return html`<div class="debt"></div>`;
     const done = this.debt.paid >= this.debt.total;
+    const t = (key: string) => this._localize.t(key);
 
     return html`
       <div class="debt">
         <div class="head">
           <span class="name">${this.debt.name}</span>
-          <span class="pending">${formatCurrency(this._pending)} pendiente</span>
+          <span class="pending">
+            ${formatCurrency(this._pending)} ${t('debts.pending')}
+          </span>
         </div>
         <finap-progress
           value=${this.debt.paid}
@@ -93,28 +99,28 @@ export class FinapDebtItem extends LitElement {
         <div class="meta">
           <span>${formatPercent(this._percent)}</span>
           ${this.debt.dueDate
-            ? html`<span class="due">Vence ${formatDate(this.debt.dueDate)}</span>`
+            ? html`<span class="due">${t('debts.due')} ${formatDate(this.debt.dueDate)}</span>`
             : ''}
-          ${done ? html`<span class="done">Pagada</span>` : ''}
+          ${done ? html`<span class="done">${t('debts.paid')}</span>` : ''}
         </div>
         <div class="actions">
           <finap-button
             variant="text"
             @click=${() => this._emit('finap-pay', this.debt as Debt)}
           >
-            Registrar pago
+            ${t('debts.pay')}
           </finap-button>
           <finap-button
             variant="text"
             @click=${() => this._emit('finap-edit', this.debt as Debt)}
           >
-            Editar
+            ${t('common.edit')}
           </finap-button>
           <finap-button
             variant="text"
             @click=${() => this._emit('finap-delete', this.debt as Debt)}
           >
-            Eliminar
+            ${t('common.delete')}
           </finap-button>
         </div>
       </div>

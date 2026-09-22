@@ -1,6 +1,7 @@
 import { LitElement, html, css } from 'lit';
 
 import '../avatar/index.js';
+import { LocalizeController } from '../../i18n/localize.js';
 
 export class FinapUserMenu extends LitElement {
   static styles = css`
@@ -94,6 +95,8 @@ export class FinapUserMenu extends LitElement {
 
   open = false;
 
+  private _localize = new LocalizeController(this);
+
   private _toggle(): void {
     this.open = !this.open;
   }
@@ -122,7 +125,7 @@ export class FinapUserMenu extends LitElement {
       </button>
       <div class="menu" role="menu" ?hidden=${!this.open}>
         <button type="button" role="menuitem" @click=${this._logout}>
-          Cerrar sesión
+          ${this._localize.t('userMenu.logout')}
         </button>
       </div>
     `;

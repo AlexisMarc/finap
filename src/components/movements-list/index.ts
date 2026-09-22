@@ -2,6 +2,7 @@ import { LitElement, html, css } from 'lit';
 
 import '../list-item/index.js';
 import '../button/index.js';
+import { LocalizeController } from '../../i18n/localize.js';
 import { formatCurrency, formatDate } from '../../utils/format.js';
 import type { Transaction } from '../../services/types.js';
 
@@ -38,6 +39,8 @@ export class FinapMovementsList extends LitElement {
 
   transactions: Transaction[] = [];
 
+  private _localize = new LocalizeController(this);
+
   private _edit(transaction: Transaction): void {
     this.dispatchEvent(
       new CustomEvent('finap-edit', {
@@ -59,6 +62,7 @@ export class FinapMovementsList extends LitElement {
   }
 
   render() {
+    const t = (key: string) => this._localize.t(key);
     return html`
       <div class="list">
         ${this.transactions.map(
@@ -77,13 +81,13 @@ export class FinapMovementsList extends LitElement {
                   variant="text"
                   @click=${() => this._edit(transaction)}
                 >
-                  Editar
+                  ${t('common.edit')}
                 </finap-button>
                 <finap-button
                   variant="text"
                   @click=${() => this._delete(transaction)}
                 >
-                  Eliminar
+                  ${t('common.delete')}
                 </finap-button>
               </div>
             </div>

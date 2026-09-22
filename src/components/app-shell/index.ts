@@ -21,22 +21,38 @@ import {
   type TransactionInput,
 } from '../../services/transactions-service.js';
 import { notifyTransactionsChanged } from '../../state/transactions.js';
+import { LocalizeController } from '../../i18n/localize.js';
 import type { Category } from '../../services/types.js';
 import type { TransactionFormValue } from '../transaction-form/index.js';
 
 export interface ShellSection {
   id: string;
-  label: string;
+  labelKey: string;
   icon: string;
   path: string;
 }
 
 const SECTIONS: ShellSection[] = [
-  { id: 'dashboard', label: 'Inicio', icon: 'home', path: '/dashboard' },
-  { id: 'analysis', label: 'Análisis', icon: 'chart', path: '/analysis' },
-  { id: 'debts', label: 'Deudas', icon: 'credit-card', path: '/debts' },
-  { id: 'movements', label: 'Movimientos', icon: 'list', path: '/movements' },
-  { id: 'settings', label: 'Ajustes', icon: 'settings', path: '/settings' },
+  { id: 'dashboard', labelKey: 'shell.nav.home', icon: 'home', path: '/dashboard' },
+  {
+    id: 'analysis',
+    labelKey: 'shell.nav.analysis',
+    icon: 'chart',
+    path: '/analysis',
+  },
+  { id: 'debts', labelKey: 'shell.nav.debts', icon: 'credit-card', path: '/debts' },
+  {
+    id: 'movements',
+    labelKey: 'shell.nav.movements',
+    icon: 'list',
+    path: '/movements',
+  },
+  {
+    id: 'settings',
+    labelKey: 'shell.nav.settings',
+    icon: 'settings',
+    path: '/settings',
+  },
 ];
 
 const APP_PAGES = new Set(SECTIONS.map((section) => section.id));
@@ -210,6 +226,8 @@ export class FinapAppShell extends LitElement {
 
   addCategories: Category[] = [];
 
+  private _localize = new LocalizeController(this);
+
   private _observer?: MutationObserver;
 
   private _onSessionChanged = () => {
@@ -307,13 +325,16 @@ export class FinapAppShell extends LitElement {
     }
 
     const section = this.currentSection;
-    const hello = this.user ? `Hola, ${this.user.name}` : 'Hola';
+    const t = (key: string) => this._localize.t(key);
+    const hello = this.user
+      ? `${t('shell.greeting')}, ${this.user.name}`
+      : t('shell.greeting');
 
     return html`
       <div class="layout">
         <aside class="sidebar">
           <span class="brand">Finap</span>
-          <nav class="nav" aria-label="Principal">
+          <nav class="nav" aria-label=${t('shell.primaryNav')}>
             ${SECTIONS.map(
               (item) => html`
                 <a
@@ -322,7 +343,7 @@ export class FinapAppShell extends LitElement {
                   @click=${this._go(item.id)}
                 >
                   <finap-icon name=${item.icon} size="20"></finap-icon>
-                  ${item.label}
+                  ${t(item.labelKey)}
                 </a>
               `,
             )}
@@ -332,15 +353,17 @@ export class FinapAppShell extends LitElement {
         <div class="main-col">
           <header class="topbar">
             <span class="greeting">
-              <span class="greeting__hello">Buenos días</span>
+              <span class="greeting__hello">${t('shell.greeting')}</span>
               <span class="greeting__name">${hello} 👋</span>
             </span>
             <finap-input
               class="search"
               type="text"
-              placeholder="Buscar..."
+              placeholder=${t('shell.search')}
             ></finap-input>
-            <finap-button @click=${this._onAdd}>Agregar</finap-button>
+            <finap-button @click=${this._onAdd}>
+              ${t('shell.add')}
+            </finap-button>
             <finap-user-menu
               name=${this.user?.name ?? ''}
               email=${this.user?.email ?? ''}
@@ -351,7 +374,7 @@ export class FinapAppShell extends LitElement {
         </div>
       </div>
 
-      <nav class="bottom-nav" aria-label="Principal">
+      <nav class="bottom-nav" aria-label=${t('shell.primaryNav')}>
         ${SECTIONS.map(
           (item) => html`
             <a
@@ -360,7 +383,7 @@ export class FinapAppShell extends LitElement {
               @click=${this._go(item.id)}
             >
               <finap-icon name=${item.icon} size="20"></finap-icon>
-              ${item.label}
+              ${t(item.labelKey)}
             </a>
           `,
         )}
@@ -368,7 +391,7 @@ export class FinapAppShell extends LitElement {
 
       <finap-modal
         ?open=${this.addOpen}
-        heading="Nuevo registro"
+        heading=${t('shell.addTitle')}
         @finap-close=${this._closeAdd}
       >
         <div class="add-body">

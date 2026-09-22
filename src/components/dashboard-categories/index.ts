@@ -1,6 +1,7 @@
 import { LitElement, html, css } from 'lit';
 
 import '../heading/index.js';
+import { LocalizeController } from '../../i18n/localize.js';
 import { formatCurrency } from '../../utils/format.js';
 import type { CategoryBreakdown } from '../../services/types.js';
 
@@ -69,12 +70,14 @@ export class FinapDashboardCategories extends LitElement {
 
   categories: CategoryBreakdown[] = [];
 
+  private _localize = new LocalizeController(this);
+
   render() {
     return html`
       <section class="categories">
         <div class="head">
-          <finap-heading level="3">Gastos por categoría</finap-heading>
-          <span class="period">Este mes</span>
+          <finap-heading level="3">${this._localize.t('dashboard.byCategory')}</finap-heading>
+          <span class="period">${this._localize.t('dashboard.thisMonth')}</span>
         </div>
         <ul class="list">
           ${this.categories.map(

@@ -20,6 +20,7 @@ import {
   type DebtInput,
 } from '../services/debts-service.js';
 import { notifyDebtsChanged } from '../state/debts.js';
+import { LocalizeController } from '../i18n/localize.js';
 import { formatCurrency } from '../utils/format.js';
 import type { Debt } from '../services/types.js';
 
@@ -121,6 +122,8 @@ export class DebtsPage extends LitElement {
 
   paySaving = false;
 
+  private _localize = new LocalizeController(this);
+
   connectedCallback(): void {
     super.connectedCallback();
     void this._load();
@@ -142,7 +145,7 @@ export class DebtsPage extends LitElement {
       this.error =
         error instanceof Error
           ? error.message
-          : 'No se pudieron cargar las deudas';
+          : this._localize.t('debts.loadError');
     } finally {
       this.loading = false;
     }
@@ -199,7 +202,9 @@ export class DebtsPage extends LitElement {
       await this._load();
     } catch (error) {
       this.saveError =
-        error instanceof Error ? error.message : 'No se pudo guardar';
+        error instanceof Error
+          ? error.message
+          : this._localize.t('common.saveError');
     } finally {
       this.saving = false;
     }
@@ -212,7 +217,7 @@ export class DebtsPage extends LitElement {
   private async _registerPayment(): Promise<void> {
     const amount = Number(this.payAmount);
     if (!this.payTarget || !this.payAmount || Number.isNaN(amount) || amount <= 0) {
-      this.payError = 'Introduce un importe válido';
+      this.payError = this._localize.t('debts.error.pay');
       return;
     }
     this.payError = '';
@@ -224,7 +229,9 @@ export class DebtsPage extends LitElement {
       await this._load();
     } catch (error) {
       this.payError =
-        error instanceof Error ? error.message : 'No se pudo registrar el pago';
+        error instanceof Error
+          ? error.message
+          : this._localize.t('common.saveError');
     } finally {
       this.paySaving = false;
     }
@@ -239,15 +246,18 @@ export class DebtsPage extends LitElement {
       await this._load();
     } catch (error) {
       this.error =
-        error instanceof Error ? error.message : 'No se pudo eliminar';
+        error instanceof Error
+          ? error.message
+          : this._localize.t('common.deleteError');
       this.confirmOpen = false;
     }
   }
 
   render() {
+    const t = (key: string) => this._localize.t(key);
     if (this.loading) {
       return html`
-        <finap-container><div class="state">Cargando…</div></finap-container>
+        <finap-container><div class="state">${t('common.loading')}</div></finap-container>
       `;
     }
 
@@ -255,11 +265,11 @@ export class DebtsPage extends LitElement {
       <finap-container>
         <div class="content">
           <div class="head">
-            <finap-heading level="1">Deudas</finap-heading>
-            <finap-button @click=${this._new}>Nueva deuda</finap-button>
+            <finap-heading level="1">${t('debts.title')}</finap-heading>
+            <finap-button @click=${this._new}>${t('debts.new')}</finap-button>
           </div>
           <span class="total">
-            Total pendiente: ${formatCurrency(this._totalPending)}
+            ${t('dashboard.totalPending')}: ${formatCurrency(this._totalPending)}
           </span>
 
           <finap-card>
@@ -277,7 +287,7 @@ export class DebtsPage extends LitElement {
 
           <finap-modal
             ?open=${this.formOpen}
-            heading=${this.editTarget ? 'Editar deuda' : 'Nueva deuda'}
+            heading=${this.editTarget ? t('debts.editTitle') : t('debts.new')}
             @finap-close=${this._closeForm}
           >
             <div class="form-body">
@@ -297,12 +307,12 @@ export class DebtsPage extends LitElement {
 
           <finap-modal
             ?open=${this.payOpen}
-            heading=${`Registrar pago${this.payTarget ? ` · ${this.payTarget.name}` : ''}`}
+            heading=${`${t('debts.payTitle')}${this.payTarget ? ` · ${this.payTarget.name}` : ''}`}
             @finap-close=${this._closePay}
           >
             <div class="form">
               <finap-input
-                label="Importe del pago"
+                label=${t('debts.payAmount')}
                 type="number"
                 placeholder="0.00"
                 .value=${this.payAmount}
@@ -311,13 +321,13 @@ export class DebtsPage extends LitElement {
               <p class="error" ?hidden=${!this.payError}>${this.payError}</p>
               <div class="actions">
                 <finap-button variant="secondary" @click=${this._closePay}>
-                  Cancelar
+                  ${t('common.cancel')}
                 </finap-button>
                 <finap-button
                   ?disabled=${this.paySaving}
                   @click=${this._registerPayment}
                 >
-                  ${this.paySaving ? 'Guardando…' : 'Registrar pago'}
+                  ${this.paySaving ? t('common.saving') : t('debts.pay')}
                 </finap-button>
               </div>
             </div>
@@ -325,9 +335,9 @@ export class DebtsPage extends LitElement {
 
           <finap-confirm-dialog
             ?open=${this.confirmOpen}
-            heading="Eliminar deuda"
-            message="¿Seguro que quieres eliminar esta deuda?"
-            confirmLabel="Eliminar"
+            heading=${t('debts.deleteTitle')}
+            message=${t('debts.deleteMessage')}
+            confirmLabel=${t('common.delete')}
             @finap-confirm=${this._confirmDelete}
             @finap-cancel=${this._closeConfirm}
           ></finap-confirm-dialog>

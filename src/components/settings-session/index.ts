@@ -3,6 +3,7 @@ import { navigate } from '@open-cells/core';
 
 import '../button/index.js';
 import { logout } from '../../services/auth-service.js';
+import { LocalizeController } from '../../i18n/localize.js';
 
 export class FinapSettingsSession extends LitElement {
   static styles = css`
@@ -25,12 +26,14 @@ export class FinapSettingsSession extends LitElement {
     navigate('landing');
   }
 
+  private _localize = new LocalizeController(this);
+
   render() {
     return html`
       <div class="row">
-        <span>Sesión</span>
+        <span>${this._localize.t('settings.session')}</span>
         <finap-button variant="secondary" @click=${this._logout}>
-          Cerrar sesión
+          ${this._localize.t('userMenu.logout')}
         </finap-button>
       </div>
     `;

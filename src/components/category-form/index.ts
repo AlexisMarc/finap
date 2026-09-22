@@ -3,6 +3,7 @@ import { LitElement, html, css } from 'lit';
 import '../input/index.js';
 import '../select/index.js';
 import '../button/index.js';
+import { LocalizeController } from '../../i18n/localize.js';
 import type { Category } from '../../services/types.js';
 
 const COLORS = [
@@ -110,6 +111,8 @@ export class FinapCategoryForm extends LitElement {
 
   icon = ICONS[0];
 
+  private _localize = new LocalizeController(this);
+
   private get _colors(): string[] {
     return COLORS;
   }
@@ -142,7 +145,7 @@ export class FinapCategoryForm extends LitElement {
 
   private _submit(): void {
     if (!this.name.trim()) {
-      this.errors = { name: 'El nombre es obligatorio' };
+      this.errors = { name: this._localize.t('categories.error.name') };
       return;
     }
     this.errors = {};
@@ -156,17 +159,18 @@ export class FinapCategoryForm extends LitElement {
   }
 
   render() {
+    const t = (key: string) => this._localize.t(key);
     return html`
       <div class="form">
         <finap-input
-          label="Nombre"
+          label=${t('categories.name')}
           type="text"
           .value=${this.name}
           error=${this.errors.name ?? ''}
           @finap-input=${this._onName}
         ></finap-input>
         <div class="field">
-          <span class="label">Color</span>
+          <span class="label">${t('categories.color')}</span>
           <div class="swatches">
             ${this._colors.map(
               (color) => html`
@@ -183,7 +187,7 @@ export class FinapCategoryForm extends LitElement {
           </div>
         </div>
         <finap-select
-          label="Icono"
+          label=${t('categories.icon')}
           .value=${this.icon}
           .options=${this._iconOptions}
           @finap-change=${this._onIcon}
@@ -191,10 +195,10 @@ export class FinapCategoryForm extends LitElement {
         <p class="error" ?hidden=${!this.error}>${this.error}</p>
         <div class="actions">
           <finap-button variant="secondary" @click=${this._cancel}>
-            Cancelar
+            ${t('common.cancel')}
           </finap-button>
           <finap-button ?disabled=${this.saving} @click=${this._submit}>
-            ${this.saving ? 'Guardando…' : 'Guardar'}
+            ${this.saving ? t('common.saving') : t('common.save')}
           </finap-button>
         </div>
       </div>

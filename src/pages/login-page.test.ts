@@ -7,17 +7,29 @@ vi.mock('../services/auth-service.js', () => ({
 import { LoginPage } from './login-page.js';
 import { fixture, teardown } from '../test/fixture.js';
 import { login } from '../services/auth-service.js';
+import { setLocale } from '../i18n/i18n.js';
 
 const mockedLogin = vi.mocked(login);
 
 describe('login-page', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    setLocale('es');
   });
 
   it('renderiza el formulario de login', async () => {
     const el = await fixture(new LoginPage());
     expect(el.shadowRoot?.querySelector('finap-login-form')).not.toBeNull();
+    teardown(el);
+  });
+
+  it('traduce el contenido al cambiar de idioma', async () => {
+    const el = await fixture(new LoginPage());
+
+    setLocale('en');
+    await el.updateComplete;
+
+    expect(el.shadowRoot?.textContent).toContain('Sign in to manage');
     teardown(el);
   });
 

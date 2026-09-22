@@ -3,10 +3,12 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { FinapAppShell } from './index.js';
 import { fixture, teardown } from '../../test/fixture.js';
 import { setSession } from '../../state/session.js';
+import { setLocale } from '../../i18n/i18n.js';
 
 describe('finap-app-shell', () => {
   beforeEach(() => {
     localStorage.clear();
+    setLocale('es');
   });
 
   it('en modo público solo renderiza el slot (sin chrome)', async () => {
@@ -38,6 +40,20 @@ describe('finap-app-shell', () => {
 
     const active = el.shadowRoot?.querySelector('[aria-current="page"]');
     expect(active?.textContent).toContain('Movimientos');
+    teardown(el);
+  });
+
+  it('traduce la navegación al cambiar de idioma', async () => {
+    const el = new FinapAppShell();
+    el.currentPage = 'dashboard-page';
+    await fixture(el);
+
+    setLocale('en');
+    await el.updateComplete;
+
+    expect(el.shadowRoot?.querySelector('.sidebar')?.textContent).toContain(
+      'Home',
+    );
     teardown(el);
   });
 

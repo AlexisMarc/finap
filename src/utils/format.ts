@@ -1,4 +1,5 @@
 import { getCurrency } from '../state/session.js';
+import { getLocale, t } from '../i18n/i18n.js';
 
 export function formatCurrency(
   value: number,
@@ -24,7 +25,10 @@ export function formatPercent(
   }).format(value / 100);
 }
 
-export function formatDate(iso: string, locale: string = 'es-CO'): string {
+export function formatDate(
+  iso: string,
+  locale: string = getLocale(),
+): string {
   const date = new Date(`${iso}T00:00:00`);
   return new Intl.DateTimeFormat(locale, {
     day: 'numeric',
@@ -34,7 +38,7 @@ export function formatDate(iso: string, locale: string = 'es-CO'): string {
 
 export function formatRelativeDate(
   iso: string,
-  locale: string = 'es-CO',
+  locale: string = getLocale(),
   now: Date = new Date(),
 ): string {
   const date = new Date(`${iso}T00:00:00`);
@@ -42,7 +46,7 @@ export function formatRelativeDate(
   const diffDays = Math.round(
     (today.getTime() - date.getTime()) / (1000 * 60 * 60 * 24),
   );
-  if (diffDays === 0) return 'Hoy';
-  if (diffDays === 1) return 'Ayer';
+  if (diffDays === 0) return t('date.today');
+  if (diffDays === 1) return t('date.yesterday');
   return formatDate(iso, locale);
 }

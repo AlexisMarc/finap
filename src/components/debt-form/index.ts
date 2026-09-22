@@ -2,6 +2,7 @@ import { LitElement, html, css } from 'lit';
 
 import '../input/index.js';
 import '../button/index.js';
+import { LocalizeController } from '../../i18n/localize.js';
 import type { Debt } from '../../services/types.js';
 
 export interface DebtFormValue {
@@ -72,6 +73,8 @@ export class FinapDebtForm extends LitElement {
 
   dueDate = '';
 
+  private _localize = new LocalizeController(this);
+
   willUpdate(changed: Map<PropertyKey, unknown>): void {
     if (changed.has('debt') && this.debt) {
       this.name = this.debt.name;
@@ -106,9 +109,11 @@ export class FinapDebtForm extends LitElement {
   private _submit(): void {
     const total = Number(this.total);
     const errors: FormErrors = {};
-    if (!this.name.trim()) errors.name = 'El nombre es obligatorio';
+    if (!this.name.trim()) {
+      errors.name = this._localize.t('debts.error.name');
+    }
     if (!this.total || Number.isNaN(total) || total <= 0) {
-      errors.total = 'Introduce un importe válido';
+      errors.total = this._localize.t('debts.error.total');
     }
     if (Object.keys(errors).length > 0) {
       this.errors = errors;
@@ -130,17 +135,18 @@ export class FinapDebtForm extends LitElement {
   }
 
   render() {
+    const t = (key: string) => this._localize.t(key);
     return html`
       <div class="form">
         <finap-input
-          label="Nombre"
+          label=${t('debts.name')}
           type="text"
           .value=${this.name}
           error=${this.errors.name ?? ''}
           @finap-input=${this._onName}
         ></finap-input>
         <finap-input
-          label="Importe total"
+          label=${t('debts.total')}
           type="number"
           placeholder="0.00"
           .value=${this.total}
@@ -148,14 +154,14 @@ export class FinapDebtForm extends LitElement {
           @finap-input=${this._onTotal}
         ></finap-input>
         <finap-input
-          label="Importe pagado"
+          label=${t('debts.paidAmount')}
           type="number"
           placeholder="0.00"
           .value=${this.paid}
           @finap-input=${this._onPaid}
         ></finap-input>
         <finap-input
-          label="Fecha límite (opcional)"
+          label=${t('debts.dueDate')}
           type="date"
           .value=${this.dueDate}
           @finap-input=${this._onDueDate}
@@ -163,10 +169,10 @@ export class FinapDebtForm extends LitElement {
         <p class="error" ?hidden=${!this.error}>${this.error}</p>
         <div class="actions">
           <finap-button variant="secondary" @click=${this._cancel}>
-            Cancelar
+            ${t('common.cancel')}
           </finap-button>
           <finap-button ?disabled=${this.saving} @click=${this._submit}>
-            ${this.saving ? 'Guardando…' : 'Guardar'}
+            ${this.saving ? t('common.saving') : t('common.save')}
           </finap-button>
         </div>
       </div>

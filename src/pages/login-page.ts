@@ -7,6 +7,7 @@ import '../components/text/index.js';
 import '../components/login-form/index.js';
 
 import { login } from '../services/auth-service.js';
+import { LocalizeController } from '../i18n/localize.js';
 
 interface LoginDetail {
   email: string;
@@ -43,6 +44,8 @@ export class LoginPage extends LitElement {
 
   error = '';
 
+  private _localize = new LocalizeController(this);
+
   private async _onLogin(event: Event): Promise<void> {
     const { email, password } = (event as CustomEvent<LoginDetail>).detail;
     this.loading = true;
@@ -52,7 +55,9 @@ export class LoginPage extends LitElement {
       navigate('dashboard');
     } catch (error) {
       this.error =
-        error instanceof Error ? error.message : 'No se pudo iniciar sesión';
+        error instanceof Error
+          ? error.message
+          : this._localize.t('login.error.generic');
     } finally {
       this.loading = false;
     }
@@ -62,8 +67,8 @@ export class LoginPage extends LitElement {
     return html`
       <div class="wrapper">
         <div class="panel">
-          <finap-heading level="1">Finap</finap-heading>
-          <finap-text>Inicia sesión para gestionar tus finanzas.</finap-text>
+          <finap-heading level="1">${this._localize.t('app.name')}</finap-heading>
+          <finap-text>${this._localize.t('login.subtitle')}</finap-text>
           <finap-card>
             <finap-login-form
               ?loading=${this.loading}

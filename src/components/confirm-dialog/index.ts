@@ -2,6 +2,7 @@ import { LitElement, html, css } from 'lit';
 
 import '../modal/index.js';
 import '../button/index.js';
+import { LocalizeController } from '../../i18n/localize.js';
 
 export class FinapConfirmDialog extends LitElement {
   static styles = css`
@@ -25,11 +26,13 @@ export class FinapConfirmDialog extends LitElement {
 
   open = false;
 
-  heading = 'Confirmar';
+  heading = '';
 
   message = '';
 
-  confirmLabel = 'Confirmar';
+  confirmLabel = '';
+
+  private _localize = new LocalizeController(this);
 
   private _confirm(): void {
     this.dispatchEvent(
@@ -47,15 +50,17 @@ export class FinapConfirmDialog extends LitElement {
     return html`
       <finap-modal
         ?open=${this.open}
-        heading=${this.heading}
+        heading=${this.heading || this._localize.t('common.confirm')}
         @finap-close=${this._cancel}
       >
         <p class="message">${this.message}</p>
         <div slot="actions">
           <finap-button variant="secondary" @click=${this._cancel}>
-            Cancelar
+            ${this._localize.t('common.cancel')}
           </finap-button>
-          <finap-button @click=${this._confirm}>${this.confirmLabel}</finap-button>
+          <finap-button @click=${this._confirm}>
+            ${this.confirmLabel || this._localize.t('common.confirm')}
+          </finap-button>
         </div>
       </finap-modal>
     `;

@@ -3,6 +3,7 @@ import { LitElement, html, css } from 'lit';
 import '../theme-toggle/index.js';
 import '../select/index.js';
 import { setLocale, type Locale } from '../../i18n/i18n.js';
+import { LocalizeController } from '../../i18n/localize.js';
 import { getCurrency, setCurrency } from '../../state/session.js';
 
 const LOCALE_OPTIONS = [
@@ -50,6 +51,8 @@ export class FinapSettingsPreferences extends LitElement {
 
   currency = 'USD';
 
+  private _localize = new LocalizeController(this);
+
   private _onLocale(event: Event): void {
     const locale = (event as CustomEvent<Locale>).detail;
     setLocale(locale);
@@ -70,14 +73,15 @@ export class FinapSettingsPreferences extends LitElement {
   }
 
   render() {
+    const t = (key: string) => this._localize.t(key);
     return html`
       <div class="prefs">
         <div class="row">
-          <span>Tema</span>
+          <span>${t('settings.theme')}</span>
           <finap-theme-toggle></finap-theme-toggle>
         </div>
         <div class="row">
-          <span>Idioma</span>
+          <span>${t('settings.language')}</span>
           <finap-select
             .value=${this.locale}
             .options=${LOCALE_OPTIONS}
@@ -85,7 +89,7 @@ export class FinapSettingsPreferences extends LitElement {
           ></finap-select>
         </div>
         <div class="row">
-          <span>Moneda</span>
+          <span>${t('settings.currency')}</span>
           <finap-select
             .value=${this.currency}
             .options=${CURRENCY_OPTIONS}

@@ -16,6 +16,7 @@ import {
   type SessionUser,
 } from '../state/session.js';
 import { getLocale, type Locale } from '../i18n/i18n.js';
+import { LocalizeController } from '../i18n/localize.js';
 
 export class SettingsPage extends LitElement {
   static styles = css`
@@ -48,6 +49,8 @@ export class SettingsPage extends LitElement {
 
   currency = 'USD';
 
+  private _localize = new LocalizeController(this);
+
   connectedCallback(): void {
     super.connectedCallback();
     this._sync();
@@ -70,20 +73,21 @@ export class SettingsPage extends LitElement {
   }
 
   render() {
+    const t = (key: string) => this._localize.t(key);
     return html`
       <finap-container>
         <div class="content">
-          <finap-heading level="1">Ajustes</finap-heading>
+          <finap-heading level="1">${t('settings.title')}</finap-heading>
 
           <finap-card>
-            <finap-heading level="3">Perfil</finap-heading>
+            <finap-heading level="3">${t('settings.profile')}</finap-heading>
             <finap-settings-profile
               .user=${this.user}
             ></finap-settings-profile>
           </finap-card>
 
           <finap-card>
-            <finap-heading level="3">Preferencias</finap-heading>
+            <finap-heading level="3">${t('settings.preferences')}</finap-heading>
             <finap-settings-preferences
               .locale=${this.locale}
               .currency=${this.currency}
@@ -91,22 +95,22 @@ export class SettingsPage extends LitElement {
           </finap-card>
 
           <finap-card>
-            <finap-heading level="3">Datos</finap-heading>
+            <finap-heading level="3">${t('settings.data')}</finap-heading>
             <div class="links">
               <finap-button @click=${() => navigate('categories')}>
-                Categorías
+                ${t('settings.categories')}
               </finap-button>
               <finap-button
                 variant="secondary"
                 @click=${() => navigate('budgets')}
               >
-                Presupuestos
+                ${t('settings.budgets')}
               </finap-button>
             </div>
           </finap-card>
 
           <finap-card>
-            <finap-heading level="3">Sesión</finap-heading>
+            <finap-heading level="3">${t('settings.session')}</finap-heading>
             <finap-settings-session></finap-settings-session>
           </finap-card>
         </div>

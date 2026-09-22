@@ -3,6 +3,7 @@ import { navigate } from '@open-cells/core';
 
 import '../heading/index.js';
 import '../list-item/index.js';
+import { LocalizeController } from '../../i18n/localize.js';
 import { formatCurrency, formatRelativeDate } from '../../utils/format.js';
 import type { Transaction } from '../../services/types.js';
 
@@ -33,6 +34,8 @@ export class FinapDashboardRecent extends LitElement {
 
   transactions: Transaction[] = [];
 
+  private _localize = new LocalizeController(this);
+
   private _goAll(event: Event): void {
     event.preventDefault();
     navigate('movements');
@@ -42,8 +45,10 @@ export class FinapDashboardRecent extends LitElement {
     return html`
       <section class="recent">
         <div class="head">
-          <finap-heading level="3">Últimos movimientos</finap-heading>
-          <a class="more" href="#/movements" @click=${this._goAll}>Ver todos →</a>
+          <finap-heading level="3">${this._localize.t('dashboard.recent')}</finap-heading>
+          <a class="more" href="/movements" @click=${this._goAll}>
+            ${this._localize.t('dashboard.seeAll')}
+          </a>
         </div>
         ${this.transactions.map(
           (transaction) => html`
