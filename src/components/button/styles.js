@@ -32,13 +32,13 @@ export const styles = css `
 
   button.secondary {
     background-color: transparent;
-    color: var(--finap-color-primary);
-    border-color: var(--finap-color-primary);
+    color: var(--finap-color-secondary);
+    border-color: var(--finap-color-secondary);
   }
 
   button.secondary:hover {
-    background-color: var(--finap-color-primary);
-    color: var(--finap-color-on-primary);
+    background-color: var(--finap-color-secondary);
+    color: var(--finap-color-on-secondary);
   }
 
   button.text {

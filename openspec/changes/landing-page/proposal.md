@@ -27,5 +27,5 @@ Finap ya tiene design system (tokens, componentes base y motion), pero no tiene 
 
 - **Nuevo código**: `src/pages/landing-page.ts`, `src/router/routes.ts`, `src/components/app-index.ts`, posiblemente `src/components/brand-mark.ts`.
 - **Modificado**: `src/main.ts` (arranca `startApp`), `index.html` (entrada a la SPA), `src/components/button/styles.ts` (variante secundaria → naranja), `src/tokens/tokens.css` (gradiente de marca).
-- **Dependencia nueva**: `@open-cells/page-controller` (ciclo de vida `onPageEnter`/`onPageLeave`).
+- **Sin dependencia nueva**: la landing es un `LitElement` registrado como custom element; el bootstrap usa solo `@open-cells/core`. El ciclo de vida `PageController` (`onPageEnter`/`onPageLeave`) se difiere a páginas con datos (ver design.md).
 - **Consumidor**: la landing es la base sobre la que se construirán las demás páginas (dashboard, movimientos, etc.).
