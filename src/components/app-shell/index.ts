@@ -317,7 +317,7 @@ export class FinapAppShell extends LitElement {
             ${SECTIONS.map(
               (item) => html`
                 <a
-                  href="#${item.path}"
+                  href=${item.path}
                   aria-current=${section === item.id ? 'page' : 'false'}
                   @click=${this._go(item.id)}
                 >
@@ -355,7 +355,7 @@ export class FinapAppShell extends LitElement {
         ${SECTIONS.map(
           (item) => html`
             <a
-              href="#${item.path}"
+              href=${item.path}
               aria-current=${section === item.id ? 'page' : 'false'}
               @click=${this._go(item.id)}
             >

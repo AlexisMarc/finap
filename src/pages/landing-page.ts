@@ -198,7 +198,7 @@ export class LandingPage extends LitElement {
               <a href="#presupuestos" @click=${this._scrollTo('presupuestos')}>
                 ${t('nav.budgets')}
               </a>
-              <a href="#/login" @click=${this._goLogin}>${t('nav.login')}</a>
+              <a href="/login" @click=${this._goLogin}>${t('nav.login')}</a>
             </nav>
             <finap-language-toggle></finap-language-toggle>
             <finap-theme-toggle></finap-theme-toggle>

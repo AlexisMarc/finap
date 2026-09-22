@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 
 import { FinapSettingsSession } from './index.js';
 import { fixture, teardown } from '../../test/fixture.js';
@@ -7,6 +7,11 @@ import { setSession, hasSession } from '../../state/session.js';
 describe('finap-settings-session', () => {
   beforeEach(() => {
     localStorage.clear();
+    globalThis.fetch = vi.fn().mockResolvedValue({
+      ok: true,
+      status: 204,
+      statusText: 'No Content',
+    });
   });
 
   it('cierra la sesión', async () => {

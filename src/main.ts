@@ -15,7 +15,7 @@ import {
   updateServiceWorker,
 } from './pwa/register-sw';
 import { startAppShell } from './components/app-index.js';
-import { normalizeInitialUrl } from './router/url.js';
+import { enableHistoryRouting } from './router/history.js';
 import './components/app-shell/index.js';
 import './components/offline-banner/index.js';
 
@@ -25,5 +25,5 @@ initConnectionStatus();
 registerServiceWorker();
 window.addEventListener('finap-apply-update', () => updateServiceWorker());
 
-normalizeInitialUrl();
+enableHistoryRouting();
 startAppShell();

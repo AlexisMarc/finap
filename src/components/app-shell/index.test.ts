@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 
 import { FinapAppShell } from './index.js';
 import { fixture, teardown } from '../../test/fixture.js';
@@ -57,6 +57,11 @@ describe('finap-app-shell', () => {
   });
 
   it('cerrar sesión limpia la sesión', async () => {
+    globalThis.fetch = vi.fn().mockResolvedValue({
+      ok: true,
+      status: 204,
+      statusText: 'No Content',
+    });
     setSession({
       token: 't',
       user: { id: 'u1', name: 'Marcos', email: 'm@finap.app' },
