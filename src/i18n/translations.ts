@@ -5,6 +5,7 @@ export const translations: Record<Locale, Record<string, string>> = {
     'app.name': 'Finap',
     'nav.functions': 'Funciones',
     'nav.budgets': 'Presupuestos',
+    'nav.login': 'Iniciar sesión',
     'landing.hero.headline': 'Tu dinero, en orden.',
     'landing.hero.subtitle':
       'Finap reúne saldo, gastos e ingresos en un solo lugar, para que siempre sepas dónde estás.',
@@ -44,6 +45,7 @@ export const translations: Record<Locale, Record<string, string>> = {
     'app.name': 'Finap',
     'nav.functions': 'Features',
     'nav.budgets': 'Budgets',
+    'nav.login': 'Sign in',
     'landing.hero.headline': 'Your money, in order.',
     'landing.hero.subtitle':
       'Finap brings your balance, expenses and income together, so you always know where you stand.',

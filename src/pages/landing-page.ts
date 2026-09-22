@@ -1,4 +1,5 @@
 import { LitElement, html, css } from 'lit';
+import { navigate } from '@open-cells/core';
 
 import { RevealController } from '../motion/reveal.js';
 import { LocalizeController } from '../i18n/localize.js';
@@ -163,6 +164,11 @@ export class LandingPage extends LitElement {
 
   private _localize = new LocalizeController(this);
 
+  private _goLogin(event?: Event): void {
+    event?.preventDefault();
+    navigate('login');
+  }
+
   private _scrollTo(id: string) {
     return (event: Event) => {
       event.preventDefault();
@@ -192,6 +198,7 @@ export class LandingPage extends LitElement {
               <a href="#presupuestos" @click=${this._scrollTo('presupuestos')}>
                 ${t('nav.budgets')}
               </a>
+              <a href="#/login" @click=${this._goLogin}>${t('nav.login')}</a>
             </nav>
             <finap-language-toggle></finap-language-toggle>
             <finap-theme-toggle></finap-theme-toggle>
@@ -206,8 +213,13 @@ export class LandingPage extends LitElement {
               <finap-heading level="1">${t('landing.hero.headline')}</finap-heading>
               <finap-text variant="large">${t('landing.hero.subtitle')}</finap-text>
               <div class="hero__actions">
-                <finap-button>${t('landing.hero.cta')}</finap-button>
-                <finap-button variant="secondary">
+                <finap-button @click=${this._goLogin}>
+                  ${t('landing.hero.cta')}
+                </finap-button>
+                <finap-button
+                  variant="secondary"
+                  @click=${this._scrollTo('funciones')}
+                >
                   ${t('landing.hero.secondary')}
                 </finap-button>
               </div>
@@ -242,7 +254,9 @@ export class LandingPage extends LitElement {
           <div class="highlight">
             <finap-heading level="2">${t('landing.highlight.title')}</finap-heading>
             <finap-text>${t('landing.highlight.body')}</finap-text>
-            <finap-button>${t('landing.highlight.cta')}</finap-button>
+            <finap-button @click=${this._goLogin}>
+              ${t('landing.highlight.cta')}
+            </finap-button>
           </div>
         </finap-container>
       </section>
