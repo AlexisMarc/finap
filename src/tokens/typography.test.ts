@@ -12,6 +12,15 @@ describe('typography.css', () => {
     expect(typographyCss).toMatch(/--finap-font-family\s*:/);
   });
 
+  it('declara la familia display (Sora)', () => {
+    expect(typographyCss).toMatch(/--finap-font-family-display\s*:/);
+    expect(typographyCss).toContain('Sora');
+  });
+
+  it('usa Inter como familia de cuerpo', () => {
+    expect(typographyCss).toContain('Inter');
+  });
+
   it.each([
     '--finap-font-size-xs',
     '--finap-font-size-md',

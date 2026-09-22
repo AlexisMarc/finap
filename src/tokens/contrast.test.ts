@@ -16,8 +16,11 @@ describe('contraste AA de la paleta', () => {
   it.each([
     ['texto sobre fondo (claro)', '#1a1a1a', '#ffffff'],
     ['texto muted sobre fondo (claro)', '#5c5c5c', '#ffffff'],
-    ['texto sobre fondo (oscuro)', '#f5f5f5', '#121212'],
-    ['texto muted sobre fondo (oscuro)', '#b0b0b0', '#121212'],
+    ['texto sobre fondo (oscuro)', '#ffffff', '#0d0d12'],
+    ['texto muted sobre fondo (oscuro)', '#9b9ba8', '#0d0d12'],
+    ['texto sobre superficie (oscuro)', '#ffffff', '#1e1e26'],
+    ['ingreso sobre superficie (oscuro)', '#2fc78a', '#1e1e26'],
+    ['acento-2 sobre superficie (oscuro)', '#9b7cff', '#1e1e26'],
     ['texto sobre primario', '#ffffff', '#eb001b'],
   ])('%s cumple WCAG AA', (_name, fg, bg) => {
     expect(meetsAA(fg, bg)).toBe(true);

@@ -1,8 +1,11 @@
-/* Finap design tokens — tipografía. System font stack sin descarga externa. */
+/* Finap design tokens — tipografía. Inter (cuerpo) + Sora (títulos). */
 
 :root {
   --finap-font-family:
-    system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    "Inter Variable", Inter, system-ui, -apple-system, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif;
+  --finap-font-family-display:
+    "Sora Variable", Sora, var(--finap-font-family);
 
   /* Tamaños */
   --finap-font-size-xs: 12px;

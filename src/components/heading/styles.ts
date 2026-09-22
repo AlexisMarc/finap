@@ -11,7 +11,7 @@ export const styles = css`
   h4,
   h5,
   h6 {
-    font-family: var(--finap-font-family);
+    font-family: var(--finap-font-family-display);
     font-weight: var(--finap-font-weight-bold);
     line-height: var(--finap-line-height-tight);
     letter-spacing: var(--finap-letter-spacing-tight);

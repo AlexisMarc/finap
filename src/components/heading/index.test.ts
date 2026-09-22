@@ -30,7 +30,7 @@ describe('finap-heading', () => {
 
   it('usa tokens tipográficos', () => {
     const cssText = FinapHeading.styles.cssText;
-    expect(cssText).toContain('var(--finap-font-family)');
+    expect(cssText).toContain('var(--finap-font-family-display)');
     expect(cssText).toContain('var(--finap-color-text)');
   });
 });

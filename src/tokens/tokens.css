@@ -10,6 +10,14 @@
   --finap-color-secondary: #ff5f00;
   --finap-color-on-secondary: #ffffff;
   --finap-color-accent: #f79e1b;
+  --finap-color-accent-2: #7c4dff;
+
+  /* Color — semánticos */
+  --finap-color-income: #2fc78a;
+  --finap-color-expense: #eb001b;
+  --finap-color-debt: #f79e1b;
+  --finap-color-positive: var(--finap-color-income);
+  --finap-color-negative: var(--finap-color-expense);
 
   /* Gradiente de marca (rojo → naranja → amarillo) */
   --finap-gradient-brand: linear-gradient(
@@ -38,15 +46,17 @@
   --finap-space-8: 64px;
 
   /* Radio de esquina */
-  --finap-radius-sm: 4px;
-  --finap-radius-md: 8px;
-  --finap-radius-lg: 16px;
+  --finap-radius-sm: 8px;
+  --finap-radius-md: 12px;
+  --finap-radius-lg: 21px;
+  --finap-radius-xl: 32px;
   --finap-radius-full: 9999px;
 
   /* Elevación */
   --finap-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.08);
   --finap-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.12);
   --finap-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.16);
+  --finap-shadow-modal: 0 24px 48px rgba(0, 0, 0, 0.6);
 
   /* Breakpoints (valores de referencia para media queries) */
   --finap-breakpoint-sm: 640px;
