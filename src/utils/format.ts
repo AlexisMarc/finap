@@ -1,0 +1,46 @@
+export function formatCurrency(
+  value: number,
+  currency: string = 'USD',
+  locale: string = 'en-US',
+): string {
+  return new Intl.NumberFormat(locale, {
+    style: 'currency',
+    currency,
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(value);
+}
+
+export function formatPercent(
+  value: number,
+  locale: string = 'en-US',
+): string {
+  return new Intl.NumberFormat(locale, {
+    style: 'percent',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 1,
+  }).format(value / 100);
+}
+
+export function formatDate(iso: string, locale: string = 'es-CO'): string {
+  const date = new Date(`${iso}T00:00:00`);
+  return new Intl.DateTimeFormat(locale, {
+    day: 'numeric',
+    month: 'short',
+  }).format(date);
+}
+
+export function formatRelativeDate(
+  iso: string,
+  locale: string = 'es-CO',
+  now: Date = new Date(),
+): string {
+  const date = new Date(`${iso}T00:00:00`);
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const diffDays = Math.round(
+    (today.getTime() - date.getTime()) / (1000 * 60 * 60 * 24),
+  );
+  if (diffDays === 0) return 'Hoy';
+  if (diffDays === 1) return 'Ayer';
+  return formatDate(iso, locale);
+}

@@ -20,7 +20,7 @@ describe('app-config', () => {
     clearSession();
     const result = sessionGuard({ to: { page: 'dashboard' } });
     expect(result.intercept).toBe(true);
-    expect(result.redirect?.page).toBe('landing');
+    expect(result.redirect?.page).toBe('login');
   });
 
   it('el guard permite rutas de la app con sesión', () => {
@@ -30,6 +30,16 @@ describe('app-config', () => {
     });
     const result = sessionGuard({ to: { page: 'dashboard' } });
     expect(result.intercept).toBe(false);
+  });
+
+  it('el guard redirige al dashboard si hay sesión e intenta login', () => {
+    setSession({
+      token: 't',
+      user: { id: 'u1', name: 'Marcos', email: 'm@finap.app' },
+    });
+    const result = sessionGuard({ to: { page: 'login' } });
+    expect(result.intercept).toBe(true);
+    expect(result.redirect?.page).toBe('dashboard');
   });
 
   it('el guard no intercepta la landing', () => {

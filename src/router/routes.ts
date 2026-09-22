@@ -8,6 +8,12 @@ export const routes: RouteDefinition[] = [
     action: () => import('../pages/landing-page.js'),
   },
   {
+    name: 'login',
+    path: '/login',
+    component: 'login-page',
+    action: () => import('../pages/login-page.js'),
+  },
+  {
     name: 'dashboard',
     path: '/dashboard',
     component: 'dashboard-page',

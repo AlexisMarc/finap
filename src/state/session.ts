@@ -34,6 +34,10 @@ export function hasSession(): boolean {
   return getSession() !== null;
 }
 
+export function getUser(): SessionUser | null {
+  return getSession()?.user ?? null;
+}
+
 export function setSession(session: Session): void {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(session));
   emit(session);

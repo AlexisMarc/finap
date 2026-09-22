@@ -1,27 +1,170 @@
 import { LitElement, html, css } from 'lit';
 
 import '../components/container/index.js';
-import '../components/heading/index.js';
-import '../components/text/index.js';
+import '../components/card/index.js';
+import '../components/button/index.js';
+import '../components/dashboard-summary/index.js';
+import '../components/dashboard-categories/index.js';
+import '../components/dashboard-debts/index.js';
+import '../components/dashboard-recent/index.js';
 
-/**
- * Página "Inicio" (placeholder).
- * La implementación completa corresponde al change `dashboard`.
- */
+import { getDashboard } from '../services/dashboard-service.js';
+import { getUser } from '../state/session.js';
+import { TRANSACTIONS_CHANGED_EVENT } from '../state/transactions.js';
+import type { DashboardSummary } from '../services/types.js';
+
 export class DashboardPage extends LitElement {
   static styles = css`
     :host {
       display: block;
     }
+
+    .sections {
+      display: grid;
+      gap: var(--finap-space-5);
+    }
+
+    .two-col {
+      display: grid;
+      gap: var(--finap-space-5);
+    }
+
+    .state {
+      display: grid;
+      gap: var(--finap-space-4);
+      justify-items: center;
+      padding: var(--finap-space-7);
+      text-align: center;
+      font-family: var(--finap-font-family);
+      color: var(--finap-color-text-muted);
+    }
+
+    @media (min-width: 1024px) {
+      .two-col {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
   `;
 
+  static properties = {
+    loading: { type: Boolean },
+    error: { type: String },
+    summary: { type: Object },
+  };
+
+  loading = false;
+
+  error = '';
+
+  summary: DashboardSummary | null = null;
+
+  private _userName = '';
+
+  connectedCallback(): void {
+    super.connectedCallback();
+    this._userName = getUser()?.name ?? '';
+    window.addEventListener(TRANSACTIONS_CHANGED_EVENT, this._onTransactionsChanged);
+    void this._load();
+  }
+
+  disconnectedCallback(): void {
+    window.removeEventListener(
+      TRANSACTIONS_CHANGED_EVENT,
+      this._onTransactionsChanged,
+    );
+    super.disconnectedCallback();
+  }
+
+  private _onTransactionsChanged = (): void => {
+    void this._load();
+  };
+
+  private async _load(): Promise<void> {
+    this.loading = true;
+    this.error = '';
+    try {
+      this.summary = await getDashboard();
+    } catch (error) {
+      this.error =
+        error instanceof Error
+          ? error.message
+          : 'No se pudo cargar el dashboard';
+    } finally {
+      this.loading = false;
+    }
+  }
+
+  private _retry(): void {
+    void this._load();
+  }
+
+  private get _debtTotal(): number {
+    return (this.summary?.debts ?? []).reduce(
+      (sum, debt) => sum + (debt.total - debt.paid),
+      0,
+    );
+  }
+
   render() {
+    if (this.loading) {
+      return html`
+        <finap-container>
+          <div class="state">Cargando…</div>
+        </finap-container>
+      `;
+    }
+
+    if (this.error) {
+      return html`
+        <finap-container>
+          <div class="state">
+            <p>${this.error}</p>
+            <finap-button @click=${this._retry}>Reintentar</finap-button>
+          </div>
+        </finap-container>
+      `;
+    }
+
+    if (!this.summary) {
+      return html`
+        <finap-container>
+          <div class="state">No hay datos disponibles.</div>
+        </finap-container>
+      `;
+    }
+
+    const summary = this.summary;
     return html`
       <finap-container>
-        <finap-heading level="1">Inicio</finap-heading>
-        <finap-text>
-          Vista pendiente de implementación (change dashboard).
-        </finap-text>
+        <div class="sections">
+          <finap-dashboard-summary
+            name=${this._userName}
+            balance=${summary.balance}
+            income=${summary.income}
+            expense=${summary.expense}
+            debt=${this._debtTotal}
+            trend=${summary.trend}
+          ></finap-dashboard-summary>
+
+          <finap-card>
+            <finap-dashboard-categories
+              .categories=${summary.categories}
+            ></finap-dashboard-categories>
+          </finap-card>
+
+          <div class="two-col">
+            <finap-card>
+              <finap-dashboard-debts
+                .debts=${summary.debts}
+              ></finap-dashboard-debts>
+            </finap-card>
+            <finap-card>
+              <finap-dashboard-recent
+                .transactions=${summary.recentTransactions}
+              ></finap-dashboard-recent>
+            </finap-card>
+          </div>
+        </div>
       </finap-container>
     `;
   }

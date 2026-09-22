@@ -6,13 +6,23 @@ import '../avatar/index.js';
 import '../user-menu/index.js';
 import '../button/index.js';
 import '../input/index.js';
+import '../modal/index.js';
+import '../transaction-form/index.js';
 
 import {
   getSession,
-  clearSession,
   SESSION_CHANGED_EVENT,
   type SessionUser,
 } from '../../state/session.js';
+import { logout } from '../../services/auth-service.js';
+import { list as listCategories } from '../../services/categories-service.js';
+import {
+  create,
+  type TransactionInput,
+} from '../../services/transactions-service.js';
+import { notifyTransactionsChanged } from '../../state/transactions.js';
+import type { Category } from '../../services/types.js';
+import type { TransactionFormValue } from '../transaction-form/index.js';
 
 export interface ShellSection {
   id: string;
@@ -182,11 +192,23 @@ export class FinapAppShell extends LitElement {
   static properties = {
     currentPage: { type: String },
     user: { type: Object },
+    addOpen: { type: Boolean },
+    addSaving: { type: Boolean },
+    addError: { type: String },
+    addCategories: { type: Array },
   };
 
   currentPage = '';
 
   user: SessionUser | null = null;
+
+  addOpen = false;
+
+  addSaving = false;
+
+  addError = '';
+
+  addCategories: Category[] = [];
 
   private _observer?: MutationObserver;
 
@@ -195,7 +217,7 @@ export class FinapAppShell extends LitElement {
   };
 
   private _onLogout = () => {
-    clearSession();
+    void logout();
     navigate('landing');
   };
 
@@ -246,9 +268,37 @@ export class FinapAppShell extends LitElement {
   }
 
   private _onAdd(): void {
-    this.dispatchEvent(
-      new CustomEvent('finap-add', { bubbles: true, composed: true }),
-    );
+    this.addOpen = true;
+    this.addError = '';
+    void this._loadAddCategories();
+  }
+
+  private async _loadAddCategories(): Promise<void> {
+    try {
+      this.addCategories = await listCategories();
+    } catch {
+      this.addCategories = [];
+    }
+  }
+
+  private _closeAdd = (): void => {
+    this.addOpen = false;
+  };
+
+  private async _onAddSave(event: Event): Promise<void> {
+    const value = (event as CustomEvent<TransactionFormValue>).detail;
+    this.addSaving = true;
+    this.addError = '';
+    try {
+      await create(value as TransactionInput);
+      notifyTransactionsChanged();
+      this.addOpen = false;
+    } catch (error) {
+      this.addError =
+        error instanceof Error ? error.message : 'No se pudo guardar';
+    } finally {
+      this.addSaving = false;
+    }
   }
 
   render() {
@@ -315,6 +365,26 @@ export class FinapAppShell extends LitElement {
           `,
         )}
       </nav>
+
+      <finap-modal
+        ?open=${this.addOpen}
+        heading="Nuevo registro"
+        @finap-close=${this._closeAdd}
+      >
+        <div class="add-body">
+          ${this.addOpen
+            ? html`
+                <finap-transaction-form
+                  .categories=${this.addCategories}
+                  .saving=${this.addSaving}
+                  error=${this.addError}
+                  @finap-save=${this._onAddSave}
+                  @finap-cancel=${this._closeAdd}
+                ></finap-transaction-form>
+              `
+            : ''}
+        </div>
+      </finap-modal>
     `;
   }
 }
