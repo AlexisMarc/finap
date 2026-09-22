@@ -21,6 +21,7 @@ const REQUIRED_TOKENS = [
   '--finap-breakpoint-sm',
   '--finap-breakpoint-xl',
   '--finap-container-max-width',
+  '--finap-gradient-brand',
 ];
 
 describe('tokens.css', () => {
@@ -36,5 +37,12 @@ describe('tokens.css', () => {
     expect(tokensCss).toContain('#eb001b');
     expect(tokensCss).toContain('#ff5f00');
     expect(tokensCss).toContain('#f79e1b');
+  });
+
+  it('declara el gradiente de marca con los tres colores', () => {
+    const block = tokensCss.slice(tokensCss.indexOf('--finap-gradient-brand'));
+    expect(block).toContain('--finap-color-primary');
+    expect(block).toContain('--finap-color-secondary');
+    expect(block).toContain('--finap-color-accent');
   });
 });

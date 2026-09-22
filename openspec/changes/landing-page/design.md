@@ -25,11 +25,11 @@ El design system (tokens, componentes base, motion) ya está implementado y arch
 - **Alternativas**: render manual sin router. Se descarta porque la landing debe ser la entrada de una SPA con más rutas después.
 - **Racional**: `action` hace el registro del custom element perezoso, y `component` es el tag que Open Cells crea en `mainNode`.
 
-### 2. Ciclo de vida de página con `@open-cells/page-controller`
+### 2. Landing como `LitElement` (PageController diferido)
 
-- **Decisión**: `landing-page` extiende `PageController` (`@open-cells/page-controller`), con `onPageEnter`/`onPageLeave`. Para la landing, `onPageEnter` es mínimo (p.ej. asegurar tema), pero deja el patrón listo para páginas con datos.
-- **Alternativas**: extender `LitElement` directamente sin controller. Funciona, pero no demuestra el patrón de Open Cells del README.
-- **Racional**: el README describe `PageController`/`ElementController`; en Open Cells 1.2.1 viven en paquetes separados (`@open-cells/page-controller`, `@open-cells/element-controller`), no en `core`.
+- **Decisión**: `landing-page` es un `LitElement` registrado como custom element (tag `landing-page`) que el router renderiza. No se usa `PageController` en este change.
+- **Alternativas**: usar `@open-cells/page-controller` 1.0.6. Se descarta por ahora: el paquete (y su cadena `@open-cells/element-controller` → `@open-cells/core-plugin`) publica sintaxis ESM sin `"type": "module"` y con un import de tipos por subpath (`@open-cells/element-controller/types`) frágil para `tsc`/Vite; además no aporta valor funcional a una landing estática (su `onPageEnter`/`onPageLeave` sería no-op).
+- **Racional**: mantener el cambio robusto y centrado en la entrada a la SPA (`startApp` + rutas, que sí es el patrón real de Open Cells). El `PageController` se adopta cuando haya páginas con datos que cargar/limpiar en el ciclo de vida.
 
 ### 3. Gradiente de marca como token
 
