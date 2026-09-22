@@ -9,6 +9,8 @@ export const APP_ROUTES = new Set([
   'debts',
   'movements',
   'settings',
+  'categories',
+  'budgets',
 ]);
 
 interface NavigationLike {

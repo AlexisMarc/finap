@@ -43,4 +43,16 @@ export const routes: RouteDefinition[] = [
     component: 'settings-page',
     action: () => import('../pages/settings-page.js'),
   },
+  {
+    name: 'categories',
+    path: '/categories',
+    component: 'categories-page',
+    action: () => import('../pages/categories-page.js'),
+  },
+  {
+    name: 'budgets',
+    path: '/budgets',
+    component: 'budgets-page',
+    action: () => import('../pages/budgets-page.js'),
+  },
 ];

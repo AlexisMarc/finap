@@ -21,6 +21,14 @@ export interface Category {
   icon: string;
 }
 
+export interface Budget {
+  id: string;
+  categoryId: string;
+  month: string;
+  limit: number;
+  spent: number;
+}
+
 export interface ApiErrorBody {
   error: { code: string; message: string; details?: unknown };
 }
