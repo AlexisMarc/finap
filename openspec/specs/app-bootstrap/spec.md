@@ -1,0 +1,34 @@
+# App Bootstrap Specification
+
+## Purpose
+
+Define el arranque de la SPA con Open Cells: inicialización de la aplicación (`startApp`), definición de rutas y render de la landing page como ruta raíz.
+
+## Requirements
+
+### Requirement: Arranque de la aplicación
+
+El sistema SHALL inicializar la SPA mediante `startApp` de Open Cells, renderizando el contenido en un nodo principal del documento.
+
+#### Scenario: Aplicación arranca
+
+- **WHEN** se carga la aplicación en el navegador
+- **THEN** la SPA se inicializa y renderiza el contenido en el nodo principal
+
+### Requirement: Ruta raíz hacia la landing
+
+El sistema SHALL mapear la ruta raíz (`/`) a la landing page.
+
+#### Scenario: Navegación a la raíz
+
+- **WHEN** el usuario navega a `/`
+- **THEN** se renderiza la landing page
+
+### Requirement: Definición declarativa de rutas
+
+El sistema SHALL definir las rutas de forma declarativa (nombre, patrón y componente asociado) para que sean extensibles con nuevas páginas.
+
+#### Scenario: Rutas declarativas
+
+- **WHEN** se define una nueva ruta
+- **THEN** se asocia un nombre, un patrón de URL y un componente sin modificar el bootstrap
