@@ -1,0 +1,19 @@
+/* Estilos globales de la aplicación. */
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  background-color: var(--finap-color-bg);
+  color: var(--finap-color-text);
+  font-family: var(--finap-font-family);
+}
+
+/* Open Cells monta cada página en el mainNode (#app) y le añade el atributo
+   `state` (active | inactive | cached). Es responsabilidad de la app ocultar
+   las páginas inactivas/cacheadas; si no, se muestran todas a la vez. */
+#app > [state='inactive'],
+#app > [state='cached'] {
+  display: none;
+}

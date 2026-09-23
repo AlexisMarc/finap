@@ -3,6 +3,7 @@ import './tokens/typography.css';
 import './tokens/motion.css';
 import './theme/theme.css';
 import './motion/motion.css';
+import './styles/app.css';
 
 import '@fontsource-variable/inter';
 import '@fontsource-variable/sora';
