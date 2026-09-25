@@ -3,11 +3,11 @@ import { navigate } from '@open-cells/core';
 
 import '../components/container/index.js';
 import '../components/heading/index.js';
-import '../components/card/index.js';
-import '../components/button/index.js';
 import '../components/settings-profile/index.js';
 import '../components/settings-preferences/index.js';
 import '../components/settings-session/index.js';
+import '@spectrum-web-components/link/sp-link.js';
+import '@spectrum-web-components/divider/sp-divider.js';
 
 import {
   getUser,
@@ -79,40 +79,43 @@ export class SettingsPage extends LitElement {
         <div class="content">
           <finap-heading level="1">${t('settings.title')}</finap-heading>
 
-          <finap-card>
+          <div class="finap-surface">
             <finap-heading level="3">${t('settings.profile')}</finap-heading>
             <finap-settings-profile
               .user=${this.user}
             ></finap-settings-profile>
-          </finap-card>
+          </div>
 
-          <finap-card>
+          <sp-divider size="s"></sp-divider>
+
+          <div class="finap-surface">
             <finap-heading level="3">${t('settings.preferences')}</finap-heading>
             <finap-settings-preferences
               .locale=${this.locale}
               .currency=${this.currency}
             ></finap-settings-preferences>
-          </finap-card>
+          </div>
 
-          <finap-card>
+          <sp-divider size="s"></sp-divider>
+
+          <div class="finap-surface">
             <finap-heading level="3">${t('settings.data')}</finap-heading>
             <div class="links">
-              <finap-button @click=${() => navigate('categories')}>
+              <sp-link @click=${() => navigate('categories')}>
                 ${t('settings.categories')}
-              </finap-button>
-              <finap-button
-                variant="secondary"
-                @click=${() => navigate('budgets')}
-              >
+              </sp-link>
+              <sp-link @click=${() => navigate('budgets')}>
                 ${t('settings.budgets')}
-              </finap-button>
+              </sp-link>
             </div>
-          </finap-card>
+          </div>
 
-          <finap-card>
+          <sp-divider size="s"></sp-divider>
+
+          <div class="finap-surface">
             <finap-heading level="3">${t('settings.session')}</finap-heading>
             <finap-settings-session></finap-settings-session>
-          </finap-card>
+          </div>
         </div>
       </finap-container>
     `;

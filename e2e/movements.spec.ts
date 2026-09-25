@@ -11,7 +11,7 @@ test.describe('Movimientos', () => {
     await page.goto('/movements');
     await expect(page.getByText('Salario').first()).toBeVisible();
 
-    await page.getByRole('button', { name: 'Gasto', exact: true }).click();
+    await page.getByRole('radio', { name: 'Gasto' }).click();
     await expect(page.getByText('Salario')).toHaveCount(0);
     await expect(page.getByText('Renta').first()).toBeVisible();
   });
@@ -19,17 +19,6 @@ test.describe('Movimientos', () => {
   test('busca por texto', async ({ page }) => {
     await page.goto('/movements');
     await page.locator('input[placeholder="Buscar"]').fill('Netflix');
-    await expect(page.getByText('Netflix').first()).toBeVisible();
-    await expect(page.getByText('Salario')).toHaveCount(0);
-  });
-
-  test('busca desde el header del shell', async ({ page }) => {
-    await page.goto('/dashboard');
-    const headerSearch = page.locator('input[placeholder="Buscar..."]');
-    await headerSearch.fill('Netflix');
-    await headerSearch.press('Enter');
-
-    await expect(page).toHaveURL(/\/movements$/);
     await expect(page.getByText('Netflix').first()).toBeVisible();
     await expect(page.getByText('Salario')).toHaveCount(0);
   });

@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="./docs/assets/logo.svg" alt="Finap" width="96" height="96" />
+</p>
+
 # Finap — Gestor de finanzas personales
 
 SPA (PWA) de gestión de finanzas personales construida con **Open Cells** (BBVA) +
@@ -6,10 +10,19 @@ arquitectura frontend: design system con tokens, capas desacopladas, i18n,
 accesibilidad, testing y offline.
 
 ![Estado](https://img.shields.io/badge/estado-MVP%20funcional-green)
-![Tests](https://img.shields.io/badge/tests-259%20passing-brightgreen)
+![Tests](https://img.shields.io/badge/tests-242%20unit%20%2B%2056%20e2e-brightgreen)
 ![Licencia](https://img.shields.io/badge/licencia-Apache--2.0-blue)
 
 ## Demo
+
+![Recorrido de Finap en escritorio](./docs/assets/finap-demo-desktop.gif)
+
+<details>
+<summary>Ver recorrido en móvil</summary>
+
+![Recorrido de Finap en móvil](./docs/assets/finap-demo-mobile.gif)
+
+</details>
 
 > Desplegable en **Vercel** (ver [`vercel.json`](./vercel.json)). `npm run dev` levanta el entorno local.
 
@@ -23,9 +36,9 @@ accesibilidad, testing y offline.
 | Build/Dev | [Vite](https://vite.dev) |
 | Routing | Open Cells (history API, URLs limpias) |
 | Estado | Canales de Open Cells (RxJS) + propiedades reactivas de Lit |
-| Tests | Vitest + happy-dom |
+| Tests | Vitest + happy-dom (unitarios) · Playwright (e2e, escritorio + móvil) |
 | Gráficas | Chart.js (envuelto en `finap-chart`) |
-| Tipografías | Inter (cuerpo) + Sora (títulos) vía `@fontsource` |
+| Tipografías | Adobe Clean (con fallback a la fuente del sistema) |
 | PWA | `vite-plugin-pwa` (Workbox): offline, caché y background sync |
 | Deploy | Vercel |
 
@@ -89,9 +102,15 @@ npm install
 npm run dev        # servidor de desarrollo (Vite + HMR)
 npm run build      # build de producción (tsc + vite build)
 npm run preview    # previsualiza el build
-npm run test       # tests unitarios
+npm run test       # tests unitarios (Vitest)
 npm run test:watch # tests en modo watch
+npm run test:e2e   # tests e2e (Playwright: escritorio + móvil, graba vídeo)
+npm run test:e2e:ui # Playwright en modo UI
 ```
+
+> Los tests e2e se ejecutan contra un backend real. Por defecto apuntan a
+> `http://localhost:3000/api/v1` (configurable con `E2E_API_BASE_URL`). Cada test
+> deja su grabación en `test-results/`.
 
 ## Configuración
 
@@ -108,6 +127,9 @@ La capa de datos está aislada en `src/services/` (única puerta a la red); los 
 - Helper `src/test/fixture.ts`: monta componentes con `new Componente()` + `connectedCallback()`
   + `updateComplete` (evita el problema conocido de happy-dom con `document.createElement` + Shadow DOM).
 - Se testean también tokens, tema, i18n, formato y los servicios (con `fetch` mockeado).
+- **Playwright** (e2e) en `e2e/`: flujos por vista sobre un backend real, con
+  proyectos **desktop** y **mobile** y **vídeo por test**. Config en `playwright.config.ts`;
+  incluye un recorrido (`tour.spec.ts`) pensado para generar los demos del portafolio.
 
 ## Despliegue (Vercel)
 

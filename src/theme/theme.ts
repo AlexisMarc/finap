@@ -21,6 +21,9 @@ export function resolveTheme(): Theme {
 
 export function applyTheme(theme: Theme): void {
   document.documentElement.setAttribute('data-theme', theme);
+  document
+    .querySelector('sp-theme')
+    ?.setAttribute('color', theme === 'dark' ? 'dark' : 'light');
   document.documentElement.dispatchEvent(
     new CustomEvent<Theme>(THEME_CHANGED_EVENT, {
       detail: theme,

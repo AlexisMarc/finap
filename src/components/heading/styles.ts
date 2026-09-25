@@ -20,15 +20,15 @@ export const styles = css`
   }
 
   h1 {
-    font-size: var(--finap-font-size-3xl);
+    font-size: clamp(32px, 8vw, var(--finap-font-size-3xl));
   }
 
   h2 {
-    font-size: var(--finap-font-size-2xl);
+    font-size: clamp(24px, 6vw, var(--finap-font-size-2xl));
   }
 
   h3 {
-    font-size: var(--finap-font-size-xl);
+    font-size: clamp(20px, 4.5vw, var(--finap-font-size-xl));
   }
 
   h4 {

@@ -14,10 +14,7 @@ test.describe('Presupuestos', () => {
       .getByRole('button', { name: 'Definir presupuesto' })
       .click();
 
-    const modal = page.locator('finap-modal', {
-      hasText: 'Definir presupuesto',
-    });
-    await modal.getByRole('button', { name: 'Guardar' }).click();
+    await page.getByRole('button', { name: 'Guardar' }).click();
 
     await expect(page.getByText('Selecciona una categoría')).toBeVisible();
   });

@@ -2,32 +2,57 @@
 
 ## Purpose
 
-Define los tokens de diseño (color, tipografía, espaciado, radio, elevación, motion y breakpoints) como CSS custom properties compartidas por toda la aplicación, con soporte de tema claro y oscuro.
+Define los tokens de diseño (color, tipografía, espaciado, radio, elevación, motion y breakpoints) como CSS custom properties compartidas por toda la aplicación, con soporte de tema claro y oscuro, basados en Spectrum.
 
 ## Requirements
 
 ### Requirement: Tokens expuestos como CSS custom properties
 
-El sistema SHALL exponer todos los tokens de diseño como CSS custom properties (variables CSS) con el prefijo `--finap-`, disponibles globalmente para cualquier componente.
+El sistema SHALL exponer los tokens de diseño como CSS custom properties disponibles globalmente, con el prefijo `--finap-` para los tokens propios de Finap y el prefijo `--spectrum-` para los tokens del design system.
 
 #### Scenario: Tokens globales disponibles
 
 - **WHEN** un componente de la aplicación se renderiza dentro del árbol que importa los tokens
-- **THEN** las variables `--finap-*` están definidas y son accesibles desde los estilos del componente
+- **THEN** las variables `--finap-*` y `--spectrum-*` están definidas y son accesibles desde los estilos del componente
 
 #### Scenario: Prefijo de nomenclatura consistente
 
-- **WHEN** se consulta cualquier token de diseño
+- **WHEN** se consulta cualquier token propio de Finap
 - **THEN** su nombre comienza con el prefijo `--finap-`
 
 ### Requirement: Paleta de color
 
-El sistema SHALL definir una paleta de color con colores primarios (naranja/rojo), neutros (grises) y fondos, inspirada en la paleta de Mastercard, y exponerla como tokens de color.
+El sistema SHALL usar la paleta de color de Spectrum como base: los neutros (fondos, superficies, bordes y texto) provienen de los tokens semánticos de Spectrum con su tono cálido natural, el acento interactivo usa el acento de Spectrum, y la paleta de marca de Finap (rojo/naranja/amarillo) se reserva como acento de marca (logo, hero y gradiente), sin dominar la interfaz.
+
+#### Scenario: Neutros de Spectrum
+
+- **WHEN** se consultan los tokens de fondo, superficie, borde y texto
+- **THEN** derivan de los tokens neutros semánticos de Spectrum (`--spectrum-background-*`, escala de grises)
+
+#### Scenario: Tono cálido coherente
+
+- **WHEN** se renderiza la interfaz
+- **THEN** los neutros reflejan el tono cálido de Spectrum, sin parecer más fríos que la librería
+
+#### Scenario: Contraste fondo/superficie en modo claro
+
+- **WHEN** se renderiza una superficie sobre el fondo en modo claro
+- **THEN** la superficie se distingue del fondo (borde y/o tono con contraste suficiente)
 
 #### Scenario: Color primario definido
 
-- **WHEN** se consulta el token de color primario
+- **WHEN** se consulta el token de color primario de marca
 - **THEN** devuelve un valor de color válido (naranja/rojo) coherente con la identidad de marca
+
+#### Scenario: Acento interactivo de Spectrum
+
+- **WHEN** se renderiza un control interactivo principal (acción primaria, foco, selección)
+- **THEN** usa el acento de Spectrum
+
+#### Scenario: Marca como acento
+
+- **WHEN** se renderiza el logo, el hero o el gradiente de marca
+- **THEN** se usa la paleta de marca (rojo/naranja/amarillo) sobre una base neutral
 
 #### Scenario: Colores de texto y fondo con contraste suficiente
 
@@ -60,21 +85,21 @@ El sistema SHALL proporcionar un tema claro (por defecto) y un tema oscuro, sele
 
 ### Requirement: Tipografía
 
-El sistema SHALL definir una escala tipográfica (familias, tamaños, pesos y alturas de línea) como tokens, usando **Inter** para texto de cuerpo y **Sora** para títulos y display.
+El sistema SHALL definir una escala tipográfica (familias, tamaños, pesos y alturas de línea) como tokens basados en la escala tipográfica de Spectrum.
 
 #### Scenario: Escala tipográfica definida
 
 - **WHEN** se consultan los tokens tipográficos (título, cuerpo, etiqueta)
-- **THEN** cada uno devuelve familia, tamaño, peso e interlineado coherentes con una escala definida
+- **THEN** cada uno devuelve familia, tamaño, peso e interlineado coherentes con la escala de Spectrum
 
 #### Scenario: Familias de cuerpo y títulos
 
 - **WHEN** se consultan los tokens de familia tipográfica
-- **THEN** el cuerpo usa `Inter` y los títulos/display usan `Sora`
+- **THEN** devuelven las familias de Spectrum definidas por el design system
 
 ### Requirement: Espaciado, radio, elevación y breakpoints
 
-El sistema SHALL definir tokens para la escala de espaciado, radios de esquina, niveles de elevación (sombra) y breakpoints de layout responsivo.
+El sistema SHALL definir tokens para la escala de espaciado, radios de esquina, niveles de elevación (sombra) y breakpoints de layout responsivo, derivados de las escalas de Spectrum.
 
 #### Scenario: Escala de espaciado disponible
 
@@ -88,7 +113,7 @@ El sistema SHALL definir tokens para la escala de espaciado, radios de esquina, 
 
 ### Requirement: Tokens de motion
 
-El sistema SHALL definir tokens de motion (duraciones y curvas de easing) para las animaciones.
+El sistema SHALL definir tokens de motion (duraciones y curvas de easing) para las animaciones, alineados con las curvas de motion de Spectrum.
 
 #### Scenario: Tokens de motion disponibles
 
@@ -111,28 +136,75 @@ El sistema SHALL definir un token de gradiente de marca compuesto por los tres c
 
 ### Requirement: Colores semánticos
 
-El sistema SHALL definir tokens de color semánticos para estados financieros y acentos: positivo/ingreso, negativo/gasto, deuda y acento secundario.
+El sistema SHALL definir tokens de color semánticos para estados financieros (positivo/ingreso, negativo/gasto y deuda) alineados con la paleta semántica de Spectrum y coherentes en tema claro y oscuro.
 
 #### Scenario: Colores semánticos disponibles
 
 - **WHEN** un componente necesita indicar un ingreso
-- **THEN** dispone de un token de color positivo (verde) coherente con el tema
+- **THEN** dispone de un token de color positivo (verde) de la paleta semántica correspondiente
 
 #### Scenario: Colores semánticos en modo oscuro
 
 - **WHEN** se activa el tema oscuro
-- **THEN** los colores semánticos (ingreso, gasto, deuda y acento) tienen valores coherentes con el tema oscuro
+- **THEN** los colores semánticos (ingreso, gasto y deuda) tienen valores coherentes con el tema oscuro
 
 ### Requirement: Escala de radios y elevación
 
-El sistema SHALL definir una escala de radios de esquina y niveles de elevación alineada a la interfaz de la app (radios variados según jerarquía y sombra de modal).
+El sistema SHALL definir una escala de radios de esquina sutil alineada con los radios de Spectrum (valores pequeños; `full` solo para elementos tipo píldora o avatares) y una elevación contenida, evitando el aspecto de "burbuja".
 
 #### Scenario: Radios por jerarquía
 
 - **WHEN** se construye una superficie (tarjeta, panel, modal)
-- **THEN** existe un token de radio adecuado a su jerarquía
+- **THEN** existe un token de radio adecuado a su jerarquía con un valor sutil (no prominente)
+
+#### Scenario: Sin redondeo prominente
+
+- **WHEN** se renderiza cualquier superficie o control rectangular
+- **THEN** su radio es pequeño y coherente con Spectrum (no hay esquinas muy redondeadas)
 
 #### Scenario: Sombra de modal
 
 - **WHEN** se muestra un modal
 - **THEN** está disponible un token de elevación para la sombra del modal
+
+### Requirement: Tema raíz Spectrum
+
+El sistema SHALL renderizar la aplicación dentro de un único `sp-theme` raíz con escala y color configurables, y SHALL aplicar el tema claro u oscuro modificando el atributo de color del `sp-theme` sin recargar la página.
+
+#### Scenario: Tema por defecto
+
+- **WHEN** la aplicación se carga sin preferencia explícita del usuario
+- **THEN** el `sp-theme` raíz se aplica con el color claro (o el del sistema si prefiere oscuro)
+
+#### Scenario: Cambio a tema oscuro
+
+- **WHEN** el usuario activa el tema oscuro
+- **THEN** el `sp-theme` raíz cambia a color oscuro y todos los componentes Spectrum reflejan el cambio
+
+#### Scenario: Respetar preferencia del sistema
+
+- **WHEN** el usuario no ha elegido tema y su sistema prefiere modo oscuro (`prefers-color-scheme: dark`)
+- **THEN** se aplica el tema oscuro
+
+### Requirement: Tokens propios como alias de Spectrum
+
+El sistema SHALL exponer los tokens existentes `--finap-*` como alias de los tokens de Spectrum (`--spectrum-*`) para que los componentes de app sigan funcionando durante la migración, y SHALL añadir tokens semánticos propios (ingreso, gasto, deuda y gradiente de marca) sobre la paleta Spectrum.
+
+#### Scenario: Alias disponible
+
+- **WHEN** un componente consulta un token `--finap-*` existente
+- **THEN** el token devuelve un valor derivado de un token `--spectrum-*`
+
+#### Scenario: Tokens semánticos en ambos temas
+
+- **WHEN** se activa el tema oscuro
+- **THEN** los tokens semánticos (ingreso, gasto, deuda) tienen valores coherentes con el tema oscuro
+
+### Requirement: Tipografía Spectrum
+
+El sistema SHALL usar las fuentes del design system de Spectrum para cuerpo y títulos en toda la aplicación.
+
+#### Scenario: Familias tipográficas
+
+- **WHEN** se consultan los tokens de familia tipográfica
+- **THEN** devuelven las familias de Spectrum (Adobe Clean o las definidas por el paquete de estilos de Spectrum)

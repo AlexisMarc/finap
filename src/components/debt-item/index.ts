@@ -1,60 +1,75 @@
 import { LitElement, html, css } from 'lit';
 
-import '../progress/index.js';
-import '../button/index.js';
+import '@spectrum-web-components/status-light/sp-status-light.js';
+import '@spectrum-web-components/action-menu/sp-action-menu.js';
+import '@spectrum-web-components/menu/sp-menu-item.js';
+import { progressBarStyles, renderProgressBar } from '../progress-bar.js';
+import { progressPercent, progressVariant } from '../../utils/progress.js';
 import { LocalizeController } from '../../i18n/localize.js';
 import { formatCurrency, formatPercent, formatDate } from '../../utils/format.js';
 import type { Debt } from '../../services/types.js';
 
 export class FinapDebtItem extends LitElement {
-  static styles = css`
-    :host {
-      display: block;
-    }
+  static styles = [
+    progressBarStyles,
+    css`
+      :host {
+        display: block;
+        min-width: 0;
+      }
 
-    .debt {
-      display: grid;
-      gap: var(--finap-space-2);
-      padding: var(--finap-space-4) 0;
-      border-top: 1px solid var(--finap-color-border);
-    }
+      .debt {
+        display: grid;
+        gap: var(--finap-space-2);
+        padding: var(--finap-space-4) 0;
+        border-top: 1px solid var(--finap-color-border);
+        min-width: 0;
+      }
 
-    .head {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      gap: var(--finap-space-3);
-      font-family: var(--finap-font-family);
-    }
+      .head {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: var(--finap-space-3);
+        font-family: var(--finap-font-family);
+      }
 
-    .name {
-      color: var(--finap-color-text);
-      font-weight: var(--finap-font-weight-semibold);
-    }
+      .name {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        color: var(--finap-color-text);
+        font-weight: var(--finap-font-weight-semibold);
+      }
 
-    .pending {
-      color: var(--finap-color-text-muted);
-      font-size: var(--finap-font-size-sm);
-    }
+      .pending {
+        flex: none;
+        color: var(--finap-color-text-muted);
+        font-size: var(--finap-font-size-sm);
+      }
 
-    .meta {
-      display: flex;
-      gap: var(--finap-space-3);
-      font-family: var(--finap-font-family);
-      font-size: var(--finap-font-size-sm);
-      color: var(--finap-color-text-muted);
-    }
+      .meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: var(--finap-space-3);
+        font-family: var(--finap-font-family);
+        font-size: var(--finap-font-size-sm);
+        color: var(--finap-color-text-muted);
+      }
 
-    .done {
-      color: var(--finap-color-income);
-      font-weight: var(--finap-font-weight-semibold);
-    }
+      .done {
+        color: var(--finap-color-income);
+        font-weight: var(--finap-font-weight-semibold);
+      }
 
-    .actions {
-      display: flex;
-      gap: var(--finap-space-1);
-    }
-  `;
+      .actions {
+        display: flex;
+        gap: var(--finap-space-1);
+      }
+    `,
+  ];
 
   static properties = {
     debt: { type: Object },
@@ -79,6 +94,20 @@ export class FinapDebtItem extends LitElement {
     );
   }
 
+  private _onAction = (event: Event): void => {
+    if (!this.debt) return;
+    const value = (event.target as { value?: string }).value;
+    const name =
+      value === 'pay'
+        ? 'finap-pay'
+        : value === 'edit'
+          ? 'finap-edit'
+          : value === 'delete'
+            ? 'finap-delete'
+            : '';
+    if (name) this._emit(name, this.debt);
+  };
+
   render() {
     if (!this.debt) return html`<div class="debt"></div>`;
     const done = this.debt.paid >= this.debt.total;
@@ -92,36 +121,33 @@ export class FinapDebtItem extends LitElement {
             ${formatCurrency(this._pending)} ${t('debts.pending')}
           </span>
         </div>
-        <finap-progress
-          value=${this.debt.paid}
-          max=${this.debt.total}
-        ></finap-progress>
+        ${renderProgressBar({
+          percent: progressPercent(this.debt.paid, this.debt.total),
+          variant: progressVariant(
+            progressPercent(this.debt.paid, this.debt.total),
+          ),
+          label: this.debt.name,
+        })}
         <div class="meta">
           <span>${formatPercent(this._percent)}</span>
           ${this.debt.dueDate
             ? html`<span class="due">${t('debts.due')} ${formatDate(this.debt.dueDate)}</span>`
             : ''}
-          ${done ? html`<span class="done">${t('debts.paid')}</span>` : ''}
+          ${done ? html`<sp-status-light variant="positive"
+                >${t('debts.paid')}</sp-status-light
+              >` : html`<sp-status-light variant="notice"
+                >${t('debts.pending')}</sp-status-light
+              >`}
         </div>
         <div class="actions">
-          <finap-button
-            variant="text"
-            @click=${() => this._emit('finap-pay', this.debt as Debt)}
+          <sp-action-menu
+            label=${t('common.actions')}
+            @change=${this._onAction}
           >
-            ${t('debts.pay')}
-          </finap-button>
-          <finap-button
-            variant="text"
-            @click=${() => this._emit('finap-edit', this.debt as Debt)}
-          >
-            ${t('common.edit')}
-          </finap-button>
-          <finap-button
-            variant="text"
-            @click=${() => this._emit('finap-delete', this.debt as Debt)}
-          >
-            ${t('common.delete')}
-          </finap-button>
+            <sp-menu-item value="pay">${t('debts.pay')}</sp-menu-item>
+            <sp-menu-item value="edit">${t('common.edit')}</sp-menu-item>
+            <sp-menu-item value="delete">${t('common.delete')}</sp-menu-item>
+          </sp-action-menu>
         </div>
       </div>
     `;

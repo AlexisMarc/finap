@@ -59,9 +59,11 @@ describe('movements-page', () => {
     await el.updateComplete;
 
     expect(el.transactions.length).toBe(0);
-    expect(el.shadowRoot?.querySelector('.state')?.textContent).toContain(
-      'No hay movimientos',
-    );
+    expect(
+      el.shadowRoot?.querySelector('sp-illustrated-message')?.getAttribute(
+        'heading',
+      ),
+    ).toContain('No hay movimientos');
     teardown(el);
   });
 
@@ -72,7 +74,7 @@ describe('movements-page', () => {
     await el.updateComplete;
 
     expect(el.error).toBe('Fallo de red');
-    expect(el.shadowRoot?.querySelector('finap-button')).not.toBeNull();
+    expect(el.shadowRoot?.querySelector('sp-button')).not.toBeNull();
     teardown(el);
   });
 

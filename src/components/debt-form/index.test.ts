@@ -11,7 +11,7 @@ describe('finap-debt-form', () => {
     el.addEventListener('finap-save', () => {
       saved = true;
     });
-    (el.shadowRoot?.querySelectorAll('finap-button')[1] as HTMLElement).click();
+    (el.shadowRoot?.querySelectorAll('sp-button')[1] as HTMLElement).click();
     await el.updateComplete;
 
     expect(saved).toBe(false);
@@ -35,7 +35,7 @@ describe('finap-debt-form', () => {
     (inputs?.[1] as HTMLElement).dispatchEvent(
       new CustomEvent('finap-input', { detail: '2800' }),
     );
-    (el.shadowRoot?.querySelectorAll('finap-button')[1] as HTMLElement).click();
+    (el.shadowRoot?.querySelectorAll('sp-button')[1] as HTMLElement).click();
 
     expect(detail).toMatchObject({ name: 'Préstamo auto', total: 2800 });
     teardown(el);

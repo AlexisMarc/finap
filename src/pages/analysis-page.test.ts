@@ -68,8 +68,10 @@ describe('analysis-page', () => {
     await el.updateComplete;
     mockedSummary.mockClear();
 
-    const chips = el.shadowRoot?.querySelectorAll('finap-chip');
-    (chips?.[2] as HTMLElement).click();
+    const buttons = el.shadowRoot?.querySelectorAll('sp-action-button');
+    const year = buttons?.[2] as HTMLElement & { value: string };
+    year.value = 'year';
+    year.dispatchEvent(new Event('change', { bubbles: true, composed: true }));
     await flush();
     await el.updateComplete;
 

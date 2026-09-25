@@ -1,19 +1,27 @@
 import { LitElement, html, css } from 'lit';
 
 import '../components/container/index.js';
-import '../components/card/index.js';
-import '../components/button/index.js';
+import '../components/skeleton/index.js';
 import '../components/dashboard-summary/index.js';
 import '../components/dashboard-categories/index.js';
 import '../components/dashboard-debts/index.js';
 import '../components/dashboard-recent/index.js';
 import '../components/assistant-chat/index.js';
+import '@spectrum-web-components/card/sp-card.js';
+import { LocalizeController } from '../i18n/localize.js';
 
 import { getDashboard } from '../services/dashboard-service.js';
 import { getUser } from '../state/session.js';
 import { TRANSACTIONS_CHANGED_EVENT } from '../state/transactions.js';
 import { DEBTS_CHANGED_EVENT } from '../state/debts.js';
 import type { DashboardSummary } from '../services/types.js';
+
+/** Sugerencias del dashboard, cada una con una imagen cálida. */
+const SUGGESTIONS = [
+  { id: 'budgets', image: '/image/milad-fakurian-n6aIqCWqADI-unsplash.webp' },
+  { id: 'savings', image: '/image/hassaan-here-cD4mcWt53ko-unsplash.webp' },
+  { id: 'debts', image: '/image/brian-lundquist-zpS4qy8SEZA-unsplash.webp' },
+];
 
 export class DashboardPage extends LitElement {
   static styles = css`
@@ -41,6 +49,52 @@ export class DashboardPage extends LitElement {
       color: var(--finap-color-text-muted);
     }
 
+    .suggestions {
+      display: grid;
+      gap: var(--finap-space-3);
+    }
+
+    .carousel {
+      display: flex;
+      gap: var(--finap-space-4);
+      overflow-x: auto;
+      padding-bottom: var(--finap-space-2);
+      scroll-snap-type: x mandatory;
+    }
+
+    .suggestion {
+      flex: none;
+      width: 280px;
+      scroll-snap-align: start;
+      --mod-card-background-color: var(--finap-color-surface);
+      --mod-card-border-color: var(--finap-color-border);
+      --mod-card-border-width: 1px;
+      --mod-card-corner-radius: var(--finap-radius-xl);
+      --mod-card-body-padding-inline: var(--finap-space-4);
+      overflow: hidden;
+      transition: box-shadow var(--finap-motion-duration-normal)
+        var(--finap-motion-easing-standard);
+    }
+
+    .suggestion img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      object-fit: cover;
+    }
+
+    .suggestion:hover,
+    .suggestion:focus-within {
+      --mod-card-border-width: 0;
+      box-shadow: var(--finap-shadow-lg);
+    }
+
+    .suggestion [slot='subheading'] {
+      font-size: var(--finap-font-size-sm);
+      font-weight: var(--finap-font-weight-regular);
+      color: var(--finap-color-text-muted);
+    }
+
     @media (min-width: 1024px) {
       .two-col {
         grid-template-columns: 1fr 1fr;
@@ -61,6 +115,8 @@ export class DashboardPage extends LitElement {
   summary: DashboardSummary | null = null;
 
   private _userName = '';
+
+  private _localize = new LocalizeController(this);
 
   connectedCallback(): void {
     super.connectedCallback();
@@ -110,10 +166,11 @@ export class DashboardPage extends LitElement {
   }
 
   render() {
+    const t = (key: string) => this._localize.t(key);
     if (this.loading) {
       return html`
         <finap-container>
-          <div class="state">Cargando…</div>
+          <finap-skeleton variant="rect" height="240px"></finap-skeleton>
         </finap-container>
       `;
     }
@@ -123,7 +180,7 @@ export class DashboardPage extends LitElement {
         <finap-container>
           <div class="state">
             <p>${this.error}</p>
-            <finap-button @click=${this._retry}>Reintentar</finap-button>
+            <sp-button variant="accent" @click=${this._retry}>Reintentar</sp-button>
           </div>
         </finap-container>
       `;
@@ -141,6 +198,11 @@ export class DashboardPage extends LitElement {
     return html`
       <finap-container>
         <div class="sections">
+          ${this._userName
+            ? html`<finap-heading level="2" class="greeting"
+                >${t('dashboard.greeting')}, ${this._userName} 👋</finap-heading
+              >`
+            : ''}
           <finap-dashboard-summary
             name=${this._userName}
             balance=${summary.balance}
@@ -150,28 +212,52 @@ export class DashboardPage extends LitElement {
             trend=${summary.trend}
           ></finap-dashboard-summary>
 
-          <finap-card>
+          <div class="finap-surface">
             <finap-dashboard-categories
               .categories=${summary.categories}
             ></finap-dashboard-categories>
-          </finap-card>
+          </div>
 
           <div class="two-col">
-            <finap-card>
+            <div class="finap-surface">
               <finap-dashboard-debts
                 .debts=${summary.debts}
               ></finap-dashboard-debts>
-            </finap-card>
-            <finap-card>
+            </div>
+            <div class="finap-surface">
               <finap-dashboard-recent
                 .transactions=${summary.recentTransactions}
               ></finap-dashboard-recent>
-            </finap-card>
+            </div>
           </div>
 
-          <finap-card>
-            <finap-assistant-chat></finap-assistant-chat>
-          </finap-card>
+          <finap-assistant-chat></finap-assistant-chat>
+
+          <section class="suggestions">
+            <finap-heading level="3">${t('dashboard.suggestions')}</finap-heading>
+            <div class="carousel">
+              ${SUGGESTIONS.map(
+                (suggestion) => html`
+                  <sp-card class="suggestion" size="s">
+                    <img
+                      slot="cover-photo"
+                      src=${suggestion.image}
+                      alt=""
+                      loading="lazy"
+                    />
+                    <span slot="heading"
+                      >${t(
+                        `dashboard.suggestion.${suggestion.id}.title`,
+                      )}</span
+                    >
+                    <span slot="subheading">
+                      ${t(`dashboard.suggestion.${suggestion.id}`)}
+                    </span>
+                  </sp-card>
+                `,
+              )}
+            </div>
+          </section>
         </div>
       </finap-container>
     `;

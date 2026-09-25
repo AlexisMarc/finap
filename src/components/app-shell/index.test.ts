@@ -39,35 +39,35 @@ describe('finap-app-shell', () => {
     teardown(el);
   });
 
-  it('marca la sección activa con aria-current', async () => {
+  it('marca la sección activa en la navegación', async () => {
     const el = new FinapAppShell();
     el.currentPage = 'movements-page';
     await fixture(el);
 
-    const active = el.shadowRoot?.querySelector('[aria-current="page"]');
+    const active = el.shadowRoot?.querySelector('sp-sidenav-item[selected]');
     expect(active?.textContent).toContain('Movimientos');
     teardown(el);
   });
 
-  it('solo marca aria-current en la sección activa', async () => {
+  it('solo marca la sección activa', async () => {
     const el = new FinapAppShell();
     el.currentPage = 'dashboard-page';
     await fixture(el);
 
-    const links = Array.from(
-      el.shadowRoot?.querySelectorAll('.sidebar .nav a') ?? [],
+    const items = Array.from(
+      el.shadowRoot?.querySelectorAll('.sidebar sp-sidenav-item') ?? [],
     );
-    const home = links.find((a) => a.textContent?.includes('Inicio'));
-    const movements = links.find((a) =>
+    const home = items.find((a) => a.textContent?.includes('Inicio'));
+    const movements = items.find((a) =>
       a.textContent?.includes('Movimientos'),
     );
 
-    expect(home?.getAttribute('aria-current')).toBe('page');
-    expect(movements?.hasAttribute('aria-current')).toBe(false);
+    expect(home?.hasAttribute('selected')).toBe(true);
+    expect(movements?.hasAttribute('selected')).toBe(false);
     teardown(el);
   });
 
-  it('muestra un único saludo con el nombre', async () => {
+  it('no muestra el saludo en el header (vive en el dashboard)', async () => {
     setSession({
       token: 't',
       user: { id: 'u1', name: 'Marcos García', email: 'm@finap.app' },
@@ -76,31 +76,7 @@ describe('finap-app-shell', () => {
     el.currentPage = 'dashboard-page';
     await fixture(el);
 
-    const greeting =
-      el.shadowRoot?.querySelector('.greeting')?.textContent ?? '';
-    expect(greeting).not.toContain('Hola Hola');
-    expect((greeting.match(/Hola/g) ?? []).length).toBe(1);
-    expect(greeting).toContain('Marcos García');
-    teardown(el);
-  });
-
-  it('busca desde el header y navega a movimientos', async () => {
-    const el = new FinapAppShell();
-    el.currentPage = 'dashboard-page';
-    await fixture(el);
-
-    const search = el.shadowRoot?.querySelector(
-      'finap-input.search',
-    ) as HTMLElement & { value: string };
-
-    search.dispatchEvent(new KeyboardEvent('keydown', { key: 'a' }));
-    expect(navigate).not.toHaveBeenCalled();
-
-    search.value = '  alquiler  ';
-    search.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
-
-    expect(navigate).toHaveBeenCalledWith('movements');
-    expect(consumePendingSearch()).toBe('alquiler');
+    expect(el.shadowRoot?.querySelector('.greeting')).toBeNull();
     teardown(el);
   });
 
@@ -163,9 +139,11 @@ describe('finap-app-shell', () => {
     el.currentPage = 'dashboard-page';
     await fixture(el);
 
-    el.dispatchEvent(
-      new CustomEvent('finap-logout', { bubbles: true, composed: true }),
-    );
+    const menu = el.shadowRoot?.querySelector('sp-action-menu') as
+      | (HTMLElement & { value: string })
+      | null;
+    menu!.value = 'logout';
+    menu!.dispatchEvent(new Event('change', { bubbles: true, composed: true }));
 
     expect(localStorage.getItem('finap-session')).toBeNull();
     teardown(el);

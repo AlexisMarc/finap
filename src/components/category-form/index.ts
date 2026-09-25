@@ -2,7 +2,6 @@ import { LitElement, html, css } from 'lit';
 
 import '../input/index.js';
 import '../select/index.js';
-import '../button/index.js';
 import { LocalizeController } from '../../i18n/localize.js';
 import type { Category } from '../../services/types.js';
 
@@ -194,12 +193,12 @@ export class FinapCategoryForm extends LitElement {
         ></finap-select>
         <p class="error" ?hidden=${!this.error}>${this.error}</p>
         <div class="actions">
-          <finap-button variant="secondary" @click=${this._cancel}>
+          <sp-button variant="secondary" @click=${this._cancel}>
             ${t('common.cancel')}
-          </finap-button>
-          <finap-button ?disabled=${this.saving} @click=${this._submit}>
+          </sp-button>
+          <sp-button variant="accent" ?disabled=${this.saving} @click=${this._submit}>
             ${this.saving ? t('common.saving') : t('common.save')}
-          </finap-button>
+          </sp-button>
         </div>
       </div>
     `;

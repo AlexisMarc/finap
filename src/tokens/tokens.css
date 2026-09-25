@@ -1,9 +1,9 @@
-/* Finap design tokens — color, spacing, radius, elevation, breakpoints.
-   Paleta de color inspirada en Mastercard (rojo/naranja/amarillo) con
-   neutros propios para garantizar contraste accesible. */
+/* Finap design tokens — basados en Adobe Spectrum.
+   Los neutros y el acento interactivo vienen de Spectrum; la paleta de marca
+   (rojo/naranja/amarillo) se reserva como acento de marca (logo, hero y gradiente). */
 
 :root {
-  /* Color — brand */
+  /* Color — marca (acento de marca, no de UI) */
   --finap-color-primary: #eb001b;
   --finap-color-primary-hover: #c7001a;
   --finap-color-on-primary: #ffffff;
@@ -11,6 +11,17 @@
   --finap-color-on-secondary: #ffffff;
   --finap-color-accent: #f79e1b;
   --finap-color-accent-2: #7c4dff;
+
+  /* Color — acento interactivo (Spectrum) */
+  --finap-color-accent-interactive: var(
+    --spectrum-accent-background-color-default
+  );
+  --finap-color-accent-interactive-hover: var(
+    --spectrum-accent-background-color-hover
+  );
+  --finap-color-accent-interactive-down: var(
+    --spectrum-accent-background-color-down
+  );
 
   /* Color — semánticos */
   --finap-color-income: #2fc78a;
@@ -27,13 +38,22 @@
     var(--finap-color-accent) 100%
   );
 
-  /* Color — neutros (tema claro) */
+  /* Color — neutros del tema claro. Son valores literales (no referencias a
+     `--spectrum-*`) porque esos tokens solo existen dentro de <sp-theme> y en
+     `:root` quedarían inválidos y transparentes. theme.css los sobrescribe en
+     oscuro. */
   --finap-color-bg: #ffffff;
-  --finap-color-bg-subtle: #f5f5f5;
+  --finap-color-bg-subtle: #f8f8f8;
   --finap-color-surface: #ffffff;
   --finap-color-text: #1a1a1a;
   --finap-color-text-muted: #5c5c5c;
-  --finap-color-border: #e0e0e0;
+  /* Borde con contraste suficiente para distinguir superficies en modo claro. */
+  --finap-color-border: #b1b1b1;
+  /* Pista de barras de progreso. */
+  --finap-color-track: #ececec;
+
+  /* Mezcla de la marca: multiplicar sobre claro, aclarar sobre oscuro. */
+  --finap-brand-blend: multiply;
 
   /* Espaciado (escala base 4px) */
   --finap-space-1: 4px;
@@ -45,11 +65,11 @@
   --finap-space-7: 48px;
   --finap-space-8: 64px;
 
-  /* Radio de esquina */
-  --finap-radius-sm: 8px;
-  --finap-radius-md: 12px;
-  --finap-radius-lg: 21px;
-  --finap-radius-xl: 32px;
+  /* Radio de esquina — escala sutil de Spectrum */
+  --finap-radius-sm: 4px;
+  --finap-radius-md: 6px;
+  --finap-radius-lg: 10px;
+  --finap-radius-xl: 14px;
   --finap-radius-full: 9999px;
 
   /* Elevación */

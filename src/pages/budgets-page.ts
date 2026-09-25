@@ -1,10 +1,8 @@
 import { LitElement, html, css } from 'lit';
 
 import '../components/container/index.js';
+import '../components/skeleton/index.js';
 import '../components/heading/index.js';
-import '../components/card/index.js';
-import '../components/button/index.js';
-import '../components/modal/index.js';
 import '../components/input/index.js';
 import '../components/select/index.js';
 import '../components/budget-item/index.js';
@@ -204,7 +202,7 @@ export class BudgetsPage extends LitElement {
     const t = (key: string) => this._localize.t(key);
     if (this.loading) {
       return html`
-        <finap-container><div class="state">${t('common.loading')}</div></finap-container>
+        <finap-container><finap-skeleton variant="rect" height="240px"></finap-skeleton></finap-container>
       `;
     }
 
@@ -213,13 +211,13 @@ export class BudgetsPage extends LitElement {
         <div class="content">
           <div class="head">
             <finap-heading level="1">${t('budgets.title')}</finap-heading>
-            <finap-button @click=${this._openForm}>
+            <sp-button variant="accent" @click=${this._openForm}>
               ${t('budgets.new')}
-            </finap-button>
+            </sp-button>
           </div>
           <span class="month">${this.month}</span>
 
-          <finap-card>
+          <div class="finap-surface">
             <div class="list">
               ${this.budgets.map(
                 (budget) => html`
@@ -230,12 +228,13 @@ export class BudgetsPage extends LitElement {
                 `,
               )}
             </div>
-          </finap-card>
+          </div>
 
-          <finap-modal
+          <sp-dialog-wrapper
             ?open=${this.formOpen}
-            heading=${t('budgets.new')}
-            @finap-close=${this._closeForm}
+            headline=${t('budgets.new')}
+            dismissable
+            @close=${this._closeForm}
           >
             <div class="form">
               <finap-select
@@ -253,15 +252,15 @@ export class BudgetsPage extends LitElement {
               ></finap-input>
               <p class="error" ?hidden=${!this.formError}>${this.formError}</p>
               <div class="actions">
-                <finap-button variant="secondary" @click=${this._closeForm}>
+                <sp-button variant="secondary" @click=${this._closeForm}>
                   ${t('common.cancel')}
-                </finap-button>
-                <finap-button ?disabled=${this.saving} @click=${this._save}>
+                </sp-button>
+                <sp-button variant="accent" ?disabled=${this.saving} @click=${this._save}>
                   ${this.saving ? t('common.saving') : t('common.save')}
-                </finap-button>
+                </sp-button>
               </div>
             </div>
-          </finap-modal>
+          </sp-dialog-wrapper>
         </div>
       </finap-container>
     `;

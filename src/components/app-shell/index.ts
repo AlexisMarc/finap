@@ -1,12 +1,19 @@
 import { LitElement, html, css, nothing } from 'lit';
 import { navigate } from '@open-cells/core';
 
-import '../icon/index.js';
-import '../avatar/index.js';
-import '../user-menu/index.js';
-import '../button/index.js';
-import '../input/index.js';
-import '../modal/index.js';
+import { finapIcon } from '../icons.js';
+import '@spectrum-web-components/action-menu/sp-action-menu.js';
+import '@spectrum-web-components/action-button/sp-action-button.js';
+import '@spectrum-web-components/action-group/sp-action-group.js';
+import '@spectrum-web-components/menu/sp-menu-item.js';
+import '@spectrum-web-components/menu/sp-menu-divider.js';
+import '@spectrum-web-components/avatar/sp-avatar.js';
+import '@spectrum-web-components/sidenav/sp-sidenav.js';
+import '@spectrum-web-components/sidenav/sp-sidenav-item.js';
+import '@spectrum-web-components/breadcrumbs/sp-breadcrumbs.js';
+import '@spectrum-web-components/breadcrumbs/sp-breadcrumb-item.js';
+import '@spectrum-web-components/coachmark/sp-coachmark.js';
+import '../brand-mark/index.js';
 import '../transaction-form/index.js';
 
 import {
@@ -14,9 +21,11 @@ import {
   SESSION_CHANGED_EVENT,
   type SessionUser,
 } from '../../state/session.js';
-import { setPendingSearch } from '../../state/search.js';
 import { logout } from '../../services/auth-service.js';
 import { list as listCategories } from '../../services/categories-service.js';
+import { resolveTheme, setTheme, type Theme } from '../../theme/theme.js';
+import { getLocale, setLocale, type Locale } from '../../i18n/i18n.js';
+import { getCurrency, setCurrency } from '../../state/session.js';
 import {
   create,
   type TransactionInput,
@@ -25,7 +34,6 @@ import { notifyTransactionsChanged } from '../../state/transactions.js';
 import { LocalizeController } from '../../i18n/localize.js';
 import type { Category } from '../../services/types.js';
 import type { TransactionFormValue } from '../transaction-form/index.js';
-import type { FinapInput } from '../input/index.js';
 
 export interface ShellSection {
   id: string;
@@ -63,6 +71,27 @@ const APP_PAGES = new Set([
   'budgets',
 ]);
 
+const HELP_STEPS = [
+  {
+    key: 'shell.help.step1',
+    image: '/image/hassaan-here-B6ahPMOptIw-unsplash.webp',
+    titleKey: 'shell.help.step1.title',
+    textKey: 'shell.help.step1',
+  },
+  {
+    key: 'shell.help.step2',
+    image: '/image/brian-lundquist-zpS4qy8SEZA-unsplash.webp',
+    titleKey: 'shell.help.step2.title',
+    textKey: 'shell.help.step2',
+  },
+  {
+    key: 'shell.help.step3',
+    image: '/image/philip-oroni-ZxwyDGICj4c-unsplash.webp',
+    titleKey: 'shell.help.step3.title',
+    textKey: 'shell.help.step3',
+  },
+];
+
 export class FinapAppShell extends LitElement {
   static styles = css`
     :host {
@@ -75,11 +104,14 @@ export class FinapAppShell extends LitElement {
     .layout {
       display: grid;
       grid-template-columns: 1fr;
+      align-items: start;
       min-height: 100vh;
     }
 
     .sidebar {
       display: none;
+      box-sizing: border-box;
+      min-width: 0;
       padding: var(--finap-space-5);
       border-right: 1px solid var(--finap-color-border);
       background-color: var(--finap-color-bg-subtle);
@@ -90,37 +122,94 @@ export class FinapAppShell extends LitElement {
       align-items: center;
       gap: var(--finap-space-2);
       margin-bottom: var(--finap-space-6);
+      color: var(--finap-color-text);
+      text-decoration: none;
       font-family: var(--finap-font-family-display);
       font-weight: var(--finap-font-weight-bold);
       letter-spacing: var(--finap-letter-spacing-tight);
     }
 
-    .nav {
-      display: grid;
-      gap: var(--finap-space-1);
+    sp-sidenav {
+      width: 100%;
     }
 
-    .nav a {
+    .header-actions {
       display: flex;
       align-items: center;
       gap: var(--finap-space-3);
-      padding: var(--finap-space-2) var(--finap-space-3);
-      border-radius: var(--finap-radius-sm);
-      color: var(--finap-color-text-muted);
-      text-decoration: none;
+      margin-left: auto;
+    }
+
+    .avatar {
+      display: inline-grid;
+      place-items: center;
+      inline-size: 24px;
+      block-size: 24px;
+      border-radius: 50%;
+      background-color: var(--finap-color-accent);
+      color: #fff;
+      font-family: var(--finap-font-family);
+      font-size: var(--finap-font-size-xs);
+      font-weight: var(--finap-font-weight-semibold);
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+    .breadcrumbs {
+      display: none;
+    }
+
+    @media (min-width: 768px) {
+      .breadcrumbs {
+        display: flex;
+        align-items: center;
+        flex: 1;
+        min-width: 0;
+        overflow: hidden;
+      }
+    }
+
+    .help-steps {
+      display: grid;
+      gap: var(--finap-space-4);
+    }
+
+    .help-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--finap-space-3);
+    }
+
+    .help-count {
+      margin-left: auto;
       font-family: var(--finap-font-family);
       font-size: var(--finap-font-size-sm);
+      color: var(--finap-color-text-muted);
     }
 
-    .nav a:hover {
-      background-color: var(--finap-color-bg);
-      color: var(--finap-color-text);
+    .help-tour {
+      display: grid;
+      gap: var(--finap-space-4);
+      padding: var(--finap-space-2) 0;
     }
 
-    .nav a[aria-current='page'] {
-      background-color: var(--finap-color-surface);
-      color: var(--finap-color-text);
-      font-weight: var(--finap-font-weight-semibold);
+    .help-tour sp-coachmark {
+      position: static !important;
+      inset: auto !important;
+      width: 100%;
+      --mod-coachmark-width: 100%;
+      --mod-coachmark-min-width: 0;
+      --mod-coachmark-max-width: 100%;
+      --mod-coachmark-padding: var(--finap-space-4);
+      overflow: hidden;
+    }
+
+    .help-tour sp-coachmark img {
+      display: block;
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      border-radius: var(--finap-radius-md);
     }
 
     .main-col {
@@ -130,34 +219,15 @@ export class FinapAppShell extends LitElement {
     }
 
     .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 40;
       display: flex;
       align-items: center;
       gap: var(--finap-space-4);
-      padding: var(--finap-space-4) var(--finap-space-5);
+      padding: var(--finap-space-3) var(--finap-space-5);
       border-bottom: 1px solid var(--finap-color-border);
-    }
-
-    .greeting {
-      display: grid;
-      gap: 2px;
-      margin-right: auto;
-    }
-
-    .greeting__hello {
-      font-family: var(--finap-font-family);
-      font-size: var(--finap-font-size-sm);
-      color: var(--finap-color-text-muted);
-    }
-
-    .greeting__name {
-      font-family: var(--finap-font-family-display);
-      font-weight: var(--finap-font-weight-bold);
-      letter-spacing: var(--finap-letter-spacing-tight);
-    }
-
-    .search {
-      flex: 1;
-      max-width: 320px;
+      background-color: var(--finap-color-bg);
     }
 
     .content {
@@ -189,7 +259,7 @@ export class FinapAppShell extends LitElement {
     }
 
     .bottom-nav a[aria-current='page'] {
-      color: var(--finap-color-primary);
+      color: var(--finap-color-accent-interactive);
     }
 
     @media (min-width: 1024px) {
@@ -199,6 +269,10 @@ export class FinapAppShell extends LitElement {
 
       .sidebar {
         display: block;
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        overflow-y: auto;
       }
 
       .bottom-nav {
@@ -214,6 +288,11 @@ export class FinapAppShell extends LitElement {
   static properties = {
     currentPage: { type: String },
     user: { type: Object },
+    theme: { type: String },
+    locale: { type: String },
+    currency: { type: String },
+    helpOpen: { type: Boolean },
+    helpStep: { type: Number },
     addOpen: { type: Boolean },
     addSaving: { type: Boolean },
     addError: { type: String },
@@ -224,6 +303,16 @@ export class FinapAppShell extends LitElement {
 
   user: SessionUser | null = null;
 
+  theme: Theme = resolveTheme();
+
+  locale: Locale = getLocale();
+
+  currency = getCurrency();
+
+  helpOpen = false;
+
+  helpStep = 0;
+
   addOpen = false;
 
   addSaving = false;
@@ -233,6 +322,25 @@ export class FinapAppShell extends LitElement {
   addCategories: Category[] = [];
 
   private _localize = new LocalizeController(this);
+
+  updated(changes: Map<string, unknown>): void {
+    super.updated(changes);
+    this._enableUnderlay(changes, 'helpOpen', '.help-dialog');
+    this._enableUnderlay(changes, 'addOpen', '.add-dialog');
+  }
+
+  private _enableUnderlay(
+    changes: Map<string, unknown>,
+    prop: 'helpOpen' | 'addOpen',
+    selector: string,
+  ): void {
+    if (!changes.has(prop) || !this[prop]) return;
+    const dialog = this.shadowRoot?.querySelector(selector);
+    if (dialog) {
+      (dialog as any).underlay = true;
+      (dialog as any).requestUpdate();
+    }
+  }
 
   private _observer?: MutationObserver;
 
@@ -245,6 +353,51 @@ export class FinapAppShell extends LitElement {
     navigate('landing');
   };
 
+  private _onUserMenuChange = (event: Event): void => {
+    const value = (event.target as { value?: string }).value ?? '';
+    if (value === 'logout') {
+      this._onLogout();
+      return;
+    }
+    if (value === 'theme') {
+      const next: Theme = this.theme === 'dark' ? 'light' : 'dark';
+      setTheme(next);
+      this.theme = next;
+      return;
+    }
+    if (value.startsWith('locale:')) {
+      const locale = value.split(':')[1] as Locale;
+      setLocale(locale);
+      this.locale = locale;
+      return;
+    }
+    if (value.startsWith('currency:')) {
+      setCurrency(value.split(':')[1]);
+      this.currency = getCurrency();
+    }
+  };
+
+  private _openHelp = (): void => {
+    this.helpStep = 0;
+    this.helpOpen = true;
+  };
+
+  private _closeHelp = (): void => {
+    this.helpOpen = false;
+  };
+
+  private _helpPrev = (): void => {
+    if (this.helpStep > 0) this.helpStep -= 1;
+  };
+
+  private _helpNext = (): void => {
+    if (this.helpStep < HELP_STEPS.length - 1) {
+      this.helpStep += 1;
+    } else {
+      this._closeHelp();
+    }
+  };
+
   connectedCallback(): void {
     super.connectedCallback();
     this.user = getSession()?.user ?? null;
@@ -252,7 +405,6 @@ export class FinapAppShell extends LitElement {
       SESSION_CHANGED_EVENT,
       this._onSessionChanged,
     );
-    this.addEventListener('finap-logout', this._onLogout);
 
     const app = this.querySelector('#app');
     if (app) {
@@ -273,7 +425,6 @@ export class FinapAppShell extends LitElement {
       SESSION_CHANGED_EVENT,
       this._onSessionChanged,
     );
-    this.removeEventListener('finap-logout', this._onLogout);
     super.disconnectedCallback();
   }
 
@@ -293,6 +444,16 @@ export class FinapAppShell extends LitElement {
     return APP_PAGES.has(this.currentSection);
   }
 
+  private get _initials(): string {
+    const name = this.user?.name?.trim() ?? '';
+    if (!name) return '?';
+    return name
+      .split(/\s+/)
+      .slice(0, 2)
+      .map((part) => part.charAt(0).toUpperCase())
+      .join('');
+  }
+
   private _go(id: string) {
     return (event: Event) => {
       event.preventDefault();
@@ -304,14 +465,6 @@ export class FinapAppShell extends LitElement {
     this.addOpen = true;
     this.addError = '';
     void this._loadAddCategories();
-  }
-
-  private _onSearchKeydown(event: Event): void {
-    if ((event as KeyboardEvent).key !== 'Enter') return;
-    const value = (event.currentTarget as FinapInput).value.trim();
-    if (!value) return;
-    setPendingSearch(value);
-    navigate('movements');
   }
 
   private async _loadAddCategories(): Promise<void> {
@@ -349,50 +502,103 @@ export class FinapAppShell extends LitElement {
 
     const section = this.currentSection;
     const t = (key: string) => this._localize.t(key);
-    const name = this.user?.name ?? '';
 
     return html`
       <div class="layout">
         <aside class="sidebar">
-          <span class="brand">Finap</span>
-          <nav class="nav" aria-label=${t('shell.primaryNav')}>
+          <a class="brand" href="/dashboard" @click=${this._go('dashboard')}>
+            <finap-brand-mark></finap-brand-mark>
+            <span>Finap</span>
+          </a>
+          <sp-sidenav aria-label=${t('shell.primaryNav')}>
             ${SECTIONS.map(
               (item) => html`
-                <a
-                  href=${item.path}
-                  aria-current=${section === item.id ? 'page' : nothing}
+                <sp-sidenav-item
+                  value=${item.id}
+                  ?selected=${section === item.id}
                   @click=${this._go(item.id)}
                 >
-                  <finap-icon name=${item.icon} size="20"></finap-icon>
+                  ${finapIcon(item.icon, 20, 'icon')}
                   ${t(item.labelKey)}
-                </a>
+                </sp-sidenav-item>
               `,
             )}
-          </nav>
+          </sp-sidenav>
         </aside>
 
         <div class="main-col">
           <header class="topbar">
-            <span class="greeting">
-              <span class="greeting__hello">${t('shell.greeting')},</span>
-              <span class="greeting__name"
-                >${name ? `${name} 👋` : t('shell.greeting')}</span
+            <div class="breadcrumbs">
+              <sp-breadcrumbs>
+                <sp-breadcrumb-item
+                  href="/dashboard"
+                  @click=${this._go('dashboard')}
+                >
+                  ${t('shell.nav.home')}
+                </sp-breadcrumb-item>
+                ${section === 'dashboard'
+                  ? ''
+                  : html`<sp-breadcrumb-item
+                      >${t(
+                        SECTIONS.find((s) => s.id === section)?.labelKey ??
+                          'shell.nav.home',
+                      )}</sp-breadcrumb-item
+                    >`}
+              </sp-breadcrumbs>
+            </div>
+            <div class="header-actions">
+              <sp-action-group>
+                <sp-button variant="accent" @click=${this._onAdd}>
+                  ${t('shell.add')}
+                </sp-button>
+                <sp-action-button @click=${this._openHelp}>
+                  ${finapIcon('help', 18, 'icon')}
+                  ${t('shell.help')}
+                </sp-action-button>
+              </sp-action-group>
+              <sp-action-menu
+                label=${t('shell.account')}
+                @change=${this._onUserMenuChange}
               >
-            </span>
-            <finap-input
-              class="search"
-              type="text"
-              placeholder=${t('shell.search')}
-              @keydown=${this._onSearchKeydown}
-            ></finap-input>
-            <finap-button @click=${this._onAdd}>
-              ${t('shell.add')}
-            </finap-button>
-            <finap-user-menu
-              name=${this.user?.name ?? ''}
-              email=${this.user?.email ?? ''}
-              avatarUrl=${this.user?.avatarUrl ?? ''}
-            ></finap-user-menu>
+                ${this.user?.avatarUrl
+                  ? html`<sp-avatar
+                      slot="icon"
+                      label=${this.user?.name ?? ''}
+                      src=${this.user.avatarUrl}
+                    ></sp-avatar>`
+                  : html`<span
+                      slot="icon"
+                      class="avatar"
+                      aria-hidden="true"
+                      >${this._initials}</span
+                    >`}
+                <sp-menu-item value="theme">
+                  ${this.theme === 'dark'
+                    ? t('theme.toggle.toLight')
+                    : t('theme.toggle.toDark')}
+                </sp-menu-item>
+                <sp-menu-item
+                  value="locale:es"
+                  ?disabled=${this.locale === 'es'}
+                >
+                  Español
+                </sp-menu-item>
+                <sp-menu-item
+                  value="locale:en"
+                  ?disabled=${this.locale === 'en'}
+                >
+                  English
+                </sp-menu-item>
+                <sp-menu-divider></sp-menu-divider>
+                <sp-menu-item value="currency:USD">USD</sp-menu-item>
+                <sp-menu-item value="currency:COP">COP</sp-menu-item>
+                <sp-menu-item value="currency:EUR">EUR</sp-menu-item>
+                <sp-menu-divider></sp-menu-divider>
+                <sp-menu-item value="logout">
+                  ${t('userMenu.logout')}
+                </sp-menu-item>
+              </sp-action-menu>
+            </div>
           </header>
           <main class="content"><slot></slot></main>
         </div>
@@ -406,17 +612,20 @@ export class FinapAppShell extends LitElement {
               aria-current=${section === item.id ? 'page' : nothing}
               @click=${this._go(item.id)}
             >
-              <finap-icon name=${item.icon} size="20"></finap-icon>
+              ${finapIcon(item.icon, 20, 'icon')}
               ${t(item.labelKey)}
             </a>
           `,
         )}
       </nav>
 
-      <finap-modal
+      <sp-dialog-wrapper
+        class="add-dialog"
         ?open=${this.addOpen}
-        heading=${t('shell.addTitle')}
-        @finap-close=${this._closeAdd}
+        headline=${t('shell.addTitle')}
+        dismissable
+        size="l"
+        @close=${this._closeAdd}
       >
         <div class="add-body">
           ${this.addOpen
@@ -431,7 +640,47 @@ export class FinapAppShell extends LitElement {
               `
             : ''}
         </div>
-      </finap-modal>
+      </sp-dialog-wrapper>
+
+      <sp-dialog-wrapper
+        class="help-dialog"
+        ?open=${this.helpOpen}
+        headline=${t('shell.help')}
+        dismissable
+        size="s"
+        @close=${this._closeHelp}
+      >
+        <div class="help-tour">
+          ${this.helpOpen
+            ? html`
+                <sp-coachmark
+                  class="help-step"
+                  open
+                  .primaryCTA=${this.helpStep === HELP_STEPS.length - 1
+                    ? t('common.close')
+                    : t('common.next')}
+                  .secondaryCTA=${this.helpStep === 0 ? '' : t('common.prev')}
+                  .totalSteps=${HELP_STEPS.length}
+                  .currentStep=${this.helpStep + 1}
+                  @primary=${this._helpNext}
+                  @secondary=${this._helpPrev}
+                >
+                  <img
+                    slot="asset"
+                    src=${HELP_STEPS[this.helpStep].image}
+                    alt=""
+                  />
+                  <span slot="title"
+                    >${t(HELP_STEPS[this.helpStep].titleKey)}</span
+                  >
+                  <div slot="content">
+                    ${t(HELP_STEPS[this.helpStep].textKey)}
+                  </div>
+                </sp-coachmark>
+              `
+            : nothing}
+        </div>
+      </sp-dialog-wrapper>
     `;
   }
 }

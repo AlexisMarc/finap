@@ -9,6 +9,10 @@ export const translations: Record<Locale, Record<string, string>> = {
     'common.save': 'Guardar',
     'common.saving': 'Guardando…',
     'common.edit': 'Editar',
+    'common.actions': 'Acciones',
+    'common.prev': 'Anterior',
+    'common.next': 'Siguiente',
+    'common.close': 'Cerrar',
     'common.delete': 'Eliminar',
     'common.retry': 'Reintentar',
     'common.confirm': 'Confirmar',
@@ -18,14 +22,16 @@ export const translations: Record<Locale, Record<string, string>> = {
 
     // Nav / landing
     'nav.functions': 'Funciones',
+    'nav.benefits': 'Beneficios',
     'nav.budgets': 'Presupuestos',
     'nav.login': 'Iniciar sesión',
+    'nav.start': 'Empezar',
     'landing.hero.headline': 'Tu dinero, en orden.',
     'landing.hero.subtitle':
       'Finap reúne saldo, gastos e ingresos en un solo lugar, para que siempre sepas dónde estás.',
     'landing.hero.cta': 'Empezar',
     'landing.hero.secondary': 'Ver cómo funciona',
-    'landing.features.title': 'Funciones',
+    'landing.features.title': 'Todo lo que tus finanzas necesitan',
     'landing.feature.dashboard.title': 'Dashboard',
     'landing.feature.dashboard.description':
       'Tu saldo, ingresos y gastos en una sola vista.',
@@ -35,14 +41,52 @@ export const translations: Record<Locale, Record<string, string>> = {
     'landing.feature.budgets.title': 'Presupuestos',
     'landing.feature.budgets.description':
       'Límites por categoría con progreso visible.',
-    'landing.highlight.title': 'Presupuestos que se mantienen solos',
-    'landing.highlight.body':
-      'Define límites por categoría y Finap te muestra el progreso, para que nunca te pases.',
-    'landing.highlight.cta': 'Empezar',
-    'landing.footer': '© 2026 Finap — Gestor de finanzas personales.',
+    'landing.feature.analysis.title': 'Análisis',
+    'landing.feature.analysis.description':
+      'Gráficas de evolución y reparto del gasto.',
+    'landing.feature.debts.title': 'Deudas',
+    'landing.feature.debts.description':
+      'Registra y liquida lo que debes con claridad.',
+    'landing.feature.assistant.title': 'Asistente IA',
+    'landing.feature.assistant.description':
+      'Pregunta en lenguaje natural y decide mejor.',
+    'landing.benefits.title':
+      'Las finanzas personales no son un lujo: son tu libertad.',
+    'landing.benefits.subtitle':
+      'Gestionar tu dinero es el hábito que sostiene cada meta. Estas bases —ingresos, gastos, ahorro, inversión y protección— viven en una sola herramienta.',
+    'landing.benefits.cta': 'Empezar ahora',
+    'landing.benefit.income.title': 'Ingresos',
+    'landing.benefit.income.content':
+      'Conoce cada peso que entra: salario, dividendos y otras fuentes de efectivo.',
+    'landing.benefit.spending.title': 'Control de gastos',
+    'landing.benefit.spending.content':
+      'Gasta menos de lo que ganas y evita que las deudas dominen tu bolsillo.',
+    'landing.benefit.saving.title': 'Ahorro',
+    'landing.benefit.saving.content':
+      'Construye un colchón de 3 a 12 meses de gastos para cualquier imprevisto.',
+    'landing.benefit.investing.title': 'Inversión',
+    'landing.benefit.investing.content':
+      'Pon tu dinero a crecer con el interés compuesto en el largo plazo.',
+    'landing.benefit.protection.title': 'Protección',
+    'landing.benefit.protection.content':
+      'Seguros y planificación patrimonial para cuidar lo que construyes.',
+    'landing.benefit.budget.title': 'Regla 50/30/20',
+    'landing.benefit.budget.content':
+      'Reparte tu ingreso: 50% necesidades, 30% gustos y 20% para tu futuro.',
+    'landing.cta.headline':
+      'Empieza hoy: tu yo del futuro te lo agradecerá.',
+    'landing.cta.button': 'Crear mi cuenta',
+    'landing.footer.tagline': 'Gestor de finanzas personales. Tu dinero, en orden.',
+    'landing.footer.product': 'Producto',
+    'landing.footer.access': 'Acceso',
+    'landing.footer.contact': 'Contacto',
+    'landing.footer.madeBy': 'Diseñado y desarrollado por Marcos Rincón.',
+    'landing.footer.rights': '© 2026 Finap. Todos los derechos reservados.',
 
     // Tema / idioma
     'theme.toggle.toDark': 'Cambiar a tema oscuro',
+    'theme.light': 'Claro',
+    'theme.dark': 'Oscuro',
     'theme.toggle.toLight': 'Cambiar a tema claro',
     'language.toggle': 'Idioma',
 
@@ -59,11 +103,20 @@ export const translations: Record<Locale, Record<string, string>> = {
     'shell.greeting': 'Hola',
     'shell.search': 'Buscar...',
     'shell.add': 'Agregar',
+    'shell.help': 'Ayuda',
+    'shell.help.step1': 'Navega por las secciones desde la barra lateral.',
+    'shell.help.step1.title': 'Explora las secciones',
+    'shell.help.step2': 'Revisa tus ingresos, gastos y deudas en el dashboard.',
+    'shell.help.step2.title': 'Consulta tu resumen',
+    'shell.help.step3': 'Agrega un registro con el botón Agregar.',
+    'shell.help.step3.title': 'Agrega un registro',
+    'shell.account': 'Cuenta',
     'shell.addTitle': 'Nuevo registro',
     'shell.primaryNav': 'Principal',
     'userMenu.logout': 'Cerrar sesión',
 
     // Dashboard
+    'dashboard.greeting': 'Hola',
     'dashboard.balance': 'Balance total',
     'dashboard.income': 'Ingresos',
     'dashboard.expense': 'Gastos',
@@ -74,7 +127,14 @@ export const translations: Record<Locale, Record<string, string>> = {
     'dashboard.pending': 'pendiente',
     'dashboard.totalPending': 'Total pendiente',
     'dashboard.recent': 'Últimos movimientos',
-    'dashboard.seeAll': 'Ver todos →',
+    'dashboard.seeAll': 'Ver todos',
+    'dashboard.suggestions': 'Sugerencias para ti',
+    'dashboard.suggestion.budgets.title': 'Presupuestos',
+    'dashboard.suggestion.budgets': 'Revisa tus presupuestos del mes y ajusta lo que haga falta.',
+    'dashboard.suggestion.savings.title': 'Ahorro',
+    'dashboard.suggestion.savings': 'Define una meta de ahorro y automatiza una aportación.',
+    'dashboard.suggestion.debts.title': 'Deudas',
+    'dashboard.suggestion.debts': 'Adelanta el pago de una deuda para reducir intereses.',
 
     // Movimientos
     'movements.title': 'Movimientos',
@@ -86,9 +146,14 @@ export const translations: Record<Locale, Record<string, string>> = {
     'movements.filter.from': 'Desde',
     'movements.filter.to': 'Hasta',
     'movements.filter.search': 'Buscar',
+    'movements.filter.more': 'Más filtros',
+    'movements.filter.categorySearch': 'Buscar categoría',
     'movements.empty': 'No hay movimientos que cumplan los filtros.',
     'movements.clear': 'Limpiar filtros',
     'movements.loadMore': 'Cargar más',
+    'movements.col.date': 'Fecha',
+    'movements.col.detail': 'Detalle',
+    'movements.col.amount': 'Importe',
     'movements.error': 'No se pudieron cargar los movimientos',
 
     // Transacciones
@@ -137,6 +202,12 @@ export const translations: Record<Locale, Record<string, string>> = {
     'analysis.period.month': 'Mes',
     'analysis.period.quarter': 'Trimestre',
     'analysis.period.year': 'Año',
+    'analysis.chartType': 'Tipo de gráfica',
+    'analysis.chart.line': 'Líneas',
+    'analysis.chart.bar': 'Barras',
+    'analysis.chart.pie': 'Pastel',
+    'analysis.evolutionHelp': 'Evolución de ingresos y gastos en el periodo.',
+    'analysis.byCategoryHelp': 'Reparto del gasto por categoría.',
     'analysis.balance': 'Balance',
     'analysis.income': 'Ingresos',
     'analysis.expense': 'Gastos',
@@ -148,6 +219,8 @@ export const translations: Record<Locale, Record<string, string>> = {
     // Deudas
     'debts.title': 'Deudas',
     'debts.new': 'Nueva deuda',
+    'debts.view.list': 'Lista',
+    'debts.view.gallery': 'Galería',
     'debts.editTitle': 'Editar deuda',
     'debts.pending': 'pendiente',
     'debts.paid': 'Pagada',
@@ -175,10 +248,19 @@ export const translations: Record<Locale, Record<string, string>> = {
     'settings.theme': 'Tema',
     'settings.language': 'Idioma',
     'settings.currency': 'Moneda',
+    'settings.themeHelp': 'Elige entre tema claro y oscuro.',
+    'settings.languageHelp': 'Cambia el idioma de la interfaz.',
+    'settings.currencyHelp': 'Moneda en la que se muestran los importes.',
     'settings.categories': 'Categorías',
     'settings.budgets': 'Presupuestos',
 
     // Login
+    'login.title': 'Inicio de sesión',
+    'login.slogan': 'Tu dinero, en orden.',
+    'login.back': 'Volver',
+    'login.signup.title': 'Crear cuenta',
+    'login.signup.text':
+      'Muy pronto podrás crear tu cuenta. Para más información, escríbenos a',
     'login.subtitle': 'Inicia sesión para gestionar tus finanzas.',
     'login.email': 'Email',
     'login.password': 'Contraseña',
@@ -197,6 +279,9 @@ export const translations: Record<Locale, Record<string, string>> = {
     'assistant.error': 'No se pudo obtener respuesta. Inténtalo de nuevo.',
     'assistant.quick.spend': '¿En qué gasté más este mes?',
     'assistant.quick.debt': '¿Cuánto debo?',
+    'assistant.subtitle': 'Tu asistente financiero',
+    'assistant.quickTitle': 'Preguntas rápidas',
+    'assistant.empty': 'Haz una pregunta para empezar.',
 
     // Offline / PWA
     'offline.message': 'Sin conexión — mostrando datos guardados',
@@ -212,6 +297,10 @@ export const translations: Record<Locale, Record<string, string>> = {
     'common.save': 'Save',
     'common.saving': 'Saving…',
     'common.edit': 'Edit',
+    'common.actions': 'Actions',
+    'common.prev': 'Previous',
+    'common.next': 'Next',
+    'common.close': 'Close',
     'common.delete': 'Delete',
     'common.retry': 'Retry',
     'common.confirm': 'Confirm',
@@ -221,14 +310,16 @@ export const translations: Record<Locale, Record<string, string>> = {
 
     // Nav / landing
     'nav.functions': 'Features',
+    'nav.benefits': 'Benefits',
     'nav.budgets': 'Budgets',
     'nav.login': 'Sign in',
+    'nav.start': 'Get started',
     'landing.hero.headline': 'Your money, in order.',
     'landing.hero.subtitle':
       'Finap brings your balance, expenses and income together, so you always know where you stand.',
     'landing.hero.cta': 'Get started',
     'landing.hero.secondary': 'See how it works',
-    'landing.features.title': 'Features',
+    'landing.features.title': 'Everything your finances need',
     'landing.feature.dashboard.title': 'Dashboard',
     'landing.feature.dashboard.description':
       'Your balance, income and expenses in a single view.',
@@ -238,14 +329,51 @@ export const translations: Record<Locale, Record<string, string>> = {
     'landing.feature.budgets.title': 'Budgets',
     'landing.feature.budgets.description':
       'Per-category limits with visible progress.',
-    'landing.highlight.title': 'Budgets that keep themselves',
-    'landing.highlight.body':
-      'Set per-category limits and Finap shows your progress, so you never overspend.',
-    'landing.highlight.cta': 'Get started',
-    'landing.footer': '© 2026 Finap — Personal finance manager.',
+    'landing.feature.analysis.title': 'Analysis',
+    'landing.feature.analysis.description':
+      'Charts of trends and spending split.',
+    'landing.feature.debts.title': 'Debts',
+    'landing.feature.debts.description':
+      'Track and settle what you owe with clarity.',
+    'landing.feature.assistant.title': 'AI Assistant',
+    'landing.feature.assistant.description':
+      'Ask in plain language and decide better.',
+    'landing.benefits.title':
+      'Personal finance is not a luxury: it is your freedom.',
+    'landing.benefits.subtitle':
+      'Managing your money is the habit behind every goal. These foundations —income, spending, saving, investing and protection— live in a single tool.',
+    'landing.benefits.cta': 'Get started free',
+    'landing.benefit.income.title': 'Income',
+    'landing.benefit.income.content':
+      'Know every dollar coming in: salary, dividends and other cash sources.',
+    'landing.benefit.spending.title': 'Spending control',
+    'landing.benefit.spending.content':
+      'Spend less than you earn and keep debt from taking over your wallet.',
+    'landing.benefit.saving.title': 'Saving',
+    'landing.benefit.saving.content':
+      'Build a cushion of 3 to 12 months of expenses for any surprise.',
+    'landing.benefit.investing.title': 'Investing',
+    'landing.benefit.investing.content':
+      'Put your money to grow with compound interest over the long term.',
+    'landing.benefit.protection.title': 'Protection',
+    'landing.benefit.protection.content':
+      'Insurance and estate planning to protect what you build.',
+    'landing.benefit.budget.title': 'The 50/30/20 rule',
+    'landing.benefit.budget.content':
+      'Split your income: 50% needs, 30% wants and 20% for your future.',
+    'landing.cta.headline': 'Start today: your future self will thank you.',
+    'landing.cta.button': 'Create my account',
+    'landing.footer.tagline': 'Personal finance manager. Your money, in order.',
+    'landing.footer.product': 'Product',
+    'landing.footer.access': 'Access',
+    'landing.footer.contact': 'Contact',
+    'landing.footer.madeBy': 'Designed and built by Marcos Rincón.',
+    'landing.footer.rights': '© 2026 Finap. All rights reserved.',
 
     // Theme / language
     'theme.toggle.toDark': 'Switch to dark theme',
+    'theme.light': 'Light',
+    'theme.dark': 'Dark',
     'theme.toggle.toLight': 'Switch to light theme',
     'language.toggle': 'Language',
 
@@ -262,11 +390,20 @@ export const translations: Record<Locale, Record<string, string>> = {
     'shell.greeting': 'Hi',
     'shell.search': 'Search...',
     'shell.add': 'Add',
+    'shell.help': 'Help',
+    'shell.help.step1': 'Browse sections from the sidebar.',
+    'shell.help.step1.title': 'Explore sections',
+    'shell.help.step2': 'Review your income, expenses, and debts on the dashboard.',
+    'shell.help.step2.title': 'Check your summary',
+    'shell.help.step3': 'Add a record with the Add button.',
+    'shell.help.step3.title': 'Add a record',
+    'shell.account': 'Account',
     'shell.addTitle': 'New entry',
     'shell.primaryNav': 'Main',
     'userMenu.logout': 'Sign out',
 
     // Dashboard
+    'dashboard.greeting': 'Hi',
     'dashboard.balance': 'Total balance',
     'dashboard.income': 'Income',
     'dashboard.expense': 'Expenses',
@@ -277,7 +414,14 @@ export const translations: Record<Locale, Record<string, string>> = {
     'dashboard.pending': 'pending',
     'dashboard.totalPending': 'Total pending',
     'dashboard.recent': 'Recent transactions',
-    'dashboard.seeAll': 'See all →',
+    'dashboard.seeAll': 'See all',
+    'dashboard.suggestions': 'Suggestions for you',
+    'dashboard.suggestion.budgets.title': 'Budgets',
+    'dashboard.suggestion.budgets': 'Review your monthly budgets and adjust what is needed.',
+    'dashboard.suggestion.savings.title': 'Savings',
+    'dashboard.suggestion.savings': 'Set a savings goal and automate a contribution.',
+    'dashboard.suggestion.debts.title': 'Debts',
+    'dashboard.suggestion.debts': 'Pay ahead on a debt to reduce interest.',
 
     // Movements
     'movements.title': 'Transactions',
@@ -289,9 +433,14 @@ export const translations: Record<Locale, Record<string, string>> = {
     'movements.filter.from': 'From',
     'movements.filter.to': 'To',
     'movements.filter.search': 'Search',
+    'movements.filter.more': 'More filters',
+    'movements.filter.categorySearch': 'Search category',
     'movements.empty': 'No transactions match the filters.',
     'movements.clear': 'Clear filters',
     'movements.loadMore': 'Load more',
+    'movements.col.date': 'Date',
+    'movements.col.detail': 'Detail',
+    'movements.col.amount': 'Amount',
     'movements.error': 'Could not load transactions',
 
     // Transactions
@@ -340,6 +489,12 @@ export const translations: Record<Locale, Record<string, string>> = {
     'analysis.period.month': 'Month',
     'analysis.period.quarter': 'Quarter',
     'analysis.period.year': 'Year',
+    'analysis.chartType': 'Chart type',
+    'analysis.chart.line': 'Line',
+    'analysis.chart.bar': 'Bar',
+    'analysis.chart.pie': 'Pie',
+    'analysis.evolutionHelp': 'Income and expense evolution over the period.',
+    'analysis.byCategoryHelp': 'Spending split by category.',
     'analysis.balance': 'Balance',
     'analysis.income': 'Income',
     'analysis.expense': 'Expenses',
@@ -351,6 +506,8 @@ export const translations: Record<Locale, Record<string, string>> = {
     // Debts
     'debts.title': 'Debts',
     'debts.new': 'New debt',
+    'debts.view.list': 'List',
+    'debts.view.gallery': 'Gallery',
     'debts.editTitle': 'Edit debt',
     'debts.pending': 'pending',
     'debts.paid': 'Paid',
@@ -378,10 +535,19 @@ export const translations: Record<Locale, Record<string, string>> = {
     'settings.theme': 'Theme',
     'settings.language': 'Language',
     'settings.currency': 'Currency',
+    'settings.themeHelp': 'Choose between light and dark theme.',
+    'settings.languageHelp': 'Change the interface language.',
+    'settings.currencyHelp': 'Currency used to display amounts.',
     'settings.categories': 'Categories',
     'settings.budgets': 'Budgets',
 
     // Login
+    'login.title': 'Sign in',
+    'login.slogan': 'Your money, in order.',
+    'login.back': 'Back',
+    'login.signup.title': 'Create account',
+    'login.signup.text':
+      'Creating your account is coming soon. For more information, write to us at',
     'login.subtitle': 'Sign in to manage your finances.',
     'login.email': 'Email',
     'login.password': 'Password',
@@ -400,6 +566,9 @@ export const translations: Record<Locale, Record<string, string>> = {
     'assistant.error': 'Could not get an answer. Please try again.',
     'assistant.quick.spend': 'Where did I spend the most this month?',
     'assistant.quick.debt': 'How much do I owe?',
+    'assistant.subtitle': 'Your financial assistant',
+    'assistant.quickTitle': 'Quick questions',
+    'assistant.empty': 'Ask a question to get started.',
 
     // Offline / PWA
     'offline.message': 'Offline — showing saved data',

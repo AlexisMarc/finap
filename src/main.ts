@@ -1,12 +1,18 @@
+import '@spectrum-web-components/theme/sp-theme.js';
+import '@spectrum-web-components/theme/theme-light.js';
+import '@spectrum-web-components/theme/theme-dark.js';
+import '@spectrum-web-components/theme/scale-medium.js';
+import '@spectrum-web-components/button/sp-button.js';
+import '@spectrum-web-components/dialog/sp-dialog-wrapper.js';
+import '@spectrum-web-components/badge/sp-badge.js';
+import '@spectrum-web-components/styles/typography.css';
+
 import './tokens/tokens.css';
 import './tokens/typography.css';
 import './tokens/motion.css';
 import './theme/theme.css';
 import './motion/motion.css';
 import './styles/app.css';
-
-import '@fontsource-variable/inter';
-import '@fontsource-variable/sora';
 
 import { initTheme } from './theme/theme';
 import { initLocale } from './i18n/i18n';

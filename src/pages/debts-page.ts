@@ -1,14 +1,17 @@
 import { LitElement, html, css } from 'lit';
 
 import '../components/container/index.js';
+import '../components/skeleton/index.js';
 import '../components/heading/index.js';
-import '../components/card/index.js';
-import '../components/button/index.js';
-import '../components/modal/index.js';
 import '../components/input/index.js';
 import '../components/debt-item/index.js';
 import '../components/debt-form/index.js';
-import '../components/confirm-dialog/index.js';
+import '@spectrum-web-components/action-group/sp-action-group.js';
+import '@spectrum-web-components/action-button/sp-action-button.js';
+import '@spectrum-web-components/action-menu/sp-action-menu.js';
+import '@spectrum-web-components/menu/sp-menu-item.js';
+import { progressBarStyles, renderProgressBar } from '../components/progress-bar.js';
+import { progressPercent, progressVariant } from '../utils/progress.js';
 import type { DebtFormValue } from '../components/debt-form/index.js';
 
 import {
@@ -25,21 +28,55 @@ import { formatCurrency } from '../utils/format.js';
 import type { Debt } from '../services/types.js';
 
 export class DebtsPage extends LitElement {
-  static styles = css`
-    :host {
-      display: block;
-    }
+  static styles = [
+    progressBarStyles,
+    css`
+      :host {
+        display: block;
+      }
 
     .content {
       display: grid;
       gap: var(--finap-space-5);
+      min-width: 0;
+    }
+
+    .content > * {
+      min-width: 0;
     }
 
     .head {
       display: flex;
       align-items: center;
       justify-content: space-between;
+      flex-wrap: wrap;
       gap: var(--finap-space-4);
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: var(--finap-space-4);
+    }
+
+    .gallery-card {
+      display: grid;
+      gap: var(--finap-space-2);
+    }
+
+    .gallery-card__name {
+      font-family: var(--finap-font-family);
+      font-weight: var(--finap-font-weight-semibold);
+      color: var(--finap-color-text);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .gallery-card__meta {
+      font-family: var(--finap-font-family);
+      font-size: var(--finap-font-size-sm);
+      color: var(--finap-color-text-muted);
     }
 
     .total {
@@ -75,12 +112,14 @@ export class DebtsPage extends LitElement {
       font-family: var(--finap-font-family);
       color: var(--finap-color-text-muted);
     }
-  `;
+    `,
+  ];
 
   static properties = {
     loading: { type: Boolean },
     error: { type: String },
     debts: { type: Array },
+    view: { type: String },
     formOpen: { type: Boolean },
     editTarget: { type: Object },
     saving: { type: Boolean },
@@ -99,6 +138,8 @@ export class DebtsPage extends LitElement {
   error = '';
 
   debts: Debt[] = [];
+
+  view: 'list' | 'gallery' = 'list';
 
   formOpen = false;
 
@@ -155,6 +196,21 @@ export class DebtsPage extends LitElement {
     this.editTarget = null;
     this.saveError = '';
     this.formOpen = true;
+  }
+
+  private _onViewChange(event: Event): void {
+    const target = event.target as { value?: string; selected?: string[] };
+    this.view = (target.value ?? target.selected?.[0] ?? 'list') as
+      | 'list'
+      | 'gallery';
+  }
+
+  private _onCardAction(event: Event, debt: Debt): void {
+    const value = (event.target as { value?: string }).value;
+    if (value === 'pay') this._pay(new CustomEvent('x', { detail: debt }));
+    if (value === 'edit') this._edit(new CustomEvent('x', { detail: debt }));
+    if (value === 'delete')
+      this._delete(new CustomEvent('x', { detail: debt }));
   }
 
   private _edit(event: Event): void {
@@ -257,7 +313,7 @@ export class DebtsPage extends LitElement {
     const t = (key: string) => this._localize.t(key);
     if (this.loading) {
       return html`
-        <finap-container><div class="state">${t('common.loading')}</div></finap-container>
+        <finap-container><finap-skeleton variant="rect" height="240px"></finap-skeleton></finap-container>
       `;
     }
 
@@ -266,29 +322,85 @@ export class DebtsPage extends LitElement {
         <div class="content">
           <div class="head">
             <finap-heading level="1">${t('debts.title')}</finap-heading>
-            <finap-button @click=${this._new}>${t('debts.new')}</finap-button>
+            <sp-action-group selects="single" @change=${this._onViewChange}>
+              <sp-action-button
+                value="list"
+                ?selected=${this.view === 'list'}
+              >
+                ${t('debts.view.list')}
+              </sp-action-button>
+              <sp-action-button
+                value="gallery"
+                ?selected=${this.view === 'gallery'}
+              >
+                ${t('debts.view.gallery')}
+              </sp-action-button>
+            </sp-action-group>
+            <sp-button variant="accent" @click=${this._new}
+              >${t('debts.new')}</sp-button
+            >
           </div>
           <span class="total">
             ${t('dashboard.totalPending')}: ${formatCurrency(this._totalPending)}
           </span>
 
-          <finap-card>
-            ${this.debts.map(
-              (debt) => html`
-                <finap-debt-item
-                  .debt=${debt}
-                  @finap-pay=${this._pay}
-                  @finap-edit=${this._edit}
-                  @finap-delete=${this._delete}
-                ></finap-debt-item>
-              `,
-            )}
-          </finap-card>
+          ${this.view === 'gallery'
+            ? html`<div class="gallery">
+                ${this.debts.map(
+                  (debt) => html`
+                    <div class="finap-surface gallery-card">
+                      <span class="gallery-card__name">${debt.name}</span>
+                      <span class="gallery-card__meta"
+                        >${formatCurrency(
+                          Math.max(debt.total - debt.paid, 0),
+                        )}
+                        ${t('debts.pending')}</span
+                      >
+                      ${renderProgressBar({
+                        percent: progressPercent(debt.paid, debt.total),
+                        variant: progressVariant(
+                          progressPercent(debt.paid, debt.total),
+                        ),
+                        label: debt.name,
+                      })}
+                      <sp-action-menu
+                        label=${t('common.actions')}
+                        @change=${(event: Event) =>
+                          this._onCardAction(event, debt)}
+                      >
+                        <sp-menu-item value="pay"
+                          >${t('debts.pay')}</sp-menu-item
+                        >
+                        <sp-menu-item value="edit"
+                          >${t('common.edit')}</sp-menu-item
+                        >
+                        <sp-menu-item value="delete"
+                          >${t('common.delete')}</sp-menu-item
+                        >
+                      </sp-action-menu>
+                    </div>
+                  `,
+                )}
+              </div>`
+            : html`<div class="finap-surface">
+                ${this.debts.map(
+                  (debt) => html`
+                    <finap-debt-item
+                      .debt=${debt}
+                      @finap-pay=${this._pay}
+                      @finap-edit=${this._edit}
+                      @finap-delete=${this._delete}
+                    ></finap-debt-item>
+                  `,
+                )}
+              </div>`}
 
-          <finap-modal
+          <sp-dialog-wrapper
+            class="form-dialog"
             ?open=${this.formOpen}
-            heading=${this.editTarget ? t('debts.editTitle') : t('debts.new')}
-            @finap-close=${this._closeForm}
+            headline=${this.editTarget ? t('debts.editTitle') : t('debts.new')}
+            dismissable
+            @close=${this._closeForm}
           >
             <div class="form-body">
               ${this.formOpen
@@ -303,12 +415,14 @@ export class DebtsPage extends LitElement {
                   `
                 : ''}
             </div>
-          </finap-modal>
+          </sp-dialog-wrapper>
 
-          <finap-modal
+          <sp-dialog-wrapper
+            class="pay-dialog"
             ?open=${this.payOpen}
-            heading=${`${t('debts.payTitle')}${this.payTarget ? ` · ${this.payTarget.name}` : ''}`}
-            @finap-close=${this._closePay}
+            headline=${`${t('debts.payTitle')}${this.payTarget ? ` · ${this.payTarget.name}` : ''}`}
+            dismissable
+            @close=${this._closePay}
           >
             <div class="form">
               <finap-input
@@ -320,27 +434,31 @@ export class DebtsPage extends LitElement {
               ></finap-input>
               <p class="error" ?hidden=${!this.payError}>${this.payError}</p>
               <div class="actions">
-                <finap-button variant="secondary" @click=${this._closePay}>
+                <sp-button variant="secondary" @click=${this._closePay}>
                   ${t('common.cancel')}
-                </finap-button>
-                <finap-button
+                </sp-button>
+                <sp-button variant="accent"
                   ?disabled=${this.paySaving}
                   @click=${this._registerPayment}
                 >
                   ${this.paySaving ? t('common.saving') : t('debts.pay')}
-                </finap-button>
+                </sp-button>
               </div>
             </div>
-          </finap-modal>
+          </sp-dialog-wrapper>
 
-          <finap-confirm-dialog
+          <sp-dialog-wrapper
+            class="delete-dialog"
             ?open=${this.confirmOpen}
-            heading=${t('debts.deleteTitle')}
-            message=${t('debts.deleteMessage')}
-            confirmLabel=${t('common.delete')}
-            @finap-confirm=${this._confirmDelete}
-            @finap-cancel=${this._closeConfirm}
-          ></finap-confirm-dialog>
+            headline=${t('debts.deleteTitle')}
+            .confirmLabel=${t('common.delete')}
+            .cancelLabel=${t('common.cancel')}
+            @confirm=${this._confirmDelete}
+            @cancel=${this._closeConfirm}
+            @close=${this._closeConfirm}
+          >
+            ${t('debts.deleteMessage')}
+          </sp-dialog-wrapper>
         </div>
       </finap-container>
     `;

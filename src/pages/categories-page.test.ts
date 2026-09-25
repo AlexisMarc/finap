@@ -31,7 +31,7 @@ describe('categories-page', () => {
     await flush();
     await el.updateComplete;
 
-    expect(el.shadowRoot?.querySelectorAll('.row').length).toBe(2);
+    expect(el.shadowRoot?.querySelectorAll('sp-table-row').length).toBe(2);
     teardown(el);
   });
 
@@ -41,7 +41,7 @@ describe('categories-page', () => {
     await flush();
     await el.updateComplete;
 
-    (el.shadowRoot?.querySelector('finap-button') as HTMLElement).click();
+    (el.shadowRoot?.querySelector('sp-button') as HTMLElement).click();
     await el.updateComplete;
 
     expect(el.formOpen).toBe(true);

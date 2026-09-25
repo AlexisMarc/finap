@@ -4,7 +4,7 @@ test.describe('Análisis', () => {
   test('muestra métricas y gráficas', async ({ page }) => {
     await page.goto('/analysis');
     await expect(
-      page.getByText('Análisis', { exact: true }).first(),
+      page.getByRole('heading', { name: 'Análisis', exact: true }),
     ).toBeVisible();
     await expect(page.locator('finap-analysis-metrics')).toBeVisible();
     await expect(page.locator('finap-chart')).toHaveCount(2);
@@ -14,10 +14,10 @@ test.describe('Análisis', () => {
     await page.goto('/analysis');
     await expect(page.locator('finap-analysis-metrics')).toBeVisible();
 
-    await page.getByRole('button', { name: 'Trimestre', exact: true }).click();
+    await page.getByRole('radio', { name: 'Trimestre' }).click();
     await expect(page.locator('finap-analysis-metrics')).toBeVisible();
 
-    await page.getByRole('button', { name: 'Año', exact: true }).click();
+    await page.getByRole('radio', { name: 'Año' }).click();
     await expect(page.locator('finap-analysis-metrics')).toBeVisible();
   });
 });

@@ -1,0 +1,67 @@
+# Spec Delta
+
+## MODIFIED Requirements
+
+### Requirement: Header con logo, navegación y toggle
+
+El sistema SHALL renderizar un header en la landing con el logo de Finap (dos rombos), la navegación principal como enlaces de Spectrum (`sp-link`) y el toggle de tema.
+
+#### Scenario: Header visible
+
+- **WHEN** se renderiza la landing
+- **THEN** se muestra un header con logo, navegación (enlaces de Spectrum) y toggle de tema
+
+### Requirement: Hero con tagline y headline
+
+El sistema SHALL renderizar un hero con tagline, headline principal y llamada a la acción (CTA), usando la tipografía de Spectrum y manteniendo el acento de marca de Finap sobre una base neutral.
+
+#### Scenario: Hero visible
+
+- **WHEN** se renderiza la landing
+- **THEN** se muestra un hero con tagline, headline y un CTA
+
+#### Scenario: CTA con estilo Spectrum
+
+- **WHEN** se renderiza el hero
+- **THEN** el CTA usa el estilo de botón primario de Spectrum
+
+#### Scenario: Acentos de marca sobre fondo claro
+
+- **WHEN** se renderiza el hero
+- **THEN** los acentos de marca (rojo/naranja) aparecen puntualmente sobre una base neutral de Spectrum, sin un fondo de gradiente completo
+
+### Requirement: Secciones de contenido
+
+El sistema SHALL presentar el contenido de la landing en secciones con tarjetas planas de Spectrum (`sp-card`) y badges (`sp-badge`) donde aporten, siguiendo los patrones de layout de Spectrum.
+
+#### Scenario: Secciones listadas
+
+- **WHEN** se renderiza la landing
+- **THEN** se muestran secciones de contenido con título y tarjetas planas de Spectrum
+
+### Requirement: Footer
+
+El sistema SHALL renderizar un footer con información básica del producto y enlaces de Spectrum (`sp-link`).
+
+#### Scenario: Footer visible
+
+- **WHEN** se renderiza la landing page
+- **THEN** se muestra un footer al final de la página
+
+### Requirement: Consumo del design system
+
+La landing page SHALL usar los componentes base y las primitivas de Spectrum (`finap-button`, `sp-card`, `sp-link`, `sp-badge`, tipografía y tokens `--spectrum-*`) en lugar de estilos propios duplicados.
+
+#### Scenario: Uso de componentes base
+
+- **WHEN** se renderiza la landing page
+- **THEN** los elementos de interfaz están compuestos por componentes y primitivas del design system
+
+### Requirement: Paleta de marca completa
+
+La landing page SHALL mostrar los tres colores de la paleta de marca (rojo primario, naranja secundario y amarillo acento) como acento sobre la base neutral de Spectrum, sin que dominen la composición.
+
+#### Scenario: Los tres colores visibles
+
+- **WHEN** se renderiza la landing page
+- **THEN** aparecen al menos un elemento primario (rojo), uno secundario (naranja) y uno de acento (amarillo) como acento de marca

@@ -2,7 +2,9 @@ import { LitElement, html, css } from 'lit';
 import { navigate } from '@open-cells/core';
 
 import '../heading/index.js';
-import '../list-item/index.js';
+import { finapIcon } from '../icons.js';
+import '@spectrum-web-components/link/sp-link.js';
+import '@spectrum-web-components/table/elements.js';
 import { LocalizeController } from '../../i18n/localize.js';
 import { formatCurrency, formatRelativeDate } from '../../utils/format.js';
 import type { Transaction } from '../../services/types.js';
@@ -21,10 +23,23 @@ export class FinapDashboardRecent extends LitElement {
     }
 
     .more {
-      font-family: var(--finap-font-family);
+      display: inline-flex;
+      align-items: center;
+      gap: var(--finap-space-1);
       font-size: var(--finap-font-size-sm);
-      color: var(--finap-color-primary);
-      text-decoration: none;
+      font-weight: var(--finap-font-weight-semibold);
+    }
+
+    sp-table {
+      width: 100%;
+    }
+
+    .amount--income {
+      color: var(--finap-color-income);
+    }
+
+    .amount--expense {
+      color: var(--finap-color-expense);
     }
   `;
 
@@ -42,26 +57,45 @@ export class FinapDashboardRecent extends LitElement {
   }
 
   render() {
+    const t = (key: string) => this._localize.t(key);
     return html`
       <section class="recent">
         <div class="head">
-          <finap-heading level="3">${this._localize.t('dashboard.recent')}</finap-heading>
-          <a class="more" href="/movements" @click=${this._goAll}>
-            ${this._localize.t('dashboard.seeAll')}
-          </a>
+          <finap-heading level="3">${t('dashboard.recent')}</finap-heading>
+          <sp-link class="more" href="/movements" @click=${this._goAll}>
+            ${t('dashboard.seeAll')} ${finapIcon('chevron-right', 14)}
+          </sp-link>
         </div>
-        ${this.transactions.map(
-          (transaction) => html`
-            <finap-list-item
-              title=${transaction.note ?? transaction.categoryId}
-              subtitle=${formatRelativeDate(transaction.date)}
-              value=${`${transaction.type === 'income' ? '+' : '-'}${formatCurrency(
-                transaction.amount,
-              )}`}
-              tone=${transaction.type === 'income' ? 'income' : 'expense'}
-            ></finap-list-item>
-          `,
-        )}
+        <sp-table>
+          <sp-table-head>
+            <sp-table-head-cell>${t('movements.col.detail')}</sp-table-head-cell>
+            <sp-table-head-cell>${t('movements.col.date')}</sp-table-head-cell>
+            <sp-table-head-cell>${t('movements.col.amount')}</sp-table-head-cell>
+          </sp-table-head>
+          <sp-table-body>
+            ${this.transactions.map(
+              (transaction) => html`
+                <sp-table-row>
+                  <sp-table-cell
+                    >${transaction.note ?? transaction.categoryId}</sp-table-cell
+                  >
+                  <sp-table-cell
+                    >${formatRelativeDate(transaction.date)}</sp-table-cell
+                  >
+                  <sp-table-cell
+                    class="amount--${transaction.type === 'income'
+                      ? 'income'
+                      : 'expense'}"
+                  >
+                    ${`${transaction.type === 'income' ? '+' : '-'}${formatCurrency(
+                      transaction.amount,
+                    )}`}
+                  </sp-table-cell>
+                </sp-table-row>
+              `,
+            )}
+          </sp-table-body>
+        </sp-table>
       </section>
     `;
   }

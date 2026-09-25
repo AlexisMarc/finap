@@ -13,7 +13,7 @@ describe('finap-select', () => {
     ];
     await fixture(el);
 
-    const options = el.shadowRoot?.querySelectorAll('option');
+    const options = el.shadowRoot?.querySelectorAll('sp-menu-item');
     expect(options?.length).toBe(2);
     expect(options?.[0].textContent).toContain('Vivienda');
     teardown(el);
@@ -29,9 +29,11 @@ describe('finap-select', () => {
       received = (e as CustomEvent).detail;
     });
 
-    const select = el.shadowRoot?.querySelector('select') as HTMLSelectElement;
-    select.value = 'c_alim';
-    select.dispatchEvent(new Event('change', { bubbles: true, composed: true }));
+    const picker = el.shadowRoot?.querySelector('sp-picker') as HTMLElement & {
+      value: string;
+    };
+    picker.value = 'c_alim';
+    picker.dispatchEvent(new Event('change', { bubbles: true, composed: true }));
 
     expect(received).toBe('c_alim');
     teardown(el);

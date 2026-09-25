@@ -18,7 +18,7 @@ describe('finap-budget-item', () => {
 
     const root = el.shadowRoot as ShadowRoot;
     expect(root.querySelector('.name')?.textContent).toContain('Alimentación');
-    expect(root.querySelector('finap-progress')).not.toBeNull();
+    expect(root.querySelector('.finap-progress')).not.toBeNull();
     teardown(el);
   });
 

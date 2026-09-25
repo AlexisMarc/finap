@@ -1,10 +1,14 @@
 import { LitElement, html, css } from 'lit';
 
-import '../theme-toggle/index.js';
+import '@spectrum-web-components/field-group/sp-field-group.js';
+import '@spectrum-web-components/contextual-help/sp-contextual-help.js';
+import '@spectrum-web-components/action-button/sp-action-button.js';
+import { finapIcon } from '../icons.js';
 import '../select/index.js';
 import { setLocale, type Locale } from '../../i18n/i18n.js';
 import { LocalizeController } from '../../i18n/localize.js';
 import { getCurrency, setCurrency } from '../../state/session.js';
+import { resolveTheme, setTheme, type Theme } from '../../theme/theme.js';
 
 const LOCALE_OPTIONS = [
   { value: 'es', label: 'Español' },
@@ -45,13 +49,22 @@ export class FinapSettingsPreferences extends LitElement {
   static properties = {
     locale: { type: String },
     currency: { type: String },
+    theme: { type: String },
   };
 
   locale: Locale = 'es';
 
   currency = 'USD';
 
+  theme: Theme = resolveTheme();
+
   private _localize = new LocalizeController(this);
+
+  private _toggleTheme(): void {
+    const theme: Theme = this.theme === 'dark' ? 'light' : 'dark';
+    setTheme(theme);
+    this.theme = theme;
+  }
 
   private _onLocale(event: Event): void {
     const locale = (event as CustomEvent<Locale>).detail;
@@ -76,26 +89,38 @@ export class FinapSettingsPreferences extends LitElement {
     const t = (key: string) => this._localize.t(key);
     return html`
       <div class="prefs">
-        <div class="row">
-          <span>${t('settings.theme')}</span>
-          <finap-theme-toggle></finap-theme-toggle>
-        </div>
-        <div class="row">
-          <span>${t('settings.language')}</span>
+        <sp-field-group horizontal label=${t('settings.theme')}>
+          <sp-action-button class="theme-button" @click=${this._toggleTheme}>
+            ${finapIcon('theme', 18, 'icon')}
+            ${this.theme === 'dark' ? t('theme.dark') : t('theme.light')}
+          </sp-action-button>
+          <sp-contextual-help label=${t('settings.themeHelp')}>
+            <span slot="heading">${t('settings.theme')}</span>
+            ${t('settings.themeHelp')}
+          </sp-contextual-help>
+        </sp-field-group>
+        <sp-field-group horizontal label=${t('settings.language')}>
           <finap-select
             .value=${this.locale}
             .options=${LOCALE_OPTIONS}
             @finap-change=${this._onLocale}
           ></finap-select>
-        </div>
-        <div class="row">
-          <span>${t('settings.currency')}</span>
+          <sp-contextual-help label=${t('settings.languageHelp')}>
+            <span slot="heading">${t('settings.language')}</span>
+            ${t('settings.languageHelp')}
+          </sp-contextual-help>
+        </sp-field-group>
+        <sp-field-group horizontal label=${t('settings.currency')}>
           <finap-select
             .value=${this.currency}
             .options=${CURRENCY_OPTIONS}
             @finap-change=${this._onCurrency}
           ></finap-select>
-        </div>
+          <sp-contextual-help label=${t('settings.currencyHelp')}>
+            <span slot="heading">${t('settings.currency')}</span>
+            ${t('settings.currencyHelp')}
+          </sp-contextual-help>
+        </sp-field-group>
       </div>
     `;
   }

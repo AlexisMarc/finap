@@ -12,7 +12,7 @@ describe('finap-login-form', () => {
       emitted = true;
     });
 
-    (el.shadowRoot?.querySelector('finap-button') as HTMLElement).click();
+    (el.shadowRoot?.querySelector('sp-button') as HTMLElement).click();
     await el.updateComplete;
 
     expect(emitted).toBe(false);
@@ -25,7 +25,7 @@ describe('finap-login-form', () => {
     const el = new FinapLoginForm();
     await fixture(el);
 
-    (el.shadowRoot?.querySelector('finap-button') as HTMLElement).click();
+    (el.shadowRoot?.querySelector('sp-button') as HTMLElement).click();
     await el.updateComplete;
 
     // Setea email inválido y contraseña, vuelve a enviar
@@ -36,7 +36,7 @@ describe('finap-login-form', () => {
     (inputs?.[1] as HTMLElement).dispatchEvent(
       new CustomEvent('finap-input', { detail: 'secret' }),
     );
-    (el.shadowRoot?.querySelector('finap-button') as HTMLElement).click();
+    (el.shadowRoot?.querySelector('sp-button') as HTMLElement).click();
     await el.updateComplete;
 
     expect(el.emailError).toContain('válido');
@@ -59,7 +59,7 @@ describe('finap-login-form', () => {
     (inputs?.[1] as HTMLElement).dispatchEvent(
       new CustomEvent('finap-input', { detail: 'secret' }),
     );
-    (el.shadowRoot?.querySelector('finap-button') as HTMLElement).click();
+    (el.shadowRoot?.querySelector('sp-button') as HTMLElement).click();
 
     expect(detail).toEqual({ email: 'm@finap.app', password: 'secret' });
     teardown(el);

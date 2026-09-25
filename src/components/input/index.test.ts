@@ -4,7 +4,7 @@ import { FinapInput } from './index.js';
 import { fixture, teardown } from '../../test/fixture.js';
 
 describe('finap-input', () => {
-  it('renderiza la etiqueta y un campo numérico', async () => {
+  it('renderiza la etiqueta y un campo numérico de Spectrum', async () => {
     const el = new FinapInput();
     el.label = 'Importe';
     el.type = 'number';
@@ -12,15 +12,21 @@ describe('finap-input', () => {
 
     const root = el.shadowRoot as ShadowRoot;
     expect(root.querySelector('label')?.textContent).toContain('Importe');
-    expect(root.querySelector('input')?.getAttribute('type')).toBe('number');
+    expect(root.querySelector('sp-number-field')).not.toBeNull();
     teardown(el);
   });
 
-  it('renderiza un textarea', async () => {
+  it('renderiza un textarea nativo', async () => {
     const el = new FinapInput();
     el.type = 'textarea';
     await fixture(el);
     expect(el.shadowRoot?.querySelector('textarea')).not.toBeNull();
+    teardown(el);
+  });
+
+  it('renderiza un campo de texto de Spectrum para texto', async () => {
+    const el = await fixture(new FinapInput());
+    expect(el.shadowRoot?.querySelector('sp-textfield')).not.toBeNull();
     teardown(el);
   });
 
@@ -41,9 +47,11 @@ describe('finap-input', () => {
       received = (e as CustomEvent).detail;
     });
 
-    const input = el.shadowRoot?.querySelector('input') as HTMLInputElement;
-    input.value = '42';
-    input.dispatchEvent(new Event('input', { bubbles: true, composed: true }));
+    const field = el.shadowRoot?.querySelector('sp-textfield') as HTMLElement & {
+      value: string;
+    };
+    field.value = '42';
+    field.dispatchEvent(new Event('input', { bubbles: true, composed: true }));
 
     expect(received).toBe('42');
     teardown(el);

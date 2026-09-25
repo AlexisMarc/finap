@@ -13,7 +13,7 @@ describe('finap-analysis-metrics', () => {
     el.trend = 12.5;
     await fixture(el);
 
-    expect(el.shadowRoot?.querySelectorAll('finap-stat-card').length).toBe(4);
+    expect(el.shadowRoot?.querySelectorAll('.stat').length).toBe(4);
     teardown(el);
   });
 });

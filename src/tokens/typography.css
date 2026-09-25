@@ -1,11 +1,10 @@
-/* Finap design tokens — tipografía. Inter (cuerpo) + Sora (títulos). */
+/* Finap design tokens — tipografía basada en Spectrum (Adobe Clean). */
 
 :root {
   --finap-font-family:
-    "Inter Variable", Inter, system-ui, -apple-system, "Segoe UI", Roboto,
-    Helvetica, Arial, sans-serif;
-  --finap-font-family-display:
-    "Sora Variable", Sora, var(--finap-font-family);
+    "Adobe Clean", adobe-clean, "Source Sans Pro", -apple-system,
+    BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --finap-font-family-display: var(--finap-font-family);
 
   /* Tamaños */
   --finap-font-size-xs: 12px;

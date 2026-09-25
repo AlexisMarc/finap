@@ -2,11 +2,13 @@ import { LitElement, html, css } from 'lit';
 import type { ChartData } from 'chart.js';
 
 import '../components/container/index.js';
+import '../components/skeleton/index.js';
 import '../components/heading/index.js';
-import '../components/card/index.js';
-import '../components/chip/index.js';
 import '../components/chart/index.js';
 import '../components/analysis-metrics/index.js';
+import '@spectrum-web-components/contextual-help/sp-contextual-help.js';
+import '@spectrum-web-components/action-group/sp-action-group.js';
+import '@spectrum-web-components/action-button/sp-action-button.js';
 
 import {
   getSummary,
@@ -67,6 +69,10 @@ export class AnalysisPage extends LitElement {
       display: block;
     }
 
+    sp-action-group {
+      flex-wrap: wrap;
+    }
+
     .content {
       display: grid;
       gap: var(--finap-space-5);
@@ -90,6 +96,12 @@ export class AnalysisPage extends LitElement {
       gap: var(--finap-space-5);
     }
 
+    .chart-head {
+      display: flex;
+      align-items: center;
+      gap: var(--finap-space-2);
+    }
+
     .state {
       padding: var(--finap-space-7);
       text-align: center;
@@ -108,6 +120,7 @@ export class AnalysisPage extends LitElement {
     loading: { type: Boolean },
     error: { type: String },
     period: { type: String },
+    chartType: { type: String },
     summary: { type: Object },
     evolution: { type: Array },
     categories: { type: Array },
@@ -118,6 +131,8 @@ export class AnalysisPage extends LitElement {
   error = '';
 
   period: Period = 'month';
+
+  chartType: 'line' | 'bar' | 'pie' = 'line';
 
   summary: AnalysisSummary | null = null;
 
@@ -161,6 +176,29 @@ export class AnalysisPage extends LitElement {
     void this._load();
   }
 
+  private _onPeriodChange(event: Event): void {
+    const target = event.target as { value?: string; selected?: string[] };
+    this._setPeriod((target.value ?? target.selected?.[0] ?? 'month') as Period);
+  }
+
+  private _onChartType(event: Event): void {
+    const target = event.target as { value?: string; selected?: string[] };
+    this.chartType = (target.value ?? target.selected?.[0] ?? 'line') as
+      | 'line'
+      | 'bar'
+      | 'pie';
+  }
+
+  private get _evolutionType(): 'line' | 'bar' {
+    return this.chartType === 'bar' ? 'bar' : 'line';
+  }
+
+  private get _categoryType(): 'doughnut' | 'bar' | 'pie' {
+    if (this.chartType === 'bar') return 'bar';
+    if (this.chartType === 'pie') return 'pie';
+    return 'doughnut';
+  }
+
   private get _evolutionData(): ChartData {
     return {
       labels: this.evolution.map((point) => point.label),
@@ -201,7 +239,7 @@ export class AnalysisPage extends LitElement {
     const t = (key: string) => this._localize.t(key);
     if (this.loading) {
       return html`
-        <finap-container><div class="state">${t('common.loading')}</div></finap-container>
+        <finap-container><finap-skeleton variant="rect" height="240px"></finap-skeleton></finap-container>
       `;
     }
 
@@ -218,17 +256,40 @@ export class AnalysisPage extends LitElement {
           <div class="head">
             <finap-heading level="1">${t('analysis.title')}</finap-heading>
             <div class="periods">
-              ${PERIODS.map(
-                (period) => html`
-                  <finap-chip
-                    clickable
-                    ?selected=${this.period === period.id}
-                    @click=${() => this._setPeriod(period.id)}
-                  >
-                    ${t(period.labelKey)}
-                  </finap-chip>
-                `,
-              )}
+              <sp-action-group selects="single" @change=${this._onPeriodChange}>
+                ${PERIODS.map(
+                  (period) => html`
+                    <sp-action-button
+                      value=${period.id}
+                      ?selected=${this.period === period.id}
+                    >
+                      ${t(period.labelKey)}
+                    </sp-action-button>
+                  `,
+                )}
+              </sp-action-group>
+            </div>
+            <div class="periods">
+              <sp-action-group selects="single" @change=${this._onChartType}>
+                <sp-action-button
+                  value="line"
+                  ?selected=${this.chartType === 'line'}
+                >
+                  ${t('analysis.chart.line')}
+                </sp-action-button>
+                <sp-action-button
+                  value="bar"
+                  ?selected=${this.chartType === 'bar'}
+                >
+                  ${t('analysis.chart.bar')}
+                </sp-action-button>
+                <sp-action-button
+                  value="pie"
+                  ?selected=${this.chartType === 'pie'}
+                >
+                  ${t('analysis.chart.pie')}
+                </sp-action-button>
+              </sp-action-group>
             </div>
           </div>
 
@@ -247,20 +308,36 @@ export class AnalysisPage extends LitElement {
           </div>
 
           <div class="charts">
-            <finap-card>
-              <finap-heading level="3">${t('analysis.evolution')}</finap-heading>
+            <div class="finap-surface">
+              <div class="chart-head">
+                <finap-heading level="3"
+                  >${t('analysis.evolution')}</finap-heading
+                >
+                <sp-contextual-help label=${t('analysis.evolutionHelp')}>
+                  <span slot="heading">${t('analysis.evolution')}</span>
+                  ${t('analysis.evolutionHelp')}
+                </sp-contextual-help>
+              </div>
               <finap-chart
-                type="line"
+                type=${this._evolutionType}
                 .data=${this._evolutionData}
               ></finap-chart>
-            </finap-card>
-            <finap-card>
-              <finap-heading level="3">${t('analysis.byCategory')}</finap-heading>
+            </div>
+            <div class="finap-surface">
+              <div class="chart-head">
+                <finap-heading level="3"
+                  >${t('analysis.byCategory')}</finap-heading
+                >
+                <sp-contextual-help label=${t('analysis.byCategoryHelp')}>
+                  <span slot="heading">${t('analysis.byCategory')}</span>
+                  ${t('analysis.byCategoryHelp')}
+                </sp-contextual-help>
+              </div>
               <finap-chart
-                type="doughnut"
+                type=${this._categoryType}
                 .data=${this._categoryData}
               ></finap-chart>
-            </finap-card>
+            </div>
           </div>
         </div>
       </finap-container>

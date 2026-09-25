@@ -26,7 +26,29 @@ describe('finap-movements-list', () => {
     ];
     await fixture(el);
 
-    expect(el.shadowRoot?.querySelectorAll('finap-list-item').length).toBe(2);
+    expect(el.shadowRoot?.querySelectorAll('sp-table-row').length).toBe(2);
+    teardown(el);
+  });
+
+  it('muestra el nombre de la categoría en lugar del id', async () => {
+    const el = new FinapMovementsList();
+    el.transactions = [
+      {
+        id: 't1',
+        type: 'expense',
+        amount: 980,
+        categoryId: 'c_vivienda',
+        date: '2025-05-12',
+      },
+    ];
+    el.categories = [
+      { id: 'c_vivienda', name: 'Vivienda', color: '#EB001B', icon: 'home' },
+    ];
+    await fixture(el);
+
+    const text = el.shadowRoot?.textContent ?? '';
+    expect(text).toContain('Vivienda');
+    expect(text).not.toContain('c_vivienda');
     teardown(el);
   });
 
@@ -47,7 +69,7 @@ describe('finap-movements-list', () => {
     el.addEventListener('finap-edit', () => events.push('edit'));
     el.addEventListener('finap-delete', () => events.push('delete'));
 
-    const buttons = el.shadowRoot?.querySelectorAll('finap-button');
+    const buttons = el.shadowRoot?.querySelectorAll('sp-button');
     (buttons?.[0] as HTMLElement).click();
     (buttons?.[1] as HTMLElement).click();
 

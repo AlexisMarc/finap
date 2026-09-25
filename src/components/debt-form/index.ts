@@ -1,7 +1,6 @@
 import { LitElement, html, css } from 'lit';
 
 import '../input/index.js';
-import '../button/index.js';
 import { LocalizeController } from '../../i18n/localize.js';
 import type { Debt } from '../../services/types.js';
 
@@ -168,12 +167,12 @@ export class FinapDebtForm extends LitElement {
         ></finap-input>
         <p class="error" ?hidden=${!this.error}>${this.error}</p>
         <div class="actions">
-          <finap-button variant="secondary" @click=${this._cancel}>
+          <sp-button variant="secondary" @click=${this._cancel}>
             ${t('common.cancel')}
-          </finap-button>
-          <finap-button ?disabled=${this.saving} @click=${this._submit}>
+          </sp-button>
+          <sp-button variant="accent" ?disabled=${this.saving} @click=${this._submit}>
             ${this.saving ? t('common.saving') : t('common.save')}
-          </finap-button>
+          </sp-button>
         </div>
       </div>
     `;

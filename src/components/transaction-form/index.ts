@@ -2,8 +2,8 @@ import { LitElement, html, css } from 'lit';
 
 import '../input/index.js';
 import '../select/index.js';
-import '../chip/index.js';
-import '../button/index.js';
+import '@spectrum-web-components/action-group/sp-action-group.js';
+import '@spectrum-web-components/action-button/sp-action-button.js';
 import { LocalizeController } from '../../i18n/localize.js';
 import type {
   Category,
@@ -39,6 +39,10 @@ export class FinapTransactionForm extends LitElement {
   static styles = css`
     :host {
       display: block;
+    }
+
+    sp-action-group {
+      flex-wrap: wrap;
     }
 
     .form {
@@ -119,6 +123,12 @@ export class FinapTransactionForm extends LitElement {
     this.amount = (event as CustomEvent<string>).detail;
   }
 
+  private _onType(event: Event): void {
+    const target = event.target as { value?: string; selected?: string[] };
+    const value = target.value ?? target.selected?.[0] ?? 'expense';
+    this.type = value as TransactionType;
+  }
+
   private _onCategory(event: Event): void {
     this.categoryId = (event as CustomEvent<string>).detail;
   }
@@ -181,17 +191,18 @@ export class FinapTransactionForm extends LitElement {
     return html`
       <div class="form">
         <div class="types">
-          ${TYPE_OPTIONS.map(
-            (option) => html`
-              <finap-chip
-                clickable
-                ?selected=${this.type === option.id}
-                @click=${() => (this.type = option.id)}
-              >
-                ${t(option.labelKey)}
-              </finap-chip>
-            `,
-          )}
+          <sp-action-group selects="single" @change=${this._onType}>
+            ${TYPE_OPTIONS.map(
+              (option) => html`
+                <sp-action-button
+                  value=${option.id}
+                  ?selected=${this.type === option.id}
+                >
+                  ${t(option.labelKey)}
+                </sp-action-button>
+              `,
+            )}
+          </sp-action-group>
         </div>
         <finap-input
           label=${t('transactions.amount')}
@@ -224,12 +235,12 @@ export class FinapTransactionForm extends LitElement {
         ></finap-input>
         <p class="error" ?hidden=${!this.error}>${this.error}</p>
         <div class="actions">
-          <finap-button variant="secondary" @click=${this._cancel}>
+          <sp-button variant="secondary" @click=${this._cancel}>
             ${t('common.cancel')}
-          </finap-button>
-          <finap-button ?disabled=${this.saving} @click=${this._submit}>
+          </sp-button>
+          <sp-button variant="accent" ?disabled=${this.saving} @click=${this._submit}>
             ${this.saving ? t('common.saving') : t('common.save')}
-          </finap-button>
+          </sp-button>
         </div>
       </div>
     `;
