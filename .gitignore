@@ -3,3 +3,5 @@
 /src/**/*.js
 .env.local
 .env.*.local
+.vercel
+.env.production

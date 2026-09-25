@@ -26,14 +26,15 @@ Ver `proposal.md`. La app es una SPA con **routing por history** (Open Cells en 
 - **Alternativas**: confiar en el autodetect de Vercel (framework Vite). Se explicita para robustez.
 - **Racional**: build reproducible.
 
-### 4. API en producción: proxy same-origin en Vercel
+### 4. API en producción: llamada directa + CORS en el backend
 
-- **Contexto**: el backend desplegado es `https://finap-service.vercel.app` y **no envía cabeceras CORS** (`OPTIONS` → 404, sin `Access-Control-Allow-Origin`). Una llamada directa desde el navegador (otro origen) quedaría bloqueada.
-- **Decisión**: **proxy same-origin**. Se añade un *rewrite* en `vercel.json` que reenvía `/api/v1/:path*` → `https://finap-service.vercel.app/api/v1/:path*` (antes del catch-all de la SPA). Así el frontend llama a `/api/v1` (mismo origen) y **no hay CORS**. En producción `VITE_API_BASE_URL` queda sin definir → default `/api/v1`. En desarrollo, `.env.development` apunta a `http://localhost:3000/api/v1` (el backend local sí tiene CORS `*`).
-- **Alternativas**: configurar `VITE_API_BASE_URL=https://finap-service.vercel.app/api/v1` y que el backend habilite CORS. Se descarta por ahora: exige tocar el backend; el proxy lo evita y es transparente.
-- **Racional**: funciona con el backend actual sin cambios y mantiene la misma capa de datos (`src/services/http.ts`).
+- **Contexto**: el backend desplegado es `https://finap-service.vercel.app` y **aún no envía cabeceras CORS**. El equipo de backend configurará CORS con el **origen del front desplegado**.
+- **Decisión**: el front llama **directamente** al backend. En producción `VITE_API_BASE_URL=https://finap-service.vercel.app/api/v1` (`.env.production`). En desarrollo, `.env.development` apunta a `http://localhost:3000/api/v1` (el local sí tiene CORS `*`).
+- **Requisito**: el backend debe incluir el **origen del front** (p. ej. `https://<proyecto>.vercel.app`) en su CORS (`Access-Control-Allow-Origin` y `Access-Control-Allow-Headers: authorization`), incluidos los preflight `OPTIONS`. Se obtiene tras el primer despliegue.
+- **Alternativas**: proxy same-origin mediante rewrite en `vercel.json` (`/api/v1/:path*` → backend), que evita CORS. Queda como plan B si el backend no puede habilitar CORS.
+- **Racional**: alineado con el plan del equipo de backend; mantiene la misma capa de datos (`src/services/http.ts`).
 
-> Nota: si en el futuro el backend habilita CORS, basta con definir `VITE_API_BASE_URL` como variable de entorno en Vercel y quitar el rewrite del proxy.
+> Nota: hasta que el backend habilite CORS para el origen del front, el despliegue mostrará errores de red. Si se prefiere, se puede activar temporalmente el proxy del plan B (rewrite) para que funcione sin CORS.
 
 ## Goals / Non-Goals
 
