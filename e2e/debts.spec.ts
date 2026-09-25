@@ -15,8 +15,14 @@ test.describe('Deudas', () => {
     await page.goto('/debts');
     await page.getByRole('button', { name: 'Nueva deuda' }).click();
     const form = page.locator('finap-debt-form');
-    await form.locator('input[type="text"]').fill(marker);
-    await form.locator('input[type="number"]').first().fill('1000');
+    await form
+      .locator('finap-input', { hasText: 'Nombre' })
+      .getByRole('textbox')
+      .fill(marker);
+    await form
+      .locator('finap-input', { hasText: 'Importe total' })
+      .getByRole('textbox')
+      .fill('1000');
     await form.getByRole('button', { name: 'Guardar' }).click();
     await expect(form).toHaveCount(0);
 
@@ -24,8 +30,10 @@ test.describe('Deudas', () => {
     await expect(item).toBeVisible();
 
     await item.getByRole('button', { name: 'Registrar pago' }).click();
-    const payModal = page.locator('finap-modal', { hasText: marker });
-    await payModal.locator('input[type="number"]').fill('100');
+    const payModal = page
+      .locator('finap-modal')
+      .filter({ has: page.locator('sp-dialog') });
+    await payModal.locator('finap-input').getByRole('textbox').fill('100');
     await payModal.getByRole('button', { name: 'Registrar pago' }).click();
     await expect(payModal).toHaveCount(0);
 

@@ -9,7 +9,7 @@ describe('finap-chip', () => {
     el.textContent = 'Vivienda';
     await fixture(el);
 
-    expect(el.shadowRoot?.querySelector('.chip')).not.toBeNull();
+    expect(el.shadowRoot?.querySelector('sp-tag')).not.toBeNull();
     teardown(el);
   });
 
@@ -19,15 +19,20 @@ describe('finap-chip', () => {
     await fixture(el);
 
     expect(el.hasAttribute('selected')).toBe(true);
+    expect(
+      el.shadowRoot?.querySelector('sp-tag')?.hasAttribute('selected'),
+    ).toBe(true);
     teardown(el);
   });
 
-  it('usa un botón cuando es interactivo', async () => {
+  it('expone rol de botón cuando es interactivo', async () => {
     const el = new FinapChip();
     el.clickable = true;
     await fixture(el);
 
-    expect(el.shadowRoot?.querySelector('button.chip')).not.toBeNull();
+    const tag = el.shadowRoot?.querySelector('sp-tag');
+    expect(tag?.getAttribute('role')).toBe('button');
+    expect(tag?.getAttribute('tabindex')).toBe('0');
     teardown(el);
   });
 

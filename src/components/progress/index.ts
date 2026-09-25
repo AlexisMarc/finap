@@ -1,36 +1,15 @@
 import { LitElement, html, css } from 'lit';
 
+import '@spectrum-web-components/progress-bar/sp-progress-bar.js';
+
 export class FinapProgress extends LitElement {
   static styles = css`
     :host {
       display: block;
     }
 
-    .track {
-      position: relative;
+    sp-progress-bar {
       width: 100%;
-      height: 8px;
-      overflow: hidden;
-      background-color: var(--finap-color-bg-subtle);
-      border-radius: var(--finap-radius-full);
-    }
-
-    .fill {
-      height: 100%;
-      background-color: var(--finap-color-primary);
-      border-radius: var(--finap-radius-full);
-      transition: width var(--finap-motion-duration-normal)
-        var(--finap-motion-easing-standard);
-    }
-
-    .fill--over {
-      background-color: var(--finap-color-expense);
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .fill {
-        transition: none;
-      }
     }
   `;
 
@@ -45,22 +24,12 @@ export class FinapProgress extends LitElement {
 
   render() {
     const percent = this.max > 0 ? (this.value / this.max) * 100 : 0;
-    const width = Math.min(Math.max(percent, 0), 100);
-    const over = percent > 100;
-    return html`
-      <div
-        class="track"
-        role="progressbar"
-        aria-valuenow=${this.value}
-        aria-valuemin="0"
-        aria-valuemax=${this.max}
-      >
-        <div
-          class="fill ${over ? 'fill--over' : ''}"
-          style="width: ${width}%"
-        ></div>
-      </div>
-    `;
+    const clamped = Math.min(Math.max(percent, 0), 100);
+    return html`<sp-progress-bar
+      size="s"
+      .progress=${clamped}
+      ?over=${percent > 100}
+    ></sp-progress-bar>`;
   }
 }
 

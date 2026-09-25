@@ -59,7 +59,7 @@ El sistema SHALL proporcionar `<finap-avatar>` que muestra las iniciales del usu
 
 ### Requirement: finap-input
 
-El sistema SHALL proporcionar `<finap-input>` como campo de formulario con etiqueta, soportando texto, número, fecha y área de texto, con estado de error, implementado sobre `sp-textfield`, `sp-number-field` y `sp-textarea`.
+El sistema SHALL proporcionar `<finap-input>` como campo de formulario con etiqueta, soportando texto, número, fecha y área de texto, con estado de error, implementado sobre `sp-textfield` y `sp-number-field` (texto/número) y con `textarea`/`date` como controles nativos estilizados con tokens.
 
 #### Scenario: Campo con etiqueta
 

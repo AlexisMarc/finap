@@ -1,4 +1,8 @@
-import { LitElement, html, css, nothing } from 'lit';
+import { LitElement, html, nothing, css } from 'lit';
+
+import '@spectrum-web-components/picker/sp-picker.js';
+import '@spectrum-web-components/menu/sp-menu-item.js';
+import '@spectrum-web-components/help-text/sp-help-text.js';
 
 export interface SelectOption {
   value: string;
@@ -16,31 +20,14 @@ export class FinapSelect extends LitElement {
       gap: var(--finap-space-1);
     }
 
-    label {
+    .finap-label {
       font-family: var(--finap-font-family);
       font-size: var(--finap-font-size-sm);
       color: var(--finap-color-text-muted);
     }
 
-    select {
-      font-family: var(--finap-font-family);
-      font-size: var(--finap-font-size-md);
-      color: var(--finap-color-text);
-      background-color: var(--finap-color-surface);
-      border: 1px solid var(--finap-color-border);
-      border-radius: var(--finap-radius-sm);
-      padding: var(--finap-space-2) var(--finap-space-3);
-    }
-
-    select:focus-visible {
-      outline: 2px solid var(--finap-color-secondary);
-      outline-offset: 1px;
-    }
-
-    .error {
-      font-family: var(--finap-font-family);
-      font-size: var(--finap-font-size-sm);
-      color: var(--finap-color-expense);
+    sp-picker {
+      width: 100%;
     }
   `;
 
@@ -59,9 +46,8 @@ export class FinapSelect extends LitElement {
 
   options: SelectOption[] = [];
 
-  private _onChange(event: Event) {
-    const target = event.target as HTMLSelectElement;
-    this.value = target.value;
+  private _onChange(event: Event): void {
+    this.value = (event.target as { value?: string }).value ?? '';
     this.dispatchEvent(
       new CustomEvent('finap-change', {
         detail: this.value,
@@ -74,14 +60,22 @@ export class FinapSelect extends LitElement {
   render() {
     return html`
       <div class="field">
-        ${this.label ? html`<label for="select">${this.label}</label>` : nothing}
-        <select id="select" .value=${this.value} @change=${this._onChange}>
+        ${this.label
+          ? html`<label class="finap-label">${this.label}</label>`
+          : nothing}
+        <sp-picker .value=${this.value} @change=${this._onChange}>
           ${this.options.map(
             (option) =>
-              html`<option value=${option.value}>${option.label}</option>`,
+              html`<sp-menu-item value=${option.value}
+                >${option.label}</sp-menu-item
+              >`,
           )}
-        </select>
-        ${this.error ? html`<span class="error">${this.error}</span>` : nothing}
+        </sp-picker>
+        ${this.error
+          ? html`<sp-help-text class="error" variant="negative"
+              >${this.error}</sp-help-text
+            >`
+          : nothing}
       </div>
     `;
   }

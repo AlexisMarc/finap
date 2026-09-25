@@ -10,8 +10,10 @@ describe('finap-progress', () => {
     el.max = 100;
     await fixture(el);
 
-    const fill = el.shadowRoot?.querySelector('.fill') as HTMLElement;
-    expect(fill.style.width).toBe('65%');
+    const bar = el.shadowRoot?.querySelector('sp-progress-bar') as HTMLElement & {
+      progress: number;
+    };
+    expect(bar.progress).toBe(65);
     teardown(el);
   });
 
@@ -21,13 +23,15 @@ describe('finap-progress', () => {
     el.max = 100;
     await fixture(el);
 
-    expect(el.shadowRoot?.querySelector('.fill--over')).not.toBeNull();
+    expect(
+      el.shadowRoot?.querySelector('sp-progress-bar')?.hasAttribute('over'),
+    ).toBe(true);
     teardown(el);
   });
 
-  it('expone el rol de accesibilidad', async () => {
+  it('usa la primitiva de progreso de Spectrum', async () => {
     const el = await fixture(new FinapProgress());
-    expect(el.shadowRoot?.querySelector('[role="progressbar"]')).not.toBeNull();
+    expect(el.shadowRoot?.querySelector('sp-progress-bar')).not.toBeNull();
     teardown(el);
   });
 });

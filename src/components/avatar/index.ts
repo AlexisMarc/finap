@@ -1,8 +1,14 @@
-import { LitElement, html, css } from 'lit';
+import { LitElement, html, nothing, css } from 'lit';
+
+import '@spectrum-web-components/avatar/sp-avatar.js';
 
 export class FinapAvatar extends LitElement {
   static styles = css`
     :host {
+      display: inline-flex;
+    }
+
+    sp-avatar {
       display: inline-flex;
     }
 
@@ -19,12 +25,6 @@ export class FinapAvatar extends LitElement {
       font-family: var(--finap-font-family);
       font-size: var(--finap-font-size-sm);
       font-weight: var(--finap-font-weight-semibold);
-    }
-
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
     }
   `;
 
@@ -47,13 +47,17 @@ export class FinapAvatar extends LitElement {
   }
 
   render() {
-    return html`
-      <span class="avatar" role="img" aria-label=${this.name}>
-        ${this.src
-          ? html`<img src=${this.src} alt=${this.name} />`
-          : this._initials}
-      </span>
-    `;
+    if (this.src) {
+      return html`<sp-avatar
+        class="avatar"
+        label=${this.name}
+        src=${this.src}
+        size="400"
+      ></sp-avatar>`;
+    }
+    return html`<span class="avatar" role="img" aria-label=${this.name || nothing}
+      >${this._initials}</span
+    >`;
   }
 }
 

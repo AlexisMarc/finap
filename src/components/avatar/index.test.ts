@@ -15,14 +15,14 @@ describe('finap-avatar', () => {
     teardown(el);
   });
 
-  it('muestra la imagen cuando se indica src', async () => {
+  it('usa un avatar de Spectrum cuando se indica src', async () => {
     const el = new FinapAvatar();
     el.name = 'Marcos';
     el.src = 'https://example.com/a.png';
     await fixture(el);
 
-    const img = el.shadowRoot?.querySelector('img');
-    expect(img?.getAttribute('src')).toBe('https://example.com/a.png');
+    const avatar = el.shadowRoot?.querySelector('sp-avatar');
+    expect(avatar?.getAttribute('src')).toBe('https://example.com/a.png');
     teardown(el);
   });
 });

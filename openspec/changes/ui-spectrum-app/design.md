@@ -28,10 +28,10 @@ La fase anterior (`ui-spectrum-foundation`) deja el `sp-theme` raíz, los tokens
 
 Cada `finap-*` sigue exponiendo el mismo nombre de elemento, atributos, slots y eventos (p. ej. `finap-input` sigue emitiendo `finap-input`). Internamente renderizan la primitiva Spectrum:
 
-- `finap-input`: `sp-textfield` (text/password/email/date), `sp-number-field` (number), `sp-textarea` (textarea); el estado `error`/`invalid` se mapea al atributo `invalid` + mensaje.
+- `finap-input`: `sp-textfield` (text/password/email), `sp-number-field` (number) y **nativo** para `textarea`/`date` (SWC 1.12 no publica `sp-textarea` y no hay date-picker); el estado `error` se muestra con `sp-help-text`. Emite `finap-input` con el valor.
 - `finap-select`: `sp-picker` con `sp-menu-item`; emite `finap-change` con el valor seleccionado.
 - `finap-modal`: `sp-dialog` (mode default) con underlay `sp-underlay`; conserva trap de foco/Escape de Spectrum y emite `finap-close`.
-- `finap-chip`: `sp-tag`; `clickable`/`selected` → `deletable`/`selected` de Spectrum.
+- `finap-chip`: `sp-tag`; `clickable`/`selected` se mantienen en la API propia y el estado seleccionado se estiliza sobre el `sp-tag` (Spectrum no ofrece toggle nativo).
 - `finap-progress`: `sp-progress-bar` con `value`/`max` y etiqueta porcentual.
 - `finap-avatar`: `sp-avatar` (iniciales o `image`).
 
@@ -62,7 +62,9 @@ Unit tests de cada componente migrado (render interno nuevo + mismos eventos) y 
 - **Diferencias de focus/teclado de Spectrum** (sp-picker, sp-dialog gestionan su propio foco) → los unit tests de modal deben pasar a verificar presencia/atributos en lugar de manipulación manual del foco.
 - **Iconos de Spectrum en chips/avatar** → uso de workflow icons existentes; los nombres custom pendientes se listan en la fase 3.
 - **Formularios compuestos** dependen del valor/evento de los wrappers → si un evento difiere, se ajusta el wrapper, no el formulario.
-- **Date input**: Spectrum no tiene date-picker; `finap-input type="date"` mantiene el input nativo estilizado con tokens.
+- **`sp-textarea` inexistente y sin date-picker** → textarea y fecha se mantienen nativos, estilizados con tokens Spectrum.
+- **`sp-tag` no es toggle** → `finap-chip` conserva `clickable`/`selected` y aplica el estilo de selección sobre el `sp-tag`.
+- **Unit tests y E2E** de los componentes migrados se actualizan en esta fase para mantener la suite verde.
 
 ## Migration Plan
 

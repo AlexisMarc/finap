@@ -10,7 +10,7 @@ describe('finap-modal', () => {
     teardown(el);
   });
 
-  it('renderiza el diálogo cuando está abierto', async () => {
+  it('renderiza el diálogo de Spectrum cuando está abierto', async () => {
     const el = new FinapModal();
     el.open = true;
     el.heading = 'Nuevo registro';
@@ -18,8 +18,10 @@ describe('finap-modal', () => {
 
     const root = el.shadowRoot as ShadowRoot;
     expect(root.querySelector('.overlay')).not.toBeNull();
-    expect(root.querySelector('[role="dialog"]')).not.toBeNull();
-    expect(root.querySelector('.title')?.textContent).toContain('Nuevo registro');
+    expect(root.querySelector('sp-dialog')).not.toBeNull();
+    expect(root.querySelector('[slot="heading"]')?.textContent).toBe(
+      'Nuevo registro',
+    );
     teardown(el);
   });
 
