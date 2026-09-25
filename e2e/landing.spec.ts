@@ -15,8 +15,11 @@ test.describe('Landing', () => {
   test('cambia de idioma ES↔EN', async ({ page }) => {
     await page.goto('/');
     await expect(page.getByText(/Tu dinero, en orden/).first()).toBeVisible();
-    await page.locator('sp-picker').first().click();
-    await page.getByRole('option', { name: 'English' }).click();
+    await page.locator('sp-picker:visible').first().click();
+    await page
+      .getByRole('option', { name: 'English' })
+      .filter({ visible: true })
+      .click();
     await expect(page.getByText(/Your money, in order/).first()).toBeVisible();
   });
 

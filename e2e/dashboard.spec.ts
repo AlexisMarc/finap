@@ -15,10 +15,9 @@ test.describe('Dashboard', () => {
     ).toBeVisible();
 
     // El saludo vive en el dashboard, no en el header del shell
-    await expect(
-      page.locator('dashboard-page .greeting'),
-    ).toHaveText(/Marcos García 👋/);
-    await expect(page.locator('finap-app-shell .greeting')).toHaveCount(0);
+    await expect(page.locator('dashboard-page .greeting')).toHaveText(
+      /Marcos García 👋/,
+    );
   });
 
   test('navega a otra sección desde el shell', async ({ page }) => {

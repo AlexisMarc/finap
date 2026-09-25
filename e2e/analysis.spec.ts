@@ -4,7 +4,7 @@ test.describe('Análisis', () => {
   test('muestra métricas y gráficas', async ({ page }) => {
     await page.goto('/analysis');
     await expect(
-      page.getByText('Análisis', { exact: true }).first(),
+      page.getByRole('heading', { name: 'Análisis', exact: true }),
     ).toBeVisible();
     await expect(page.locator('finap-analysis-metrics')).toBeVisible();
     await expect(page.locator('finap-chart')).toHaveCount(2);

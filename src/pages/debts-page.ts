@@ -396,6 +396,7 @@ export class DebtsPage extends LitElement {
               </div>`}
 
           <sp-dialog-wrapper
+            class="form-dialog"
             ?open=${this.formOpen}
             headline=${this.editTarget ? t('debts.editTitle') : t('debts.new')}
             dismissable
@@ -417,6 +418,7 @@ export class DebtsPage extends LitElement {
           </sp-dialog-wrapper>
 
           <sp-dialog-wrapper
+            class="pay-dialog"
             ?open=${this.payOpen}
             headline=${`${t('debts.payTitle')}${this.payTarget ? ` · ${this.payTarget.name}` : ''}`}
             dismissable
@@ -446,6 +448,7 @@ export class DebtsPage extends LitElement {
           </sp-dialog-wrapper>
 
           <sp-dialog-wrapper
+            class="delete-dialog"
             ?open=${this.confirmOpen}
             headline=${t('debts.deleteTitle')}
             .confirmLabel=${t('common.delete')}
