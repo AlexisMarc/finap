@@ -98,7 +98,7 @@ npm run test:watch # tests en modo watch
 La URL del backend se define con la variable de entorno **`VITE_API_BASE_URL`** (ver [`.env.example`](./.env.example)):
 
 - **Desarrollo**: `.env.development` → `http://localhost:3000/api/v1` (backend local, con CORS).
-- **Producción (Vercel)**: el frontend usa `/api/v1` (same-origin) y Vercel **proxea** `/api/v1/*` al backend desplegado mediante un *rewrite* en [`vercel.json`](./vercel.json) (`https://finap-service.vercel.app/api/v1/*`), evitando CORS. Si el backend habilita CORS, basta definir `VITE_API_BASE_URL` como variable de entorno en Vercel.
+- **Producción (Vercel)**: definir `VITE_API_BASE_URL` como **variable de entorno del proyecto en Vercel** (Production) → `https://finap-service.vercel.app/api/v1`. El backend debe permitir el origen del front en su CORS (`Access-Control-Allow-Origin` + `Allow-Headers: authorization`). *Nota*: Vercel no sube archivos `.env`; la variable debe configurarse en el dashboard/CLI (`vercel env add`).
 
 La capa de datos está aislada en `src/services/` (única puerta a la red); los contratos están documentados en [`docs/api/`](./docs/api/README.md).
 

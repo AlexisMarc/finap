@@ -17,4 +17,4 @@
 
 - [x] 3.1 Desplegar en Vercel y verificar: `/` (landing), `/dashboard` y recarga directa (F5) no dan 404
 - [x] 3.2 Verificar la PWA: manifest accesible, service worker servido sin caché y app instalable
-- [ ] 3.3 Confirmar que el backend incluye el origen del front en su CORS (`Access-Control-Allow-Origin` + `Allow-Headers: authorization`, preflight `OPTIONS`) y verificar login + datos reales en producción
+- [x] 3.3 Confirmar que el backend incluye el origen del front en su CORS (`Access-Control-Allow-Origin` + `Allow-Headers: authorization`, preflight `OPTIONS`) y verificar login + datos reales en producción
