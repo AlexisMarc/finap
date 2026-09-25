@@ -6,7 +6,7 @@ Finap quiere adoptar **Adobe Spectrum Web Components** como design system. Spect
 
 ## What Changes
 
-- **Dependencias**: añadir paquetes de Spectrum (`@spectrum-web-components/theme`, `styles`, `button`, `textfield`, `picker`, `dialog`, `progress-*`, `icon` + `@spectrum-icons/workflow`), manteniendo Lit, chart.js y Open Cells.
+- **Dependencias**: añadir paquetes de Spectrum (`@spectrum-web-components/theme`, `styles`, `button`, `textfield`, `picker`, `dialog`, `progress-*`, `icon` + `@spectrum-web-components/icons-workflow`), manteniendo Lit, chart.js y Open Cells.
 - **Tema**: un único `sp-theme` raíz (scale medium, color light/dark) sustituye al esquema de tokens propio; el `finap-theme-toggle` pasa a conmutar el atributo `color` del `sp-theme` y respeta `prefers-color-scheme` como hoy.
 - **Tokens**: `--finap-*` se conservan como **alias** de los tokens `--spectrum-*` (para no reescribir todas las páginas de golpe) y se añaden los tokens semánticos de Finap (ingreso/gasto/deuda y gradiente de marca) sobre la paleta Spectrum.
 - **Tipografía**: se adoptan las fuentes de Spectrum (Adobe Clean) para cuerpo y títulos; se retiran Inter/Sora.

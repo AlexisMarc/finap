@@ -8,10 +8,12 @@
     <title>Finap — Gestor de finanzas personales</title>
   </head>
   <body>
-    <finap-offline-banner></finap-offline-banner>
-    <finap-app-shell>
-      <div id="app"></div>
-    </finap-app-shell>
+    <sp-theme id="sp-theme" scale="medium" color="light">
+      <finap-offline-banner></finap-offline-banner>
+      <finap-app-shell>
+        <div id="app"></div>
+      </finap-app-shell>
+    </sp-theme>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

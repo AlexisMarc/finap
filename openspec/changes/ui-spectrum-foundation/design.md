@@ -40,7 +40,7 @@ Motivación en proposal.md. Restricciones:
 - `finap-button` pasa a renderizar `<sp-button>` mapeando `variant` → `variant` de Spectrum (primary→accent, secondary→secondary, text→… `quiet`).
 - `finap-heading`/`finap-text`: mantienen su API (level/size) y aplican clases tipográficas Spectrum (`spectrum-Heading`, `spectrum-Body`).
 - `finap-card`/`finap-container`: wrappers de superficie con tokens Spectrum.
-- `finap-icon` mapea el nombre al set de workflow icons de Spectrum (`@spectrum-icons/workflow`); nombres desconocidos → fallback silencioso.
+- `finap-icon` mapea el nombre al set de workflow icons de Spectrum (`@spectrum-web-components/icons-workflow`); nombres desconocidos → fallback silencioso.
 - `finap-brand-mark` y `finap-language-toggle`: sin cambios.
 
 ### 4. Fuentes

@@ -1,5 +1,9 @@
 /* Estilos globales de la aplicación. */
 
+sp-theme {
+  display: block;
+}
+
 html,
 body {
   margin: 0;

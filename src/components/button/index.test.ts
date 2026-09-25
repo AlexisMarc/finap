@@ -4,12 +4,12 @@ import { FinapButton } from './index.js';
 import { fixture, teardown } from '../../test/fixture.js';
 
 describe('finap-button', () => {
-  it('renderiza un <button> nativo con variante primaria por defecto', async () => {
+  it('renderiza un <sp-button> con variante accent por defecto', async () => {
     const el = await fixture(new FinapButton());
 
-    const button = el.shadowRoot?.querySelector('button');
+    const button = el.shadowRoot?.querySelector('sp-button');
     expect(button).not.toBeNull();
-    expect(button?.classList.contains('primary')).toBe(true);
+    expect(button?.getAttribute('variant')).toBe('accent');
     teardown(el);
   });
 
@@ -18,7 +18,20 @@ describe('finap-button', () => {
     el.variant = 'secondary';
     await fixture(el);
 
-    expect(el.shadowRoot?.querySelector('button')?.classList.contains('secondary')).toBe(true);
+    expect(
+      el.shadowRoot?.querySelector('sp-button')?.getAttribute('variant'),
+    ).toBe('secondary');
+    teardown(el);
+  });
+
+  it('usa tratamiento outline para la variante de texto', async () => {
+    const el = new FinapButton();
+    el.variant = 'text';
+    await fixture(el);
+
+    expect(
+      el.shadowRoot?.querySelector('sp-button')?.getAttribute('treatment'),
+    ).toBe('outline');
     teardown(el);
   });
 
@@ -27,20 +40,15 @@ describe('finap-button', () => {
     el.disabled = true;
     await fixture(el);
 
-    const button = el.shadowRoot?.querySelector('button');
-    expect(button?.hasAttribute('disabled')).toBe(true);
+    expect(
+      el.shadowRoot?.querySelector('sp-button')?.hasAttribute('disabled'),
+    ).toBe(true);
     teardown(el);
   });
 
-  it('renderiza un <button> nativo, que soporta activación por teclado', async () => {
+  it('usa un componente Spectrum, que soporta activación por teclado', async () => {
     const el = await fixture(new FinapButton());
-    expect(el.shadowRoot?.querySelector('button')?.tagName).toBe('BUTTON');
+    expect(el.shadowRoot?.querySelector('sp-button')?.tagName).toBe('SP-BUTTON');
     teardown(el);
-  });
-
-  it('usa tokens de diseño en lugar de valores hardcodeados', () => {
-    const cssText = FinapButton.styles.cssText;
-    expect(cssText).toContain('var(--finap-');
-    expect(cssText).toContain('var(--finap-color-primary)');
   });
 });

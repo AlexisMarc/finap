@@ -1,12 +1,10 @@
 import { LitElement, html } from 'lit';
 
-import { styles } from './styles.js';
+import '@spectrum-web-components/button/sp-button.js';
 
 export type ButtonVariant = 'primary' | 'secondary' | 'text';
 
 export class FinapButton extends LitElement {
-  static styles = styles;
-
   static properties = {
     variant: { type: String },
     disabled: { type: Boolean, reflect: true },
@@ -16,11 +14,19 @@ export class FinapButton extends LitElement {
 
   disabled = false;
 
+  private get _spectrumVariant(): 'accent' | 'secondary' {
+    return this.variant === 'primary' ? 'accent' : 'secondary';
+  }
+
   render() {
     return html`
-      <button class=${this.variant} ?disabled=${this.disabled}>
+      <sp-button
+        variant=${this._spectrumVariant}
+        treatment=${this.variant === 'text' ? 'outline' : 'fill'}
+        ?disabled=${this.disabled}
+      >
         <slot></slot>
-      </button>
+      </sp-button>
     `;
   }
 }

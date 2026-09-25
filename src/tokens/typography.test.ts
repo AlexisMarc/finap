@@ -12,13 +12,12 @@ describe('typography.css', () => {
     expect(typographyCss).toMatch(/--finap-font-family\s*:/);
   });
 
-  it('declara la familia display (Sora)', () => {
+  it('declara la familia display', () => {
     expect(typographyCss).toMatch(/--finap-font-family-display\s*:/);
-    expect(typographyCss).toContain('Sora');
   });
 
-  it('usa Inter como familia de cuerpo', () => {
-    expect(typographyCss).toContain('Inter');
+  it('usa la familia de Spectrum (Adobe Clean)', () => {
+    expect(typographyCss).toContain('Adobe Clean');
   });
 
   it.each([
