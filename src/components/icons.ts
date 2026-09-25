@@ -9,6 +9,7 @@ import '@spectrum-web-components/icons-workflow/icons/sp-icon-money.js';
 import '@spectrum-web-components/icons-workflow/icons/sp-icon-credit-card.js';
 import '@spectrum-web-components/icons-workflow/icons/sp-icon-view-list.js';
 import '@spectrum-web-components/icons-workflow/icons/sp-icon-arrow-right.js';
+import '@spectrum-web-components/icons-workflow/icons/sp-icon-arrow-left.js';
 import '@spectrum-web-components/icons-workflow/icons/sp-icon-menu.js';
 import '@spectrum-web-components/icons-workflow/icons/sp-icon-close.js';
 import '@spectrum-web-components/icons-workflow/icons/sp-icon-checkmark.js';
@@ -31,6 +32,7 @@ const ICONS: Record<string, TemplateResult> = {
   'credit-card': staticHtml`<${literal`sp-icon-credit-card`}></${literal`sp-icon-credit-card`}>`,
   list: staticHtml`<${literal`sp-icon-view-list`}></${literal`sp-icon-view-list`}>`,
   'arrow-right': staticHtml`<${literal`sp-icon-arrow-right`}></${literal`sp-icon-arrow-right`}>`,
+  'arrow-left': staticHtml`<${literal`sp-icon-arrow-left`}></${literal`sp-icon-arrow-left`}>`,
   menu: staticHtml`<${literal`sp-icon-menu`}></${literal`sp-icon-menu`}>`,
   close: staticHtml`<${literal`sp-icon-close`}></${literal`sp-icon-close`}>`,
   check: staticHtml`<${literal`sp-icon-checkmark`}></${literal`sp-icon-checkmark`}>`,

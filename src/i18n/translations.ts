@@ -247,6 +247,12 @@ export const translations: Record<Locale, Record<string, string>> = {
     'settings.budgets': 'Presupuestos',
 
     // Login
+    'login.title': 'Inicio de sesión',
+    'login.slogan': 'Tu dinero, en orden.',
+    'login.back': 'Volver',
+    'login.signup.title': 'Crear cuenta',
+    'login.signup.text':
+      'Muy pronto podrás crear tu cuenta. Para más información, escríbenos a',
     'login.subtitle': 'Inicia sesión para gestionar tus finanzas.',
     'login.email': 'Email',
     'login.password': 'Contraseña',
@@ -517,6 +523,12 @@ export const translations: Record<Locale, Record<string, string>> = {
     'settings.budgets': 'Budgets',
 
     // Login
+    'login.title': 'Sign in',
+    'login.slogan': 'Your money, in order.',
+    'login.back': 'Back',
+    'login.signup.title': 'Create account',
+    'login.signup.text':
+      'Creating your account is coming soon. For more information, write to us at',
     'login.subtitle': 'Sign in to manage your finances.',
     'login.email': 'Email',
     'login.password': 'Password',

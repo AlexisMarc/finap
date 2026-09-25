@@ -23,6 +23,28 @@ describe('login-page', () => {
     teardown(el);
   });
 
+  it('muestra el lateral con marca, eslogan y botón volver', async () => {
+    const el = await fixture(new LoginPage());
+
+    const root = el.shadowRoot as ShadowRoot;
+    expect(root.querySelector('.login__aside finap-brand-mark')).not.toBeNull();
+    expect(root.querySelector('.login__slogan')?.textContent).toContain(
+      'Tu dinero',
+    );
+    expect(root.querySelector('.login__card .login__back')).not.toBeNull();
+    teardown(el);
+  });
+
+  it('enlaza el correo de contacto para crear la cuenta', async () => {
+    const el = await fixture(new LoginPage());
+
+    const link = el.shadowRoot?.querySelector('.login__signup sp-link');
+    expect(link?.getAttribute('href')).toBe(
+      'mailto:marcos.rincon1903@gmail.com',
+    );
+    teardown(el);
+  });
+
   it('traduce el contenido al cambiar de idioma', async () => {
     const el = await fixture(new LoginPage());
 
