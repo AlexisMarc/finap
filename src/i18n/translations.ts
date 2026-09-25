@@ -22,14 +22,16 @@ export const translations: Record<Locale, Record<string, string>> = {
 
     // Nav / landing
     'nav.functions': 'Funciones',
+    'nav.benefits': 'Beneficios',
     'nav.budgets': 'Presupuestos',
     'nav.login': 'Iniciar sesión',
+    'nav.start': 'Empezar',
     'landing.hero.headline': 'Tu dinero, en orden.',
     'landing.hero.subtitle':
       'Finap reúne saldo, gastos e ingresos en un solo lugar, para que siempre sepas dónde estás.',
     'landing.hero.cta': 'Empezar',
     'landing.hero.secondary': 'Ver cómo funciona',
-    'landing.features.title': 'Funciones',
+    'landing.features.title': 'Todo lo que tus finanzas necesitan',
     'landing.feature.dashboard.title': 'Dashboard',
     'landing.feature.dashboard.description':
       'Tu saldo, ingresos y gastos en una sola vista.',
@@ -39,11 +41,47 @@ export const translations: Record<Locale, Record<string, string>> = {
     'landing.feature.budgets.title': 'Presupuestos',
     'landing.feature.budgets.description':
       'Límites por categoría con progreso visible.',
-    'landing.highlight.title': 'Presupuestos que se mantienen solos',
-    'landing.highlight.body':
-      'Define límites por categoría y Finap te muestra el progreso, para que nunca te pases.',
-    'landing.highlight.cta': 'Empezar',
-    'landing.footer': '© 2026 Finap — Gestor de finanzas personales.',
+    'landing.feature.analysis.title': 'Análisis',
+    'landing.feature.analysis.description':
+      'Gráficas de evolución y reparto del gasto.',
+    'landing.feature.debts.title': 'Deudas',
+    'landing.feature.debts.description':
+      'Registra y liquida lo que debes con claridad.',
+    'landing.feature.assistant.title': 'Asistente IA',
+    'landing.feature.assistant.description':
+      'Pregunta en lenguaje natural y decide mejor.',
+    'landing.benefits.title':
+      'Las finanzas personales no son un lujo: son tu libertad.',
+    'landing.benefits.subtitle':
+      'Gestionar tu dinero es el hábito que sostiene cada meta. Estas bases —ingresos, gastos, ahorro, inversión y protección— viven en una sola herramienta.',
+    'landing.benefits.cta': 'Empezar ahora',
+    'landing.benefit.income.title': 'Ingresos',
+    'landing.benefit.income.content':
+      'Conoce cada peso que entra: salario, dividendos y otras fuentes de efectivo.',
+    'landing.benefit.spending.title': 'Control de gastos',
+    'landing.benefit.spending.content':
+      'Gasta menos de lo que ganas y evita que las deudas dominen tu bolsillo.',
+    'landing.benefit.saving.title': 'Ahorro',
+    'landing.benefit.saving.content':
+      'Construye un colchón de 3 a 12 meses de gastos para cualquier imprevisto.',
+    'landing.benefit.investing.title': 'Inversión',
+    'landing.benefit.investing.content':
+      'Pon tu dinero a crecer con el interés compuesto en el largo plazo.',
+    'landing.benefit.protection.title': 'Protección',
+    'landing.benefit.protection.content':
+      'Seguros y planificación patrimonial para cuidar lo que construyes.',
+    'landing.benefit.budget.title': 'Regla 50/30/20',
+    'landing.benefit.budget.content':
+      'Reparte tu ingreso: 50% necesidades, 30% gustos y 20% para tu futuro.',
+    'landing.cta.headline':
+      'Empieza hoy: tu yo del futuro te lo agradecerá.',
+    'landing.cta.button': 'Crear mi cuenta',
+    'landing.footer.tagline': 'Gestor de finanzas personales. Tu dinero, en orden.',
+    'landing.footer.product': 'Producto',
+    'landing.footer.access': 'Acceso',
+    'landing.footer.contact': 'Contacto',
+    'landing.footer.madeBy': 'Diseñado y desarrollado por Marcos Rincón.',
+    'landing.footer.rights': '© 2026 Finap. Todos los derechos reservados.',
 
     // Tema / idioma
     'theme.toggle.toDark': 'Cambiar a tema oscuro',
@@ -255,14 +293,16 @@ export const translations: Record<Locale, Record<string, string>> = {
 
     // Nav / landing
     'nav.functions': 'Features',
+    'nav.benefits': 'Benefits',
     'nav.budgets': 'Budgets',
     'nav.login': 'Sign in',
+    'nav.start': 'Get started',
     'landing.hero.headline': 'Your money, in order.',
     'landing.hero.subtitle':
       'Finap brings your balance, expenses and income together, so you always know where you stand.',
     'landing.hero.cta': 'Get started',
     'landing.hero.secondary': 'See how it works',
-    'landing.features.title': 'Features',
+    'landing.features.title': 'Everything your finances need',
     'landing.feature.dashboard.title': 'Dashboard',
     'landing.feature.dashboard.description':
       'Your balance, income and expenses in a single view.',
@@ -272,11 +312,46 @@ export const translations: Record<Locale, Record<string, string>> = {
     'landing.feature.budgets.title': 'Budgets',
     'landing.feature.budgets.description':
       'Per-category limits with visible progress.',
-    'landing.highlight.title': 'Budgets that keep themselves',
-    'landing.highlight.body':
-      'Set per-category limits and Finap shows your progress, so you never overspend.',
-    'landing.highlight.cta': 'Get started',
-    'landing.footer': '© 2026 Finap — Personal finance manager.',
+    'landing.feature.analysis.title': 'Analysis',
+    'landing.feature.analysis.description':
+      'Charts of trends and spending split.',
+    'landing.feature.debts.title': 'Debts',
+    'landing.feature.debts.description':
+      'Track and settle what you owe with clarity.',
+    'landing.feature.assistant.title': 'AI Assistant',
+    'landing.feature.assistant.description':
+      'Ask in plain language and decide better.',
+    'landing.benefits.title':
+      'Personal finance is not a luxury: it is your freedom.',
+    'landing.benefits.subtitle':
+      'Managing your money is the habit behind every goal. These foundations —income, spending, saving, investing and protection— live in a single tool.',
+    'landing.benefits.cta': 'Get started free',
+    'landing.benefit.income.title': 'Income',
+    'landing.benefit.income.content':
+      'Know every dollar coming in: salary, dividends and other cash sources.',
+    'landing.benefit.spending.title': 'Spending control',
+    'landing.benefit.spending.content':
+      'Spend less than you earn and keep debt from taking over your wallet.',
+    'landing.benefit.saving.title': 'Saving',
+    'landing.benefit.saving.content':
+      'Build a cushion of 3 to 12 months of expenses for any surprise.',
+    'landing.benefit.investing.title': 'Investing',
+    'landing.benefit.investing.content':
+      'Put your money to grow with compound interest over the long term.',
+    'landing.benefit.protection.title': 'Protection',
+    'landing.benefit.protection.content':
+      'Insurance and estate planning to protect what you build.',
+    'landing.benefit.budget.title': 'The 50/30/20 rule',
+    'landing.benefit.budget.content':
+      'Split your income: 50% needs, 30% wants and 20% for your future.',
+    'landing.cta.headline': 'Start today: your future self will thank you.',
+    'landing.cta.button': 'Create my account',
+    'landing.footer.tagline': 'Personal finance manager. Your money, in order.',
+    'landing.footer.product': 'Product',
+    'landing.footer.access': 'Access',
+    'landing.footer.contact': 'Contact',
+    'landing.footer.madeBy': 'Designed and built by Marcos Rincón.',
+    'landing.footer.rights': '© 2026 Finap. All rights reserved.',
 
     // Theme / language
     'theme.toggle.toDark': 'Switch to dark theme',

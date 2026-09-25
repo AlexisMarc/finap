@@ -10,12 +10,14 @@ describe('landing-page', () => {
     setLocale('es');
   });
 
-  it('renderiza header, hero, funciones y footer', async () => {
+  it('renderiza header, hero, funciones, beneficios, CTA y footer', async () => {
     const el = await fixture(new LandingPage());
 
     expect(el.shadowRoot?.querySelector('.site-header')).not.toBeNull();
     expect(el.shadowRoot?.querySelector('.hero')).not.toBeNull();
     expect(el.shadowRoot?.querySelector('.features')).not.toBeNull();
+    expect(el.shadowRoot?.querySelector('.benefits')).not.toBeNull();
+    expect(el.shadowRoot?.querySelector('.cta')).not.toBeNull();
     expect(el.shadowRoot?.querySelector('.site-footer')).not.toBeNull();
     teardown(el);
   });
@@ -30,26 +32,65 @@ describe('landing-page', () => {
     teardown(el);
   });
 
-  it('muestra el hero con headline y CTAs primario y secundario', async () => {
+  it('muestra el hero con headline, imagen cálida y CTAs primario y secundario', async () => {
     const el = await fixture(new LandingPage());
 
     const root = el.shadowRoot as ShadowRoot;
     expect(root.querySelector('.hero finap-heading')).not.toBeNull();
     expect(root.querySelector('.hero sp-button[variant="accent"]')).not.toBeNull();
-    expect(root.querySelector('.hero sp-button[variant="secondary"]')).not.toBeNull();
+    expect(root.querySelector('.hero sp-button[static-color="white"]')).not.toBeNull();
+    expect(LandingPage.styles.cssText).toContain('almas-salakhov');
     teardown(el);
   });
 
-  it('lista las funciones del producto', async () => {
+  it('no usa el rombo decorativo del hero', async () => {
+    const el = await fixture(new LandingPage());
+
+    expect(el.shadowRoot?.querySelector('.hero__mark')).toBeNull();
+    teardown(el);
+  });
+
+  it('lista las funciones del producto con tarjeta e imagen', async () => {
     const el = await fixture(new LandingPage());
 
     const features = el.shadowRoot?.querySelectorAll('.features .feature');
-    expect(features?.length).toBe(3);
+    expect(features?.length).toBe(6);
+    expect(
+      el.shadowRoot?.querySelector('.feature img[slot="cover-photo"]'),
+    ).not.toBeNull();
     teardown(el);
   });
 
-  it('usa el gradiente de marca como acento decorativo', () => {
-    expect(LandingPage.styles.cssText).toContain('var(--finap-gradient-brand)');
+  it('lista los beneficios como coachmarks con imagen', async () => {
+    const el = await fixture(new LandingPage());
+
+    const benefits = el.shadowRoot?.querySelectorAll('.benefits sp-coachmark');
+    expect(benefits?.length).toBe(6);
+    expect(
+      el.shadowRoot?.querySelector('.benefit img[slot="asset"]'),
+    ).not.toBeNull();
+    teardown(el);
+  });
+
+  it('muestra la llamada a la acción final sobre imagen azul', async () => {
+    const el = await fixture(new LandingPage());
+
+    const root = el.shadowRoot as ShadowRoot;
+    expect(root.querySelector('.cta sp-button[size="xl"]')).not.toBeNull();
+    expect(LandingPage.styles.cssText).toContain('isaac-quesada');
+    teardown(el);
+  });
+
+  it('muestra los datos de contacto en el footer', async () => {
+    const el = await fixture(new LandingPage());
+
+    const links = Array.from(
+      el.shadowRoot?.querySelectorAll('.site-footer sp-link') ?? [],
+    ).map((link) => link.getAttribute('href'));
+    expect(links).toContain('mailto:marcos.rincon1903@gmail.com');
+    expect(links).toContain('https://github.com/AlexisMarc');
+    expect(links).toContain('https://www.linkedin.com/in/alexis-rincon-buitrago');
+    teardown(el);
   });
 
   it('se revela al conectar (entrada orquestada)', async () => {

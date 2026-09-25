@@ -22,7 +22,9 @@ test.describe('Landing', () => {
 
   test('alterna el tema y navega a login', async ({ page }) => {
     await page.goto('/');
-    await page.locator('sp-action-button').first().click();
+    await page
+      .getByRole('button', { name: /Cambiar a tema oscuro|Switch to dark theme/i })
+      .click();
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
     await page.getByRole('link', { name: /Iniciar sesión|Sign in/i }).first().click();
     await expect(page).toHaveURL(/\/login$/);

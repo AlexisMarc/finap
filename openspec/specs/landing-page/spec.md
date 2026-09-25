@@ -2,59 +2,87 @@
 
 ## Purpose
 
-Define la landing page de Finap, la página de entrada a la SPA, que presenta el producto (hero, features y footer) usando el design system de Spectrum, con el acento de marca y animaciones sutiles.
+Define la landing page de Finap, la página de entrada a la SPA, que presenta el producto (hero, funciones, beneficios, llamada a la acción y footer) usando el design system de Spectrum, con imágenes de marca (naranjas, azules y rojas) y animaciones sutiles.
 
 ## Requirements
 
 ### Requirement: Header con logo, navegación y toggle
 
-El sistema SHALL renderizar un header en la landing con el logo de Finap (dos rombos), la navegación principal como enlaces de Spectrum (`sp-link`) y el toggle de tema.
+El sistema SHALL renderizar un header pegajoso en la landing con el logo de Finap (dos rombos), la navegación principal como botones de Spectrum (`sp-action-group` + `sp-action-button`), el selector de idioma (`sp-picker`) y el toggle de tema.
 
 #### Scenario: Header visible
 
 - **WHEN** se renderiza la landing
-- **THEN** se muestra un header con logo, navegación (enlaces de Spectrum) y toggle de tema
+- **THEN** se muestra un header pegajoso con logo, navegación, selector de idioma y toggle de tema
 
-### Requirement: Hero con tagline y headline
+### Requirement: Hero con imagen cálida de fondo
 
-El sistema SHALL renderizar un hero con tagline, headline principal y llamada a la acción (CTA), usando la tipografía de Spectrum y manteniendo el acento de marca de Finap sobre una base neutral.
+El sistema SHALL renderizar un hero sobre una imagen cálida (naranja) de fondo con un degradado de contraste, manteniendo el headline, el subtítulo y los dos botones de acción, sin usar el rombo decorativo.
 
 #### Scenario: Hero visible
 
 - **WHEN** se renderiza la landing
-- **THEN** se muestra un hero con tagline, headline y un CTA
+- **THEN** se muestra un hero con imagen naranja de fondo, headline, subtítulo y dos botones de acción
 
-#### Scenario: CTA con estilo Spectrum
-
-- **WHEN** se renderiza el hero
-- **THEN** el CTA usa el estilo de botón primario de Spectrum
-
-#### Scenario: Acentos de marca sobre fondo claro
+#### Scenario: Contraste del texto
 
 - **WHEN** se renderiza el hero
-- **THEN** los acentos de marca (rojo/naranja) aparecen puntualmente sobre una base neutral de Spectrum, sin un fondo de gradiente completo
+- **THEN** el texto y los botones son legibles sobre la imagen gracias al degradado de contraste
 
-### Requirement: Secciones de contenido
+#### Scenario: Sin rombo decorativo
 
-El sistema SHALL presentar el contenido de la landing en secciones con tarjetas planas de Spectrum (`sp-card`) y badges (`sp-badge`) donde aporten, siguiendo los patrones de layout de Spectrum.
+- **WHEN** se renderiza el hero
+- **THEN** no aparece el rombo (`.hero__mark`) que existía antes
 
-#### Scenario: Secciones listadas
+### Requirement: Tarjetas de funcionalidades con imágenes cálidas
+
+El sistema SHALL presentar las funcionalidades del producto en tarjetas (`sp-card`) con una imagen cálida de portada, un título y una breve descripción.
+
+#### Scenario: Funcionalidades listadas
+
+- **WHEN** se renderiza la sección de funciones
+- **THEN** se muestran tarjetas con imagen, título y descripción para Dashboard, Movimientos, Presupuestos, Análisis, Deudas y Asistente IA
+
+#### Scenario: Hover de tarjeta
+
+- **WHEN** el usuario pasa el cursor sobre una tarjeta
+- **THEN** la tarjeta pierde el borde, crece ligeramente y su imagen hace un leve zoom
+
+### Requirement: Sección de beneficios con coachmarks
+
+El sistema SHALL renderizar una sección con un título centrado de una oración, un texto complementario más pequeño y un botón de acción azul, seguida de una serie de coachmarks (`sp-coachmark`) con imágenes naranjas, azules y rojas que describen los beneficios de las finanzas personales.
+
+#### Scenario: Beneficios listados
+
+- **WHEN** se renderiza la sección de beneficios
+- **THEN** se muestran un título centrado, un texto pequeño, un botón azul y seis coachmarks con imagen, título y descripción
+
+#### Scenario: Origen del contenido
+
+- **WHEN** se revisa el contenido de los beneficios
+- **THEN** describe las bases de las finanzas personales (ingresos, gastos, ahorro, inversión, protección y presupuesto)
+
+### Requirement: Llamada a la acción final
+
+El sistema SHALL renderizar una sección final con una imagen azul de fondo, una oración de enganche grande y un botón de acción grande.
+
+#### Scenario: CTA visible
 
 - **WHEN** se renderiza la landing
-- **THEN** se muestran secciones de contenido con título y tarjetas planas de Spectrum
+- **THEN** se muestra una sección con imagen azul de fondo, oración de enganche y botón de acción grande
 
-### Requirement: Footer
+### Requirement: Footer clásico con contacto
 
-El sistema SHALL renderizar un footer con información básica del producto y enlaces de Spectrum (`sp-link`).
+El sistema SHALL renderizar un footer con el logo, las opciones del header (funciones, beneficios e inicio de sesión), el botón de inicio de sesión y los datos de contacto del autor.
 
 #### Scenario: Footer visible
 
 - **WHEN** se renderiza la landing page
-- **THEN** se muestra un footer al final de la página
+- **THEN** se muestra un footer con menús, logo, inicio de sesión y datos de contacto (email, GitHub, LinkedIn y portafolio)
 
 ### Requirement: Consumo del design system
 
-La landing page SHALL usar los componentes y primitivas de Spectrum (`sp-button`, `sp-card`, `sp-link`, `sp-badge`, tipografía y tokens `--spectrum-*`) en lugar de estilos propios duplicados.
+La landing page SHALL usar los componentes y primitivas de Spectrum (`sp-button`, `sp-card`, `sp-coachmark`, `sp-link`, tipografía y tokens `--spectrum-*` / `--mod-*`) en lugar de estilos propios duplicados.
 
 #### Scenario: Uso de componentes base
 
@@ -63,12 +91,12 @@ La landing page SHALL usar los componentes y primitivas de Spectrum (`sp-button`
 
 ### Requirement: Paleta de marca completa
 
-La landing page SHALL mostrar los tres colores de la paleta de marca (rojo primario, naranja secundario y amarillo acento) como acento sobre la base neutral de Spectrum, sin que dominen la composición.
+La landing page SHALL mostrar las imágenes y acentos de la paleta de marca (naranja, azul y rojo) sin que dominen la composición.
 
 #### Scenario: Los tres colores visibles
 
 - **WHEN** se renderiza la landing page
-- **THEN** aparecen al menos un elemento primario (rojo), uno secundario (naranja) y uno de acento (amarillo) como acento de marca
+- **THEN** aparecen imágenes naranjas, azules y rojas como acento de marca
 
 ### Requirement: Animaciones sutiles
 
@@ -95,7 +123,7 @@ La landing page SHALL adaptarse a los breakpoints del design system (móvil, tab
 
 ### Requirement: Contenido internacionalizado
 
-La landing page SHALL mostrar su contenido (header, hero, secciones y footer) en el idioma activo (español o inglés) usando el sistema i18n.
+La landing page SHALL mostrar su contenido (header, hero, funciones, beneficios, CTA y footer) en el idioma activo (español o inglés) usando el sistema i18n.
 
 #### Scenario: Contenido en español
 
