@@ -179,6 +179,9 @@ export const translations: Record<Locale, Record<string, string>> = {
     'settings.theme': 'Tema',
     'settings.language': 'Idioma',
     'settings.currency': 'Moneda',
+    'settings.themeHelp': 'Elige entre tema claro y oscuro.',
+    'settings.languageHelp': 'Cambia el idioma de la interfaz.',
+    'settings.currencyHelp': 'Moneda en la que se muestran los importes.',
     'settings.categories': 'Categorías',
     'settings.budgets': 'Presupuestos',
 
@@ -386,6 +389,9 @@ export const translations: Record<Locale, Record<string, string>> = {
     'settings.theme': 'Theme',
     'settings.language': 'Language',
     'settings.currency': 'Currency',
+    'settings.themeHelp': 'Choose between light and dark theme.',
+    'settings.languageHelp': 'Change the interface language.',
+    'settings.currencyHelp': 'Currency used to display amounts.',
     'settings.categories': 'Categories',
     'settings.budgets': 'Budgets',
 

@@ -1,6 +1,7 @@
 import { LitElement, html, css } from 'lit';
 
 import '../components/container/index.js';
+import '../components/skeleton/index.js';
 import '../components/heading/index.js';
 import '../components/input/index.js';
 import '../components/select/index.js';
@@ -201,7 +202,7 @@ export class BudgetsPage extends LitElement {
     const t = (key: string) => this._localize.t(key);
     if (this.loading) {
       return html`
-        <finap-container><div class="state">${t('common.loading')}</div></finap-container>
+        <finap-container><finap-skeleton variant="rect" height="240px"></finap-skeleton></finap-container>
       `;
     }
 

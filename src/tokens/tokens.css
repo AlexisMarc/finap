@@ -38,14 +38,15 @@
     var(--finap-color-accent) 100%
   );
 
-  /* Color — neutros: alias de los tokens semánticos de Spectrum
-     (el tema claro/oscuro de Spectrum los adapta automáticamente) */
+  /* Color — neutros: tokens semánticos de Spectrum (tono cálido de la librería).
+     El tema claro/oscuro de Spectrum los adapta automáticamente. */
   --finap-color-bg: var(--spectrum-background-base-color);
   --finap-color-bg-subtle: var(--spectrum-background-layer-1-color);
   --finap-color-surface: var(--spectrum-background-layer-2-color);
   --finap-color-text: var(--spectrum-gray-900);
   --finap-color-text-muted: var(--spectrum-gray-700);
-  --finap-color-border: var(--spectrum-gray-300);
+  /* Borde con contraste suficiente para distinguir superficies en modo claro. */
+  --finap-color-border: var(--spectrum-gray-400);
 
   /* Espaciado (escala base 4px) */
   --finap-space-1: 4px;

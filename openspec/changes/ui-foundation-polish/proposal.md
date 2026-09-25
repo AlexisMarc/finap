@@ -8,7 +8,7 @@ Tras el rediseño a Spectrum, quedan detalles de base que hacen la interfaz poco
 
 - **Colores más cálidos**: los neutros se afinan hacia el tono cálido de Spectrum y se garantiza el contraste entre fondo y superficie en modo claro.
 - **Estados de carga**: skeletons (shimmer) con tokens de Spectrum en lugar del texto "Cargando…" en las vistas.
-- **Ayuda contextual**: `sp-coachmark` (tours de pasos) y `sp-tooltip`/`sp-help-text` para guiar campos y controles.
+- **Ayuda contextual**: `sp-contextual-help` (icono + popover oficial con heading/cuerpo/enlace), `sp-coachmark` (tours de pasos) y `sp-tooltip`/`sp-help-text` para guiar campos y controles.
 - **Campos de fecha y área de texto**: `finap-input type="date"` y el `textarea` nativo se estilizan como `sp-textfield` (etiqueta, borde, foco y help-text), ya que SWC no publica un date-picker ni `sp-textarea`.
 - **Badges/status**: `sp-badge` y `sp-status-light` para indicar ingreso/gasto/deuda y estados de forma coherente.
 - **Grupos**: `sp-action-group` (grupos de botones) y `sp-field-group` (agrupación de campos con etiqueta) para jerarquía visual.

@@ -17,6 +17,7 @@ import '@spectrum-web-components/icons-workflow/icons/sp-icon-car.js';
 import '@spectrum-web-components/icons-workflow/icons/sp-icon-game.js';
 import '@spectrum-web-components/icons-workflow/icons/sp-icon-page-tag.js';
 import '@spectrum-web-components/icons-workflow/icons/sp-icon-refresh.js';
+import '@spectrum-web-components/icons-workflow/icons/sp-icon-help.js';
 
 /** Mapa de nombres propios de Finap → iconos de workflow de Spectrum. */
 const ICONS: Record<string, TemplateResult> = {
@@ -35,6 +36,7 @@ const ICONS: Record<string, TemplateResult> = {
   gamepad: staticHtml`<${literal`sp-icon-game`}></${literal`sp-icon-game`}>`,
   tag: staticHtml`<${literal`sp-icon-page-tag`}></${literal`sp-icon-page-tag`}>`,
   repeat: staticHtml`<${literal`sp-icon-refresh`}></${literal`sp-icon-refresh`}>`,
+  help: staticHtml`<${literal`sp-icon-help`}></${literal`sp-icon-help`}>`,
 };
 
 /** Nombres de icono soportados (para tests y mapeos estáticos). */

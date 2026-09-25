@@ -1,7 +1,7 @@
 import { LitElement, html, css } from 'lit';
 
 import '@spectrum-web-components/progress-bar/sp-progress-bar.js';
-import '@spectrum-web-components/badge/sp-badge.js';
+import '@spectrum-web-components/status-light/sp-status-light.js';
 import { progressPercent, isOver } from '../../utils/progress.js';
 import { LocalizeController } from '../../i18n/localize.js';
 import { formatCurrency, formatPercent, formatDate } from '../../utils/format.js';
@@ -102,9 +102,11 @@ export class FinapDebtItem extends LitElement {
           ${this.debt.dueDate
             ? html`<span class="due">${t('debts.due')} ${formatDate(this.debt.dueDate)}</span>`
             : ''}
-          ${done
-            ? html`<sp-badge variant="positive">${t('debts.paid')}</sp-badge>`
-            : ''}
+          ${done ? html`<sp-status-light variant="positive"
+                >${t('debts.paid')}</sp-status-light
+              >` : html`<sp-status-light variant="notice"
+                >${t('debts.pending')}</sp-status-light
+              >`}
         </div>
         <div class="actions">
           <sp-button

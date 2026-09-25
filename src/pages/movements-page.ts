@@ -1,6 +1,7 @@
 import { LitElement, html, css } from 'lit';
 
 import '../components/container/index.js';
+import '../components/skeleton/index.js';
 import '../components/heading/index.js';
 import '../components/movements-filters/index.js';
 import '../components/movements-list/index.js';
@@ -242,7 +243,7 @@ export class MovementsPage extends LitElement {
     if (this.loading) {
       return html`
         <finap-container>
-          <div class="state">${t('common.loading')}</div>
+          <finap-skeleton variant="rect" height="240px"></finap-skeleton>
         </finap-container>
       `;
     }

@@ -15,6 +15,7 @@ import '@spectrum-web-components/menu/sp-menu-item.js';
 import '@spectrum-web-components/card/sp-card.js';
 import '@spectrum-web-components/badge/sp-badge.js';
 import '@spectrum-web-components/link/sp-link.js';
+import '@spectrum-web-components/action-group/sp-action-group.js';
 import { resolveTheme, setTheme, type Theme } from '../theme/theme.js';
 import { getLocale, setLocale, type Locale } from '../i18n/i18n.js';
 
@@ -250,7 +251,7 @@ export class LandingPage extends LitElement {
             <div class="hero__content">
               <finap-heading level="1">${t('landing.hero.headline')}</finap-heading>
               <finap-text variant="large">${t('landing.hero.subtitle')}</finap-text>
-              <div class="hero__actions">
+              <sp-action-group>
                 <sp-button variant="accent" @click=${this._goLogin}>
                   ${t('landing.hero.cta')}
                 </sp-button>
@@ -260,7 +261,7 @@ export class LandingPage extends LitElement {
                 >
                   ${t('landing.hero.secondary')}
                 </sp-button>
-              </div>
+              </sp-action-group>
             </div>
             <div class="hero__mark" aria-hidden="true"></div>
           </div>

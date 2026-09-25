@@ -20,7 +20,7 @@ describe('finap-debt-item', () => {
     const el = new FinapDebtItem();
     el.debt = { id: 'd1', name: 'X', total: 100, paid: 100 };
     await fixture(el);
-    expect(el.shadowRoot?.querySelector('sp-badge')).not.toBeNull();
+    expect(el.shadowRoot?.querySelector('sp-status-light')).not.toBeNull();
     teardown(el);
   });
 

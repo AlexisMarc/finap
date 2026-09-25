@@ -35,16 +35,24 @@ export class FinapInput extends LitElement {
     }
 
     .native-input {
+      box-sizing: border-box;
+      width: 100%;
+      min-height: var(--spectrum-component-height-100, 32px);
       font-family: var(--finap-font-family);
       font-size: var(--finap-font-size-md);
       color: var(--finap-color-text);
       background-color: var(--finap-color-surface);
-      border: 1px solid var(--finap-color-border);
+      border: 1px solid var(--spectrum-gray-400);
       border-radius: var(--finap-radius-sm);
       padding: var(--finap-space-2) var(--finap-space-3);
     }
 
+    .native-input:hover {
+      border-color: var(--spectrum-gray-500);
+    }
+
     .native-input:focus-visible {
+      border-color: var(--finap-color-accent-interactive);
       outline: 2px solid var(--finap-color-accent-interactive);
       outline-offset: 1px;
     }

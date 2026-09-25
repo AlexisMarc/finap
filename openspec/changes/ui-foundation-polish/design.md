@@ -27,8 +27,9 @@ Skeleton propio con CSS (`@keyframes` de shimmer + tokens `--spectrum-*`). Compo
 
 ### 4. Ayuda contextual
 
+- Ayuda de campos y vistas con el componente oficial `sp-contextual-help` (icono + popover con heading/cuerpo/link).
 - Tours de pasos con `sp-coachmark` (disparados por un botón de ayuda).
-- Help en campos con `sp-help-text` (y `sp-tooltip` para iconos).
+- Ayuda puntual en iconos con `sp-tooltip` y en campos con `sp-help-text`.
 
 ### 5. Badges/grupos
 

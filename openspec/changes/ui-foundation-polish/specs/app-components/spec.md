@@ -27,7 +27,12 @@ El sistema SHALL mostrar skeletons (placeholders con shimmer) con tokens de Spec
 
 ### Requirement: Ayuda contextual
 
-El sistema SHALL proporcionar ayuda contextual mediante `sp-coachmark` (tours de pasos) y `sp-tooltip`/`sp-help-text` para guiar campos y controles.
+El sistema SHALL proporcionar ayuda contextual mediante el componente oficial `sp-contextual-help` (icono + popover con heading/cuerpo/enlace), `sp-coachmark` (tours de pasos) y `sp-tooltip`/`sp-help-text` para guiar campos y controles.
+
+#### Scenario: Ayuda de campo o vista
+
+- **WHEN** un usuario necesita explicación de un campo o vista
+- **THEN** dispone de `sp-contextual-help` con su popover de ayuda
 
 #### Scenario: Tour de ayuda
 

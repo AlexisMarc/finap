@@ -2,6 +2,7 @@ import { LitElement, html, css } from 'lit';
 import type { ChartData } from 'chart.js';
 
 import '../components/container/index.js';
+import '../components/skeleton/index.js';
 import '../components/heading/index.js';
 import '../components/chart/index.js';
 import '../components/analysis-metrics/index.js';
@@ -205,7 +206,7 @@ export class AnalysisPage extends LitElement {
     const t = (key: string) => this._localize.t(key);
     if (this.loading) {
       return html`
-        <finap-container><div class="state">${t('common.loading')}</div></finap-container>
+        <finap-container><finap-skeleton variant="rect" height="240px"></finap-skeleton></finap-container>
       `;
     }
 
