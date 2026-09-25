@@ -42,12 +42,14 @@ export class MovementsPage extends LitElement {
     .content {
       display: grid;
       gap: var(--finap-space-5);
+      min-width: 0;
     }
 
     .results,
     .list-wrap {
       display: grid;
       gap: var(--finap-space-4);
+      min-width: 0;
     }
 
     .more {

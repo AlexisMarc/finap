@@ -156,11 +156,17 @@ export class FinapAppShell extends LitElement {
     }
 
     .breadcrumbs {
-      display: flex;
-      align-items: center;
-      flex: 1;
-      min-width: 0;
-      overflow: hidden;
+      display: none;
+    }
+
+    @media (min-width: 768px) {
+      .breadcrumbs {
+        display: flex;
+        align-items: center;
+        flex: 1;
+        min-width: 0;
+        overflow: hidden;
+      }
     }
 
     .help-steps {

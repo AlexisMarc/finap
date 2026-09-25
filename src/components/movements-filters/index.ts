@@ -61,8 +61,8 @@ export class FinapMovementsFilters extends LitElement {
     }
 
     .row sp-search {
-      flex: 1;
-      min-width: 220px;
+      flex: 1 1 100%;
+      min-width: 0;
     }
 
     .popover-wrap {
@@ -81,8 +81,15 @@ export class FinapMovementsFilters extends LitElement {
     .popover-body {
       display: grid;
       gap: var(--finap-space-3);
-      min-width: 260px;
+      min-width: min(260px, calc(100vw - 2 * var(--finap-space-5)));
       padding: var(--finap-space-4);
+    }
+
+    @media (min-width: 768px) {
+      .row sp-search {
+        flex: 1 1 auto;
+        min-width: 220px;
+      }
     }
   `;
 

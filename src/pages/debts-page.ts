@@ -38,12 +38,18 @@ export class DebtsPage extends LitElement {
     .content {
       display: grid;
       gap: var(--finap-space-5);
+      min-width: 0;
+    }
+
+    .content > * {
+      min-width: 0;
     }
 
     .head {
       display: flex;
       align-items: center;
       justify-content: space-between;
+      flex-wrap: wrap;
       gap: var(--finap-space-4);
     }
 
@@ -62,6 +68,9 @@ export class DebtsPage extends LitElement {
       font-family: var(--finap-font-family);
       font-weight: var(--finap-font-weight-semibold);
       color: var(--finap-color-text);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
     .gallery-card__meta {

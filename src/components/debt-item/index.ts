@@ -15,6 +15,7 @@ export class FinapDebtItem extends LitElement {
     css`
       :host {
         display: block;
+        min-width: 0;
       }
 
       .debt {
@@ -22,6 +23,7 @@ export class FinapDebtItem extends LitElement {
         gap: var(--finap-space-2);
         padding: var(--finap-space-4) 0;
         border-top: 1px solid var(--finap-color-border);
+        min-width: 0;
       }
 
       .head {
@@ -33,17 +35,24 @@ export class FinapDebtItem extends LitElement {
       }
 
       .name {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
         color: var(--finap-color-text);
         font-weight: var(--finap-font-weight-semibold);
       }
 
       .pending {
+        flex: none;
         color: var(--finap-color-text-muted);
         font-size: var(--finap-font-size-sm);
       }
 
       .meta {
         display: flex;
+        flex-wrap: wrap;
+        align-items: center;
         gap: var(--finap-space-3);
         font-family: var(--finap-font-family);
         font-size: var(--finap-font-size-sm);
