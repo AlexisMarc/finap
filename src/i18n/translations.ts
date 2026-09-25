@@ -105,13 +105,18 @@ export const translations: Record<Locale, Record<string, string>> = {
     'shell.add': 'Agregar',
     'shell.help': 'Ayuda',
     'shell.help.step1': 'Navega por las secciones desde la barra lateral.',
-    'shell.help.step2': 'Busca movimientos desde el buscador del header.',
+    'shell.help.step1.title': 'Explora las secciones',
+    'shell.help.step2': 'Revisa tus ingresos, gastos y deudas en el dashboard.',
+    'shell.help.step2.title': 'Consulta tu resumen',
     'shell.help.step3': 'Agrega un registro con el botón Agregar.',
+    'shell.help.step3.title': 'Agrega un registro',
+    'shell.account': 'Cuenta',
     'shell.addTitle': 'Nuevo registro',
     'shell.primaryNav': 'Principal',
     'userMenu.logout': 'Cerrar sesión',
 
     // Dashboard
+    'dashboard.greeting': 'Hola',
     'dashboard.balance': 'Balance total',
     'dashboard.income': 'Ingresos',
     'dashboard.expense': 'Gastos',
@@ -122,10 +127,13 @@ export const translations: Record<Locale, Record<string, string>> = {
     'dashboard.pending': 'pendiente',
     'dashboard.totalPending': 'Total pendiente',
     'dashboard.recent': 'Últimos movimientos',
-    'dashboard.seeAll': 'Ver todos →',
+    'dashboard.seeAll': 'Ver todos',
     'dashboard.suggestions': 'Sugerencias para ti',
+    'dashboard.suggestion.budgets.title': 'Presupuestos',
     'dashboard.suggestion.budgets': 'Revisa tus presupuestos del mes y ajusta lo que haga falta.',
+    'dashboard.suggestion.savings.title': 'Ahorro',
     'dashboard.suggestion.savings': 'Define una meta de ahorro y automatiza una aportación.',
+    'dashboard.suggestion.debts.title': 'Deudas',
     'dashboard.suggestion.debts': 'Adelanta el pago de una deuda para reducir intereses.',
 
     // Movimientos
@@ -271,6 +279,9 @@ export const translations: Record<Locale, Record<string, string>> = {
     'assistant.error': 'No se pudo obtener respuesta. Inténtalo de nuevo.',
     'assistant.quick.spend': '¿En qué gasté más este mes?',
     'assistant.quick.debt': '¿Cuánto debo?',
+    'assistant.subtitle': 'Tu asistente financiero',
+    'assistant.quickTitle': 'Preguntas rápidas',
+    'assistant.empty': 'Haz una pregunta para empezar.',
 
     // Offline / PWA
     'offline.message': 'Sin conexión — mostrando datos guardados',
@@ -381,13 +392,18 @@ export const translations: Record<Locale, Record<string, string>> = {
     'shell.add': 'Add',
     'shell.help': 'Help',
     'shell.help.step1': 'Browse sections from the sidebar.',
-    'shell.help.step2': 'Search movements from the header search.',
+    'shell.help.step1.title': 'Explore sections',
+    'shell.help.step2': 'Review your income, expenses, and debts on the dashboard.',
+    'shell.help.step2.title': 'Check your summary',
     'shell.help.step3': 'Add a record with the Add button.',
+    'shell.help.step3.title': 'Add a record',
+    'shell.account': 'Account',
     'shell.addTitle': 'New entry',
     'shell.primaryNav': 'Main',
     'userMenu.logout': 'Sign out',
 
     // Dashboard
+    'dashboard.greeting': 'Hi',
     'dashboard.balance': 'Total balance',
     'dashboard.income': 'Income',
     'dashboard.expense': 'Expenses',
@@ -398,10 +414,13 @@ export const translations: Record<Locale, Record<string, string>> = {
     'dashboard.pending': 'pending',
     'dashboard.totalPending': 'Total pending',
     'dashboard.recent': 'Recent transactions',
-    'dashboard.seeAll': 'See all →',
+    'dashboard.seeAll': 'See all',
     'dashboard.suggestions': 'Suggestions for you',
+    'dashboard.suggestion.budgets.title': 'Budgets',
     'dashboard.suggestion.budgets': 'Review your monthly budgets and adjust what is needed.',
+    'dashboard.suggestion.savings.title': 'Savings',
     'dashboard.suggestion.savings': 'Set a savings goal and automate a contribution.',
+    'dashboard.suggestion.debts.title': 'Debts',
     'dashboard.suggestion.debts': 'Pay ahead on a debt to reduce interest.',
 
     // Movements
@@ -547,6 +566,9 @@ export const translations: Record<Locale, Record<string, string>> = {
     'assistant.error': 'Could not get an answer. Please try again.',
     'assistant.quick.spend': 'Where did I spend the most this month?',
     'assistant.quick.debt': 'How much do I owe?',
+    'assistant.subtitle': 'Your financial assistant',
+    'assistant.quickTitle': 'Quick questions',
+    'assistant.empty': 'Ask a question to get started.',
 
     // Offline / PWA
     'offline.message': 'Offline — showing saved data',

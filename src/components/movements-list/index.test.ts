@@ -30,6 +30,28 @@ describe('finap-movements-list', () => {
     teardown(el);
   });
 
+  it('muestra el nombre de la categoría en lugar del id', async () => {
+    const el = new FinapMovementsList();
+    el.transactions = [
+      {
+        id: 't1',
+        type: 'expense',
+        amount: 980,
+        categoryId: 'c_vivienda',
+        date: '2025-05-12',
+      },
+    ];
+    el.categories = [
+      { id: 'c_vivienda', name: 'Vivienda', color: '#EB001B', icon: 'home' },
+    ];
+    await fixture(el);
+
+    const text = el.shadowRoot?.textContent ?? '';
+    expect(text).toContain('Vivienda');
+    expect(text).not.toContain('c_vivienda');
+    teardown(el);
+  });
+
   it('emite finap-edit y finap-delete', async () => {
     const el = new FinapMovementsList();
     const transaction = {

@@ -10,7 +10,7 @@ import '@spectrum-web-components/action-group/sp-action-group.js';
 import '@spectrum-web-components/action-button/sp-action-button.js';
 import '@spectrum-web-components/action-menu/sp-action-menu.js';
 import '@spectrum-web-components/menu/sp-menu-item.js';
-import '@spectrum-web-components/meter/sp-meter.js';
+import { progressBarStyles, renderProgressBar } from '../components/progress-bar.js';
 import { progressPercent, progressVariant } from '../utils/progress.js';
 import type { DebtFormValue } from '../components/debt-form/index.js';
 
@@ -28,10 +28,12 @@ import { formatCurrency } from '../utils/format.js';
 import type { Debt } from '../services/types.js';
 
 export class DebtsPage extends LitElement {
-  static styles = css`
-    :host {
-      display: block;
-    }
+  static styles = [
+    progressBarStyles,
+    css`
+      :host {
+        display: block;
+      }
 
     .content {
       display: grid;
@@ -101,7 +103,8 @@ export class DebtsPage extends LitElement {
       font-family: var(--finap-font-family);
       color: var(--finap-color-text-muted);
     }
-  `;
+    `,
+  ];
 
   static properties = {
     loading: { type: Boolean },
@@ -344,12 +347,13 @@ export class DebtsPage extends LitElement {
                         )}
                         ${t('debts.pending')}</span
                       >
-                      <sp-meter
-                        .value=${progressPercent(debt.paid, debt.total)}
-                        variant=${progressVariant(
+                      ${renderProgressBar({
+                        percent: progressPercent(debt.paid, debt.total),
+                        variant: progressVariant(
                           progressPercent(debt.paid, debt.total),
-                        )}
-                      ></sp-meter>
+                        ),
+                        label: debt.name,
+                      })}
                       <sp-action-menu
                         label=${t('common.actions')}
                         @change=${(event: Event) =>

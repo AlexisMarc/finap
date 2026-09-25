@@ -1,68 +1,97 @@
 import { LitElement, html, css } from 'lit';
 
 import '../heading/index.js';
+import { progressBarStyles, renderProgressBar } from '../progress-bar.js';
 import { LocalizeController } from '../../i18n/localize.js';
 import { formatCurrency } from '../../utils/format.js';
 import type { CategoryBreakdown } from '../../services/types.js';
 
 export class FinapDashboardCategories extends LitElement {
-  static styles = css`
-    :host {
-      display: block;
-    }
+  static styles = [
+    progressBarStyles,
+    css`
+      :host {
+        display: block;
+      }
 
-    .head {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      margin-bottom: var(--finap-space-3);
-    }
+      .head {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: var(--finap-space-3);
+        margin-bottom: var(--finap-space-5);
+      }
 
-    .period {
-      font-family: var(--finap-font-family);
-      font-size: var(--finap-font-size-sm);
-      color: var(--finap-color-text-muted);
-    }
+      .period {
+        font-family: var(--finap-font-family);
+        font-size: var(--finap-font-size-sm);
+        color: var(--finap-color-text-muted);
+      }
 
-    .list {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-    }
+      .list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: grid;
+        gap: var(--finap-space-5);
+      }
 
-    .row {
-      display: flex;
-      align-items: center;
-      gap: var(--finap-space-3);
-      padding: var(--finap-space-2) 0;
-      font-family: var(--finap-font-family);
-      border-top: 1px solid var(--finap-color-border);
-    }
+      .row {
+        display: grid;
+        gap: var(--finap-space-2);
+        font-family: var(--finap-font-family);
+      }
 
-    .dot {
-      width: 10px;
-      height: 10px;
-      flex: none;
-      border-radius: var(--finap-radius-full);
-      background-color: var(--c, var(--finap-color-accent));
-    }
+      .row__head {
+        display: flex;
+        align-items: center;
+        gap: var(--finap-space-2);
+      }
 
-    .name {
-      flex: 1;
-      color: var(--finap-color-text);
-    }
+      .dot {
+        inline-size: 10px;
+        block-size: 10px;
+        flex: none;
+        border-radius: var(--finap-radius-full);
+        background-color: var(--c, var(--finap-color-accent));
+      }
 
-    .amount {
-      color: var(--finap-color-text-muted);
-    }
+      .name {
+        flex: 1;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: var(--finap-font-size-lg);
+        font-weight: var(--finap-font-weight-semibold);
+        color: var(--finap-color-text);
+      }
 
-    .pct {
-      width: 48px;
-      text-align: right;
-      font-weight: var(--finap-font-weight-semibold);
-      color: var(--finap-color-text);
-    }
-  `;
+      .amount {
+        font-weight: var(--finap-font-weight-semibold);
+        color: var(--finap-color-text);
+        font-variant-numeric: tabular-nums;
+      }
+
+      .row__bar {
+        display: flex;
+        align-items: center;
+        gap: var(--finap-space-3);
+      }
+
+      .row__bar .finap-progress {
+        flex: 1;
+      }
+
+      .pct {
+        inline-size: 44px;
+        text-align: right;
+        font-size: var(--finap-font-size-sm);
+        color: var(--finap-color-text-muted);
+        font-variant-numeric: tabular-nums;
+      }
+    `,
+  ];
 
   static properties = {
     categories: { type: Array },
@@ -83,10 +112,19 @@ export class FinapDashboardCategories extends LitElement {
           ${this.categories.map(
             (category) => html`
               <li class="row">
-                <span class="dot" style="--c: ${category.color}"></span>
-                <span class="name">${category.name}</span>
-                <span class="amount">${formatCurrency(category.amount)}</span>
-                <span class="pct">${category.percentage}%</span>
+                <div class="row__head">
+                  <span class="dot" style="--c: ${category.color}"></span>
+                  <span class="name">${category.name}</span>
+                  <span class="amount">${formatCurrency(category.amount)}</span>
+                </div>
+                <div class="row__bar">
+                  ${renderProgressBar({
+                    percent: category.percentage,
+                    color: category.color,
+                    label: category.name,
+                  })}
+                  <span class="pct">${category.percentage}%</span>
+                </div>
               </li>
             `,
           )}

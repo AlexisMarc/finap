@@ -67,7 +67,7 @@ describe('finap-app-shell', () => {
     teardown(el);
   });
 
-  it('muestra un único saludo con el nombre', async () => {
+  it('no muestra el saludo en el header (vive en el dashboard)', async () => {
     setSession({
       token: 't',
       user: { id: 'u1', name: 'Marcos García', email: 'm@finap.app' },
@@ -76,31 +76,7 @@ describe('finap-app-shell', () => {
     el.currentPage = 'dashboard-page';
     await fixture(el);
 
-    const greeting =
-      el.shadowRoot?.querySelector('.greeting')?.textContent ?? '';
-    expect(greeting).not.toContain('Hola Hola');
-    expect((greeting.match(/Hola/g) ?? []).length).toBe(1);
-    expect(greeting).toContain('Marcos García');
-    teardown(el);
-  });
-
-  it('busca desde el header y navega a movimientos', async () => {
-    const el = new FinapAppShell();
-    el.currentPage = 'dashboard-page';
-    await fixture(el);
-
-    const search = el.shadowRoot?.querySelector('sp-search') as HTMLElement & {
-      value: string;
-    };
-
-    search.dispatchEvent(new KeyboardEvent('keydown', { key: 'a' }));
-    expect(navigate).not.toHaveBeenCalled();
-
-    search.value = '  alquiler  ';
-    search.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
-
-    expect(navigate).toHaveBeenCalledWith('movements');
-    expect(consumePendingSearch()).toBe('alquiler');
+    expect(el.shadowRoot?.querySelector('.greeting')).toBeNull();
     teardown(el);
   });
 

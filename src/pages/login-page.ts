@@ -208,7 +208,7 @@ export class LoginPage extends LitElement {
                 quiet
                 @click=${this._goBack}
               >
-                ${finapIcon('arrow-left', 16, 'icon')} ${t('login.back')}
+                ${finapIcon('chevron-left', 18, 'icon')} ${t('login.back')}
               </sp-action-button>
               <finap-heading level="1">${t('login.title')}</finap-heading>
               <finap-text variant="muted">${t('login.subtitle')}</finap-text>

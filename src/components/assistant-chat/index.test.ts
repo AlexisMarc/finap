@@ -25,7 +25,7 @@ describe('finap-assistant-chat', () => {
     (el.shadowRoot?.querySelector('finap-input') as HTMLElement).dispatchEvent(
       new CustomEvent('finap-input', { detail: '¿En qué gasté más?' }),
     );
-    (el.shadowRoot?.querySelector('sp-button') as HTMLElement).click();
+    (el.shadowRoot?.querySelector('.input-row sp-button') as HTMLElement).click();
     await flush();
     await el.updateComplete;
 
@@ -39,11 +39,30 @@ describe('finap-assistant-chat', () => {
     mockedAsk.mockResolvedValue({ answer: 'ok' });
     const el = await fixture(new FinapAssistantChat());
 
-    (el.shadowRoot?.querySelector('.quick sp-action-button') as HTMLElement).click();
+    (el.shadowRoot?.querySelector('.quick sp-button') as HTMLElement).click();
     await flush();
     await el.updateComplete;
 
     expect(mockedAsk).toHaveBeenCalled();
+    teardown(el);
+  });
+
+  it('envía con Enter desde el campo', async () => {
+    mockedAsk.mockResolvedValue({ answer: 'ok' });
+    const el = await fixture(new FinapAssistantChat());
+
+    const input = el.shadowRoot?.querySelector('finap-input') as HTMLElement;
+    input.dispatchEvent(
+      new CustomEvent('finap-input', { detail: '¿Cuánto debo?' }),
+    );
+    input.dispatchEvent(
+      new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }),
+    );
+    await flush();
+    await el.updateComplete;
+
+    expect(mockedAsk).toHaveBeenCalledWith('¿Cuánto debo?');
+    expect(el.messages.length).toBe(2);
     teardown(el);
   });
 
@@ -54,7 +73,7 @@ describe('finap-assistant-chat', () => {
     (el.shadowRoot?.querySelector('finap-input') as HTMLElement).dispatchEvent(
       new CustomEvent('finap-input', { detail: 'Hola' }),
     );
-    (el.shadowRoot?.querySelector('sp-button') as HTMLElement).click();
+    (el.shadowRoot?.querySelector('.input-row sp-button') as HTMLElement).click();
     await flush();
     await el.updateComplete;
 

@@ -1,63 +1,66 @@
 import { LitElement, html, css } from 'lit';
 
-import '@spectrum-web-components/meter/sp-meter.js';
 import '@spectrum-web-components/status-light/sp-status-light.js';
 import '@spectrum-web-components/action-menu/sp-action-menu.js';
 import '@spectrum-web-components/menu/sp-menu-item.js';
+import { progressBarStyles, renderProgressBar } from '../progress-bar.js';
 import { progressPercent, progressVariant } from '../../utils/progress.js';
 import { LocalizeController } from '../../i18n/localize.js';
 import { formatCurrency, formatPercent, formatDate } from '../../utils/format.js';
 import type { Debt } from '../../services/types.js';
 
 export class FinapDebtItem extends LitElement {
-  static styles = css`
-    :host {
-      display: block;
-    }
+  static styles = [
+    progressBarStyles,
+    css`
+      :host {
+        display: block;
+      }
 
-    .debt {
-      display: grid;
-      gap: var(--finap-space-2);
-      padding: var(--finap-space-4) 0;
-      border-top: 1px solid var(--finap-color-border);
-    }
+      .debt {
+        display: grid;
+        gap: var(--finap-space-2);
+        padding: var(--finap-space-4) 0;
+        border-top: 1px solid var(--finap-color-border);
+      }
 
-    .head {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      gap: var(--finap-space-3);
-      font-family: var(--finap-font-family);
-    }
+      .head {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: var(--finap-space-3);
+        font-family: var(--finap-font-family);
+      }
 
-    .name {
-      color: var(--finap-color-text);
-      font-weight: var(--finap-font-weight-semibold);
-    }
+      .name {
+        color: var(--finap-color-text);
+        font-weight: var(--finap-font-weight-semibold);
+      }
 
-    .pending {
-      color: var(--finap-color-text-muted);
-      font-size: var(--finap-font-size-sm);
-    }
+      .pending {
+        color: var(--finap-color-text-muted);
+        font-size: var(--finap-font-size-sm);
+      }
 
-    .meta {
-      display: flex;
-      gap: var(--finap-space-3);
-      font-family: var(--finap-font-family);
-      font-size: var(--finap-font-size-sm);
-      color: var(--finap-color-text-muted);
-    }
+      .meta {
+        display: flex;
+        gap: var(--finap-space-3);
+        font-family: var(--finap-font-family);
+        font-size: var(--finap-font-size-sm);
+        color: var(--finap-color-text-muted);
+      }
 
-    .done {
-      color: var(--finap-color-income);
-      font-weight: var(--finap-font-weight-semibold);
-    }
+      .done {
+        color: var(--finap-color-income);
+        font-weight: var(--finap-font-weight-semibold);
+      }
 
-    .actions {
-      display: flex;
-      gap: var(--finap-space-1);
-    }
-  `;
+      .actions {
+        display: flex;
+        gap: var(--finap-space-1);
+      }
+    `,
+  ];
 
   static properties = {
     debt: { type: Object },
@@ -109,12 +112,13 @@ export class FinapDebtItem extends LitElement {
             ${formatCurrency(this._pending)} ${t('debts.pending')}
           </span>
         </div>
-        <sp-meter
-          .value=${progressPercent(this.debt.paid, this.debt.total)}
-          variant=${progressVariant(
+        ${renderProgressBar({
+          percent: progressPercent(this.debt.paid, this.debt.total),
+          variant: progressVariant(
             progressPercent(this.debt.paid, this.debt.total),
-          )}
-        ></sp-meter>
+          ),
+          label: this.debt.name,
+        })}
         <div class="meta">
           <span>${formatPercent(this._percent)}</span>
           ${this.debt.dueDate

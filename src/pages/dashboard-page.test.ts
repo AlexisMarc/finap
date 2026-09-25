@@ -7,6 +7,7 @@ vi.mock('../services/dashboard-service.js', () => ({
 import { DashboardPage } from './dashboard-page.js';
 import { fixture, teardown } from '../test/fixture.js';
 import { getDashboard } from '../services/dashboard-service.js';
+import { setSession } from '../state/session.js';
 
 const mockedGetDashboard = vi.mocked(getDashboard);
 
@@ -62,8 +63,23 @@ describe('dashboard-page', () => {
     teardown(el);
   });
 
-  it('muestra el estado de error con reintento', async () => {
-    mockedGetDashboard.mockRejectedValue(new Error('Fallo de red'));
+  it('muestra el saludo con el nombre del usuario', async () => {
+    setSession({
+      token: 't',
+      user: { id: 'u1', name: 'Marcos García', email: 'm@finap.app' },
+    });
+    mockedGetDashboard.mockResolvedValue(SUMMARY);
+    const el = await fixture(new DashboardPage());
+    await flush();
+    await el.updateComplete;
+
+    expect(el.shadowRoot?.querySelector('.greeting')?.textContent).toContain(
+      'Marcos García',
+    );
+    teardown(el);
+  });
+
+  it('muestra el estado de error con reintento', async () => {    mockedGetDashboard.mockRejectedValue(new Error('Fallo de red'));
     const el = await fixture(new DashboardPage());
     await flush();
     await el.updateComplete;

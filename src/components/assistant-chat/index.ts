@@ -4,6 +4,7 @@ import '../heading/index.js';
 import '../input/index.js';
 import '../assistant-message/index.js';
 import '@spectrum-web-components/action-button/sp-action-button.js';
+import '@spectrum-web-components/button/sp-button.js';
 
 import { ask } from '../../services/assistant-service.js';
 import { LocalizeController } from '../../i18n/localize.js';
@@ -34,10 +35,16 @@ export class FinapAssistantChat extends LitElement {
       height: 48px;
       border: none;
       border-radius: var(--finap-radius-full);
-      background-color: var(--finap-color-accent-interactive);
+      background-color: var(--finap-color-primary);
       color: var(--finap-color-on-primary);
       cursor: pointer;
       box-shadow: var(--finap-shadow-md);
+      transition: background-color var(--finap-motion-duration-fast)
+        var(--finap-motion-easing-standard);
+    }
+
+    .fab:hover {
+      background-color: var(--finap-color-primary-hover);
     }
 
     .panel {
@@ -45,10 +52,12 @@ export class FinapAssistantChat extends LitElement {
       right: var(--finap-space-5);
       bottom: calc(var(--finap-space-5) + 60px);
       z-index: 400;
-      width: min(360px, calc(100vw - 2 * var(--finap-space-5)));
-      max-height: 70vh;
-      overflow: auto;
-      padding: var(--finap-space-4);
+      display: grid;
+      grid-template-rows: auto 1fr;
+      gap: var(--finap-space-4);
+      width: min(400px, calc(100vw - 2 * var(--finap-space-5)));
+      max-height: min(560px, 80vh);
+      padding: var(--finap-space-5);
       background-color: var(--finap-color-surface);
       border: 1px solid var(--finap-color-border);
       border-radius: var(--finap-radius-lg);
@@ -61,22 +70,63 @@ export class FinapAssistantChat extends LitElement {
 
     .panel-head {
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       justify-content: space-between;
       gap: var(--finap-space-2);
-      margin-bottom: var(--finap-space-3);
+      padding-bottom: var(--finap-space-3);
+      border-bottom: 1px solid var(--finap-color-border);
+    }
+
+    .panel-title {
+      display: grid;
+      gap: 2px;
+    }
+
+    .panel-subtitle {
+      font-family: var(--finap-font-family);
+      font-size: var(--finap-font-size-sm);
+      color: var(--finap-color-text-muted);
     }
 
     .chat {
       display: grid;
-      gap: var(--finap-space-3);
+      gap: var(--finap-space-4);
+      min-height: 0;
+      overflow: auto;
     }
 
     .messages {
+      display: flex;
+      flex-direction: column;
+      gap: var(--finap-space-2);
+      min-height: 120px;
+      max-height: 300px;
+      overflow: auto;
+      padding: var(--finap-space-3);
+      background-color: var(--finap-color-bg-subtle);
+      border-radius: var(--finap-radius-md);
+    }
+
+    .empty {
+      margin: auto;
+      text-align: center;
+      font-family: var(--finap-font-family);
+      font-size: var(--finap-font-size-sm);
+      color: var(--finap-color-text-muted);
+    }
+
+    .quick-wrap {
       display: grid;
       gap: var(--finap-space-2);
-      max-height: 260px;
-      overflow: auto;
+    }
+
+    .quick-label {
+      font-family: var(--finap-font-family);
+      font-size: var(--finap-font-size-xs);
+      font-weight: var(--finap-font-weight-semibold);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--finap-color-text-muted);
     }
 
     .quick {
@@ -135,6 +185,12 @@ export class FinapAssistantChat extends LitElement {
     this.draft = (event as CustomEvent<string>).detail;
   }
 
+  private _onKeydown = (event: KeyboardEvent): void => {
+    if (event.key !== 'Enter' || event.shiftKey) return;
+    event.preventDefault();
+    void this._send();
+  };
+
   private async _send(question?: string): Promise<void> {
     const text = (question ?? this.draft).trim();
     if (!text || this.thinking) return;
@@ -172,13 +228,19 @@ export class FinapAssistantChat extends LitElement {
       </button>
       <div class="panel" ?hidden=${!this.open}>
         <div class="panel-head">
-          <finap-heading level="3">${t('assistant.title')}</finap-heading>
+          <div class="panel-title">
+            <finap-heading level="3">${t('assistant.title')}</finap-heading>
+            <span class="panel-subtitle">${t('assistant.subtitle')}</span>
+          </div>
           <sp-action-button label=${t('common.close')} @click=${this._toggle}>
             ${finapIcon('close', 18, 'icon')}
           </sp-action-button>
         </div>
         <div class="chat">
           <div class="messages">
+            ${this.messages.length === 0 && !this.thinking
+              ? html`<p class="empty">${t('assistant.empty')}</p>`
+              : ''}
             ${this.messages.map(
               (message) => html`
                 <finap-assistant-message
@@ -196,14 +258,22 @@ export class FinapAssistantChat extends LitElement {
                 `
               : ''}
           </div>
-          <div class="quick">
-            ${QUICK_KEYS.map(
-              (key) => html`
-                <sp-action-button @click=${this._quick(key)}>
-                  ${t(key)}
-                </sp-action-button>
-              `,
-            )}
+          <div class="quick-wrap">
+            <span class="quick-label">${t('assistant.quickTitle')}</span>
+            <div class="quick">
+              ${QUICK_KEYS.map(
+                (key) => html`
+                  <sp-button
+                    size="s"
+                    treatment="outline"
+                    variant="secondary"
+                    @click=${this._quick(key)}
+                  >
+                    ${t(key)}
+                  </sp-button>
+                `,
+              )}
+            </div>
           </div>
           <p class="error" ?hidden=${!this.error}>${this.error}</p>
           <div class="input-row">
@@ -212,6 +282,7 @@ export class FinapAssistantChat extends LitElement {
               placeholder=${t('assistant.placeholder')}
               .value=${this.draft}
               @finap-input=${this._onInput}
+              @keydown=${this._onKeydown}
             ></finap-input>
             <sp-button variant="accent" @click=${() => this._send()}>
               ${t('assistant.send')}

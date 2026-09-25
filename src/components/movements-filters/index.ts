@@ -74,6 +74,8 @@ export class FinapMovementsFilters extends LitElement {
       top: calc(100% + var(--finap-space-2));
       right: 0;
       z-index: 20;
+      max-width: none;
+      max-height: none;
     }
 
     .popover-body {

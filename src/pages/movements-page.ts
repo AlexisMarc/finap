@@ -289,6 +289,7 @@ export class MovementsPage extends LitElement {
                     <div class="finap-surface">
                       <finap-movements-list
                         .transactions=${this.transactions}
+                        .categories=${this.categories}
                         @finap-edit=${this._onEdit}
                         @finap-delete=${this._onDelete}
                       ></finap-movements-list>

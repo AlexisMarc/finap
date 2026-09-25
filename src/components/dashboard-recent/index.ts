@@ -2,6 +2,8 @@ import { LitElement, html, css } from 'lit';
 import { navigate } from '@open-cells/core';
 
 import '../heading/index.js';
+import { finapIcon } from '../icons.js';
+import '@spectrum-web-components/link/sp-link.js';
 import '@spectrum-web-components/table/elements.js';
 import { LocalizeController } from '../../i18n/localize.js';
 import { formatCurrency, formatRelativeDate } from '../../utils/format.js';
@@ -21,10 +23,11 @@ export class FinapDashboardRecent extends LitElement {
     }
 
     .more {
-      font-family: var(--finap-font-family);
+      display: inline-flex;
+      align-items: center;
+      gap: var(--finap-space-1);
       font-size: var(--finap-font-size-sm);
-      color: var(--finap-color-accent-interactive);
-      text-decoration: none;
+      font-weight: var(--finap-font-weight-semibold);
     }
 
     sp-table {
@@ -59,9 +62,9 @@ export class FinapDashboardRecent extends LitElement {
       <section class="recent">
         <div class="head">
           <finap-heading level="3">${t('dashboard.recent')}</finap-heading>
-          <a class="more" href="/movements" @click=${this._goAll}>
-            ${t('dashboard.seeAll')}
-          </a>
+          <sp-link class="more" href="/movements" @click=${this._goAll}>
+            ${t('dashboard.seeAll')} ${finapIcon('chevron-right', 14)}
+          </sp-link>
         </div>
         <sp-table>
           <sp-table-head>

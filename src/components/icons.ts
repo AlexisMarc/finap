@@ -10,6 +10,8 @@ import '@spectrum-web-components/icons-workflow/icons/sp-icon-credit-card.js';
 import '@spectrum-web-components/icons-workflow/icons/sp-icon-view-list.js';
 import '@spectrum-web-components/icons-workflow/icons/sp-icon-arrow-right.js';
 import '@spectrum-web-components/icons-workflow/icons/sp-icon-arrow-left.js';
+import '@spectrum-web-components/icons-workflow/icons/sp-icon-chevron-left.js';
+import '@spectrum-web-components/icons-workflow/icons/sp-icon-chevron-right.js';
 import '@spectrum-web-components/icons-workflow/icons/sp-icon-menu.js';
 import '@spectrum-web-components/icons-workflow/icons/sp-icon-close.js';
 import '@spectrum-web-components/icons-workflow/icons/sp-icon-checkmark.js';
@@ -33,6 +35,8 @@ const ICONS: Record<string, TemplateResult> = {
   list: staticHtml`<${literal`sp-icon-view-list`}></${literal`sp-icon-view-list`}>`,
   'arrow-right': staticHtml`<${literal`sp-icon-arrow-right`}></${literal`sp-icon-arrow-right`}>`,
   'arrow-left': staticHtml`<${literal`sp-icon-arrow-left`}></${literal`sp-icon-arrow-left`}>`,
+  'chevron-left': staticHtml`<${literal`sp-icon-chevron-left`}></${literal`sp-icon-chevron-left`}>`,
+  'chevron-right': staticHtml`<${literal`sp-icon-chevron-right`}></${literal`sp-icon-chevron-right`}>`,
   menu: staticHtml`<${literal`sp-icon-menu`}></${literal`sp-icon-menu`}>`,
   close: staticHtml`<${literal`sp-icon-close`}></${literal`sp-icon-close`}>`,
   check: staticHtml`<${literal`sp-icon-checkmark`}></${literal`sp-icon-checkmark`}>`,

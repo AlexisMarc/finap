@@ -12,7 +12,7 @@ describe('finap-debt-item', () => {
     expect(el.shadowRoot?.querySelector('.name')?.textContent).toContain(
       'Préstamo auto',
     );
-    expect(el.shadowRoot?.querySelector('sp-meter')).not.toBeNull();
+    expect(el.shadowRoot?.querySelector('.finap-progress')).not.toBeNull();
     teardown(el);
   });
 

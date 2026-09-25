@@ -49,6 +49,8 @@
   --finap-color-text-muted: #5c5c5c;
   /* Borde con contraste suficiente para distinguir superficies en modo claro. */
   --finap-color-border: #b1b1b1;
+  /* Pista de barras de progreso. */
+  --finap-color-track: #ececec;
 
   /* Mezcla de la marca: multiplicar sobre claro, aclarar sobre oscuro. */
   --finap-brand-blend: multiply;

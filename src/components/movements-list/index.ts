@@ -4,7 +4,7 @@ import '@spectrum-web-components/table/elements.js';
 import '@spectrum-web-components/badge/sp-badge.js';
 import { LocalizeController } from '../../i18n/localize.js';
 import { formatCurrency, formatDate } from '../../utils/format.js';
-import type { Transaction } from '../../services/types.js';
+import type { Category, Transaction } from '../../services/types.js';
 
 export class FinapMovementsList extends LitElement {
   static styles = css`
@@ -31,7 +31,17 @@ export class FinapMovementsList extends LitElement {
 
     .badges {
       display: flex;
+      flex-wrap: wrap;
       gap: var(--finap-space-1);
+    }
+
+    .badges sp-badge {
+      --mod-badge-height: 18px;
+      --mod-badge-font-size: var(--finap-font-size-xs);
+      --mod-badge-label-spacing-vertical-top: 0;
+      --mod-badge-label-spacing-vertical-bottom: 0;
+      --mod-badge-label-spacing-horizontal: var(--finap-space-2);
+      --mod-badge-corner-radius: var(--finap-radius-full);
     }
 
     .actions {
@@ -42,11 +52,18 @@ export class FinapMovementsList extends LitElement {
 
   static properties = {
     transactions: { type: Array },
+    categories: { type: Array },
   };
 
   transactions: Transaction[] = [];
 
+  categories: Category[] = [];
+
   private _localize = new LocalizeController(this);
+
+  private _categoryName(id: string): string {
+    return this.categories.find((category) => category.id === id)?.name ?? id;
+  }
 
   private _edit(transaction: Transaction): void {
     this.dispatchEvent(
@@ -86,11 +103,15 @@ export class FinapMovementsList extends LitElement {
                 <sp-table-cell>
                   <div class="detail">
                     <span
-                      >${transaction.note ?? transaction.categoryId}</span
+                      >${transaction.note ??
+                      this._categoryName(transaction.categoryId)}</span
                     >
                     <span class="badges">
-                      <sp-badge>${transaction.categoryId}</sp-badge>
+                      <sp-badge size="s"
+                        >${this._categoryName(transaction.categoryId)}</sp-badge
+                      >
                       <sp-badge
+                        size="s"
                         variant=${transaction.type === 'income'
                           ? 'positive'
                           : 'negative'}
