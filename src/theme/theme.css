@@ -26,6 +26,7 @@
   --finap-color-income: #2fc78a;
   --finap-color-expense: #ff2e44;
   --finap-color-debt: #ffb53d;
+  --finap-brand-blend: screen;
   --finap-gradient-brand: linear-gradient(
     135deg,
     #ff2e44 0%,
@@ -56,6 +57,7 @@
     --finap-color-income: #2fc78a;
     --finap-color-expense: #ff2e44;
     --finap-color-debt: #ffb53d;
+    --finap-brand-blend: screen;
     --finap-gradient-brand: linear-gradient(
       135deg,
       #ff2e44 0%,

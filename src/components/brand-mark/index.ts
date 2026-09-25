@@ -30,7 +30,7 @@ export class FinapBrandMark extends LitElement {
     .rhombus--secondary {
       right: 6px;
       background-color: var(--finap-color-secondary);
-      mix-blend-mode: multiply;
+      mix-blend-mode: var(--finap-brand-blend, multiply);
     }
   `;
 

@@ -38,15 +38,20 @@
     var(--finap-color-accent) 100%
   );
 
-  /* Color — neutros: tokens semánticos de Spectrum (tono cálido de la librería).
-     El tema claro/oscuro de Spectrum los adapta automáticamente. */
-  --finap-color-bg: var(--spectrum-background-base-color);
-  --finap-color-bg-subtle: var(--spectrum-background-layer-1-color);
-  --finap-color-surface: var(--spectrum-background-layer-2-color);
-  --finap-color-text: var(--spectrum-gray-900);
-  --finap-color-text-muted: var(--spectrum-gray-700);
+  /* Color — neutros del tema claro. Son valores literales (no referencias a
+     `--spectrum-*`) porque esos tokens solo existen dentro de <sp-theme> y en
+     `:root` quedarían inválidos y transparentes. theme.css los sobrescribe en
+     oscuro. */
+  --finap-color-bg: #ffffff;
+  --finap-color-bg-subtle: #f8f8f8;
+  --finap-color-surface: #ffffff;
+  --finap-color-text: #1a1a1a;
+  --finap-color-text-muted: #5c5c5c;
   /* Borde con contraste suficiente para distinguir superficies en modo claro. */
-  --finap-color-border: var(--spectrum-gray-400);
+  --finap-color-border: #b1b1b1;
+
+  /* Mezcla de la marca: multiplicar sobre claro, aclarar sobre oscuro. */
+  --finap-brand-blend: multiply;
 
   /* Espaciado (escala base 4px) */
   --finap-space-1: 4px;

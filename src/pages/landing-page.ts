@@ -21,22 +21,22 @@ import { getLocale, setLocale, type Locale } from '../i18n/i18n.js';
 
 /** Funcionalidades del producto, cada una con una imagen cálida. */
 const FEATURES = [
-  { id: 'dashboard', image: '/image/hassaan-here-Gz_74MbJ4V8-unsplash.jpg' },
-  { id: 'movements', image: '/image/hassaan-here-W89Z1p-IfvM-unsplash.jpg' },
-  { id: 'budgets', image: '/image/milad-fakurian-n6aIqCWqADI-unsplash.jpg' },
-  { id: 'analysis', image: '/image/hassaan-here-B6ahPMOptIw-unsplash.jpg' },
-  { id: 'debts', image: '/image/brian-lundquist-zpS4qy8SEZA-unsplash.jpg' },
-  { id: 'assistant', image: '/image/solen-feyissa-y3WtJlUaya8-unsplash.jpg' },
+  { id: 'dashboard', image: '/image/hassaan-here-Gz_74MbJ4V8-unsplash.webp' },
+  { id: 'movements', image: '/image/hassaan-here-W89Z1p-IfvM-unsplash.webp' },
+  { id: 'budgets', image: '/image/milad-fakurian-n6aIqCWqADI-unsplash.webp' },
+  { id: 'analysis', image: '/image/hassaan-here-B6ahPMOptIw-unsplash.webp' },
+  { id: 'debts', image: '/image/brian-lundquist-zpS4qy8SEZA-unsplash.webp' },
+  { id: 'assistant', image: '/image/solen-feyissa-y3WtJlUaya8-unsplash.webp' },
 ];
 
 /** Beneficios de las finanzas personales, con imágenes cálidas, azules y rojas. */
 const BENEFITS = [
-  { id: 'income', image: '/image/almas-salakhov-ej5sArkD1Ag-unsplash.jpg' },
-  { id: 'spending', image: '/image/bhautik-patel-Q8tP0qyhsXY-unsplash.jpg' },
-  { id: 'saving', image: '/image/hassaan-here-cD4mcWt53ko-unsplash.jpg' },
-  { id: 'investing', image: '/image/waro-photos-zKMmLWSDcPY-unsplash.jpg' },
-  { id: 'protection', image: '/image/milad-fakurian-iFHGJUgFymw-unsplash.jpg' },
-  { id: 'budget', image: '/image/solen-feyissa-y3WtJlUaya8-unsplash.jpg' },
+  { id: 'income', image: '/image/almas-salakhov-ej5sArkD1Ag-unsplash.webp' },
+  { id: 'spending', image: '/image/bhautik-patel-Q8tP0qyhsXY-unsplash.webp' },
+  { id: 'saving', image: '/image/hassaan-here-cD4mcWt53ko-unsplash.webp' },
+  { id: 'investing', image: '/image/waro-photos-zKMmLWSDcPY-unsplash.webp' },
+  { id: 'protection', image: '/image/milad-fakurian-iFHGJUgFymw-unsplash.webp' },
+  { id: 'budget', image: '/image/solen-feyissa-y3WtJlUaya8-unsplash.webp' },
 ];
 
 const CONTACT = {
@@ -117,12 +117,17 @@ export class LandingPage extends LitElement {
           rgba(24, 5, 0, 0.66) 42%,
           rgba(24, 5, 0, 0.22) 100%
         ),
-        url('/image/almas-salakhov-ej5sArkD1Ag-unsplash.jpg');
+        url('/image/almas-salakhov-ej5sArkD1Ag-unsplash.webp');
       background-size: cover;
       background-position: center;
       color: #fff;
       --finap-color-text: #fff;
       --finap-font-size-3xl: var(--finap-font-size-2xl);
+    }
+
+    .hero finap-container {
+      flex: 1 1 100%;
+      min-width: 0;
     }
 
     .hero__content {
@@ -247,7 +252,7 @@ export class LandingPage extends LitElement {
       padding: var(--finap-space-8) 0;
       background-image:
         linear-gradient(rgba(3, 8, 28, 0.74), rgba(3, 8, 28, 0.74)),
-        url('/image/isaac-quesada-YjeLQeWxcGk-unsplash.jpg');
+        url('/image/isaac-quesada-YjeLQeWxcGk-unsplash.webp');
       background-size: cover;
       background-position: center;
       color: #fff;

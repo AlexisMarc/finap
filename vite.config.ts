@@ -41,7 +41,7 @@ export default defineConfig({
             },
           },
           {
-            urlPattern: /\.(?:png|jpg|jpeg|svg|woff2)$/,
+            urlPattern: /\.(?:png|jpg|jpeg|svg|webp|woff2)$/,
             handler: 'CacheFirst',
             options: {
               cacheName: 'finap-assets',
