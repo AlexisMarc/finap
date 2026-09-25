@@ -55,7 +55,11 @@ const SECTIONS: ShellSection[] = [
   },
 ];
 
-const APP_PAGES = new Set(SECTIONS.map((section) => section.id));
+const APP_PAGES = new Set([
+  ...SECTIONS.map((section) => section.id),
+  'categories',
+  'budgets',
+]);
 
 export class FinapAppShell extends LitElement {
   static styles = css`
@@ -252,7 +256,12 @@ export class FinapAppShell extends LitElement {
     if (app) {
       this._syncPage(app);
       this._observer = new MutationObserver(() => this._syncPage(app));
-      this._observer.observe(app, { childList: true });
+      this._observer.observe(app, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+        attributeFilter: ['state'],
+      });
     }
   }
 
@@ -267,7 +276,11 @@ export class FinapAppShell extends LitElement {
   }
 
   private _syncPage(app: Element): void {
-    this.currentPage = app.firstElementChild?.tagName.toLowerCase() ?? '';
+    // Open Cells deja varias páginas montadas en #app y marca la visible con
+    // state="active". Hay que detectar esa, no la primera.
+    const active =
+      app.querySelector(':scope > [state="active"]') ?? app.lastElementChild;
+    this.currentPage = active?.tagName.toLowerCase() ?? '';
   }
 
   get currentSection(): string {

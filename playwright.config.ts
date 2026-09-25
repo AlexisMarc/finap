@@ -4,6 +4,7 @@ const API_BASE_URL =
   process.env.E2E_API_BASE_URL ?? 'http://localhost:3000/api/v1';
 const PORT = 4173;
 const BASE_URL = process.env.E2E_BASE_URL ?? `http://localhost:${PORT}`;
+const AUTH_FILE = 'e2e/.auth/user.json';
 
 export default defineConfig({
   testDir: './e2e',
@@ -18,7 +19,15 @@ export default defineConfig({
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
   },
-  projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
+  projects: [
+    { name: 'setup', testMatch: /.*\.setup\.ts/ },
+    {
+      name: 'chromium',
+      use: { ...devices['Desktop Chrome'], storageState: AUTH_FILE },
+      dependencies: ['setup'],
+      testIgnore: /.*\.setup\.ts/,
+    },
+  ],
   // Si se apunta a un despliegue (E2E_BASE_URL), no levantamos servidor local.
   webServer: process.env.E2E_BASE_URL
     ? undefined

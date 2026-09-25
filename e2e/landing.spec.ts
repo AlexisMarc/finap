@@ -1,5 +1,8 @@
 import { test, expect } from '@playwright/test';
 
+// La landing es pública: se prueba sin sesión.
+test.use({ storageState: { cookies: [], origins: [] } });
+
 test.describe('Landing', () => {
   test('carga con hero y navegación', async ({ page }) => {
     await page.goto('/');

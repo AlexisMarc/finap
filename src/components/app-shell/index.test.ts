@@ -72,6 +72,22 @@ describe('finap-app-shell', () => {
     teardown(el);
   });
 
+  it('detecta la página activa cuando hay varias páginas montadas', async () => {
+    const el = new FinapAppShell();
+    const app = document.createElement('div');
+    app.id = 'app';
+    el.appendChild(app);
+    await fixture(el);
+
+    app.innerHTML =
+      '<login-page state="inactive"></login-page><dashboard-page state="active"></dashboard-page>';
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    await el.updateComplete;
+
+    expect(el.currentSection).toBe('dashboard');
+    teardown(el);
+  });
+
   it('cerrar sesión limpia la sesión', async () => {
     globalThis.fetch = vi.fn().mockResolvedValue({
       ok: true,

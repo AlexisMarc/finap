@@ -7,5 +7,6 @@
 /playwright-report
 /blob-report
 /playwright/.cache
+/e2e/.auth
 .vercel
 .env.production
