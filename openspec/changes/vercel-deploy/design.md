@@ -26,6 +26,15 @@ Ver `proposal.md`. La app es una SPA con **routing por history** (Open Cells en 
 - **Alternativas**: confiar en el autodetect de Vercel (framework Vite). Se explicita para robustez.
 - **Racional**: build reproducible.
 
+### 4. API en producción: proxy same-origin en Vercel
+
+- **Contexto**: el backend desplegado es `https://finap-service.vercel.app` y **no envía cabeceras CORS** (`OPTIONS` → 404, sin `Access-Control-Allow-Origin`). Una llamada directa desde el navegador (otro origen) quedaría bloqueada.
+- **Decisión**: **proxy same-origin**. Se añade un *rewrite* en `vercel.json` que reenvía `/api/v1/:path*` → `https://finap-service.vercel.app/api/v1/:path*` (antes del catch-all de la SPA). Así el frontend llama a `/api/v1` (mismo origen) y **no hay CORS**. En producción `VITE_API_BASE_URL` queda sin definir → default `/api/v1`. En desarrollo, `.env.development` apunta a `http://localhost:3000/api/v1` (el backend local sí tiene CORS `*`).
+- **Alternativas**: configurar `VITE_API_BASE_URL=https://finap-service.vercel.app/api/v1` y que el backend habilite CORS. Se descarta por ahora: exige tocar el backend; el proxy lo evita y es transparente.
+- **Racional**: funciona con el backend actual sin cambios y mantiene la misma capa de datos (`src/services/http.ts`).
+
+> Nota: si en el futuro el backend habilita CORS, basta con definir `VITE_API_BASE_URL` como variable de entorno en Vercel y quitar el rewrite del proxy.
+
 ## Goals / Non-Goals
 
 **Goals**: desplegar la SPA en Vercel con URLs limpias y PWA correcta.

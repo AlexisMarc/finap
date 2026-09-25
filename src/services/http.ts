@@ -1,7 +1,7 @@
 import { getSession } from '../state/session.js';
 import type { ApiErrorBody } from './types.js';
 
-export const API_BASE_URL = '/api/v1';
+export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? '/api/v1';
 
 export class ApiError extends Error {
   readonly status: number;
