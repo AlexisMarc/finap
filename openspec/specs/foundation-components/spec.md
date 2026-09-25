@@ -2,23 +2,23 @@
 
 ## Purpose
 
-Define los componentes web base reutilizables (botón, tarjeta, títulos, texto, icono y contenedor) construidos con Lit, que consumen los tokens de diseño y que la landing y las páginas de la SPA reutilizarán.
+Define los componentes web base reutilizables (botón, tarjeta, títulos, texto, icono y contenedor) construidos con Lit, que consumen los tokens de diseño y que la landing y las páginas de la SPA reutilizarán, implementados sobre Spectrum.
 
 ## Requirements
 
 ### Requirement: finap-button
 
-El sistema SHALL proporcionar un componente `<finap-button>` con variantes (primaria, secundaria, texto), estado deshabilitado y soporte de teclado/accesibilidad.
+El sistema SHALL proporcionar un componente `<finap-button>` con variantes (primaria, secundaria, texto), estado deshabilitado y soporte de teclado/accesibilidad, implementado sobre `<sp-button>` de Spectrum.
 
 #### Scenario: Render con variante por defecto
 
 - **WHEN** se renderiza `<finap-button>` sin atributo de variante
-- **THEN** el botón se muestra con el estilo de variante primaria
+- **THEN** el botón se muestra con el estilo de variante primaria de Spectrum
 
 #### Scenario: Variante explícita
 
 - **WHEN** se renderiza `<finap-button variant="secondary">`
-- **THEN** el botón se muestra con el estilo de la variante secundaria
+- **THEN** el botón se muestra con el estilo de la variante secundaria de Spectrum
 
 #### Scenario: Botón deshabilitado
 
@@ -32,7 +32,7 @@ El sistema SHALL proporcionar un componente `<finap-button>` con variantes (prim
 
 ### Requirement: finap-card
 
-El sistema SHALL proporcionar un componente `<finap-card>` contenedor con elevación y esquinas redondeadas consistentes, con un slot para contenido.
+El sistema SHALL proporcionar un componente `<finap-card>` contenedor con elevación y esquinas redondeadas de Spectrum, con un slot para contenido.
 
 #### Scenario: Contenido proyectado en el slot
 
@@ -41,16 +41,16 @@ El sistema SHALL proporcionar un componente `<finap-card>` contenedor con elevac
 
 ### Requirement: finap-heading
 
-El sistema SHALL proporcionar un componente `<finap-heading>` para títulos con niveles semánticos (h1-h6) y estilo tipográfico consistente.
+El sistema SHALL proporcionar un componente `<finap-heading>` para títulos con niveles semánticos (h1-h6) y estilo tipográfico de Spectrum.
 
 #### Scenario: Nivel semántico
 
 - **WHEN** se renderiza `<finap-heading level="2">`
-- **THEN** el componente renderiza un elemento `h2` con el estilo tipográfico correspondiente
+- **THEN** el componente renderiza un elemento `h2` con el estilo tipográfico correspondiente de Spectrum
 
 ### Requirement: finap-text
 
-El sistema SHALL proporcionar un componente `<finap-text>` para texto de cuerpo con variantes de tamaño.
+El sistema SHALL proporcionar un componente `<finap-text>` para texto de cuerpo con variantes de tamaño basadas en la escala de Spectrum.
 
 #### Scenario: Texto de cuerpo
 
@@ -59,12 +59,12 @@ El sistema SHALL proporcionar un componente `<finap-text>` para texto de cuerpo 
 
 ### Requirement: finap-icon
 
-El sistema SHALL proporcionar un componente `<finap-icon>` que renderiza un icono por nombre desde un conjunto de iconos del design system.
+El sistema SHALL proporcionar un componente `<finap-icon>` que renderiza un icono por nombre desde el set de workflow icons de Spectrum.
 
 #### Scenario: Icono por nombre
 
 - **WHEN** se renderiza `<finap-icon name="home">`
-- **THEN** se muestra el icono correspondiente al nombre indicado
+- **THEN** se muestra el icono de Spectrum correspondiente al nombre indicado
 
 #### Scenario: Nombre de icono desconocido
 
@@ -82,7 +82,7 @@ El sistema SHALL proporcionar un componente `<finap-container>` que limita el an
 
 ### Requirement: Consumo de tokens de diseño
 
-Todos los componentes base SHALL usar los tokens de diseño (`--finap-*`) para color, tipografía, espaciado y elevación, sin valores hardcodeados.
+Todos los componentes base SHALL usar los tokens de diseño (`--spectrum-*` o sus alias `--finap-*`) para color, tipografía, espaciado y elevación, sin valores hardcodeados.
 
 #### Scenario: Estilos derivados de tokens
 
@@ -105,7 +105,7 @@ El sistema SHALL proporcionar un componente `<finap-brand-mark>` que renderiza e
 
 ### Requirement: finap-theme-toggle
 
-El sistema SHALL proporcionar un componente `<finap-theme-toggle>` que alterna entre tema claro y oscuro, persiste la elección y respeta la preferencia del sistema.
+El sistema SHALL proporcionar un componente `<finap-theme-toggle>` que alterna entre tema claro y oscuro del `sp-theme` raíz, persiste la elección y respeta la preferencia del sistema.
 
 #### Scenario: Alternar tema
 
