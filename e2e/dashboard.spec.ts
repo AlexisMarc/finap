@@ -14,13 +14,11 @@ test.describe('Dashboard', () => {
       page.getByRole('link', { name: /Inicio|Home/i }).first(),
     ).toBeVisible();
 
-    // Saludo del header sin duplicar la palabra de saludo
+    // El saludo vive en el dashboard, no en el header del shell
     await expect(
-      page.locator('finap-app-shell .greeting__name'),
+      page.locator('dashboard-page .greeting'),
     ).toHaveText(/Marcos García 👋/);
-    await expect(
-      page.locator('finap-app-shell .greeting__name'),
-    ).not.toHaveText(/Hola/);
+    await expect(page.locator('finap-app-shell .greeting')).toHaveCount(0);
   });
 
   test('navega a otra sección desde el shell', async ({ page }) => {

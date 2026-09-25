@@ -25,7 +25,10 @@ test.describe('Transacciones', () => {
     await expect(form).toHaveCount(0);
 
     await page.goto('/movements');
-    const row = page.locator('finap-movements-list sp-table-row', { hasText: marker });
+    const list = page.locator('finap-movements-list');
+    const row = list
+      .locator('sp-table-row, li.card')
+      .filter({ hasText: marker });
     await expect(row).toBeVisible();
 
     await row.getByRole('button', { name: 'Eliminar' }).click();
@@ -34,7 +37,7 @@ test.describe('Transacciones', () => {
       .getByRole('button', { name: 'Eliminar' })
       .click();
     await expect(
-      page.locator('finap-movements-list sp-table-row', { hasText: marker }),
+      list.locator('sp-table-row, li.card').filter({ hasText: marker }),
     ).toHaveCount(0);
   });
 

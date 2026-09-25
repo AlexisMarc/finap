@@ -14,16 +14,36 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 0,
   reporter: [['list'], ['html', { open: 'never' }]],
+  outputDir: 'test-results',
   use: {
     baseURL: BASE_URL,
+    // Videos para el portafolio: cada test deja su grabación en test-results/.
+    video: 'on',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
   },
   projects: [
-    { name: 'setup', testMatch: /.*\.setup\.ts/ },
     {
-      name: 'chromium',
-      use: { ...devices['Desktop Chrome'], storageState: AUTH_FILE },
+      name: 'setup',
+      testMatch: /.*\.setup\.ts/,
+      use: { video: 'off' },
+    },
+    {
+      name: 'desktop',
+      use: {
+        ...devices['Desktop Chrome'],
+        viewport: { width: 1440, height: 900 },
+        storageState: AUTH_FILE,
+      },
+      dependencies: ['setup'],
+      testIgnore: /.*\.setup\.ts/,
+    },
+    {
+      name: 'mobile',
+      use: {
+        ...devices['Pixel 5'],
+        storageState: AUTH_FILE,
+      },
       dependencies: ['setup'],
       testIgnore: /.*\.setup\.ts/,
     },

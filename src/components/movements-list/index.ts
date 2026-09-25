@@ -6,10 +6,13 @@ import { LocalizeController } from '../../i18n/localize.js';
 import { formatCurrency, formatDate } from '../../utils/format.js';
 import type { Category, Transaction } from '../../services/types.js';
 
+const MOBILE_QUERY = '(max-width: 767px)';
+
 export class FinapMovementsList extends LitElement {
   static styles = css`
     :host {
       display: block;
+      min-width: 0;
     }
 
     sp-table {
@@ -39,7 +42,8 @@ export class FinapMovementsList extends LitElement {
       gap: var(--finap-space-1);
     }
 
-    .badges sp-badge {
+    .badges sp-badge,
+    .card__meta sp-badge {
       --mod-badge-height: 18px;
       --mod-badge-font-size: var(--finap-font-size-xs);
       --mod-badge-label-spacing-vertical-top: 0;
@@ -54,81 +58,62 @@ export class FinapMovementsList extends LitElement {
     }
 
     .cards {
-      display: none;
+      display: grid;
+      gap: var(--finap-space-3);
+      margin: 0;
+      padding: 0;
+      list-style: none;
     }
 
-    @media (max-width: 767px) {
-      .table-wrap {
-        display: none;
-      }
+    .card {
+      display: grid;
+      gap: var(--finap-space-2);
+      padding: var(--finap-space-3);
+      border: 1px solid var(--finap-color-border);
+      border-radius: var(--finap-radius-md);
+    }
 
-      .cards {
-        display: grid;
-        gap: var(--finap-space-3);
-        margin: 0;
-        padding: 0;
-        list-style: none;
-      }
+    .card__row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: var(--finap-space-3);
+    }
 
-      .card {
-        display: grid;
-        gap: var(--finap-space-2);
-        padding: var(--finap-space-3);
-        border: 1px solid var(--finap-color-border);
-        border-radius: var(--finap-radius-md);
-      }
+    .card__detail {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-family: var(--finap-font-family);
+      font-weight: var(--finap-font-weight-semibold);
+      color: var(--finap-color-text);
+    }
 
-      .card__row {
-        display: flex;
-        align-items: baseline;
-        justify-content: space-between;
-        gap: var(--finap-space-3);
-      }
+    .card__amount {
+      white-space: nowrap;
+      font-family: var(--finap-font-family);
+      font-weight: var(--finap-font-weight-semibold);
+    }
 
-      .card__detail {
-        min-width: 0;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        font-family: var(--finap-font-family);
-        font-weight: var(--finap-font-weight-semibold);
-        color: var(--finap-color-text);
-      }
+    .card__meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--finap-space-2);
+    }
 
-      .card__amount {
-        white-space: nowrap;
-        font-family: var(--finap-font-family);
-        font-weight: var(--finap-font-weight-semibold);
-      }
+    .card__date {
+      margin-left: auto;
+      font-family: var(--finap-font-family);
+      font-size: var(--finap-font-size-sm);
+      color: var(--finap-color-text-muted);
+    }
 
-      .card__meta {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        gap: var(--finap-space-2);
-      }
-
-      .card__meta sp-badge {
-        --mod-badge-height: 18px;
-        --mod-badge-font-size: var(--finap-font-size-xs);
-        --mod-badge-label-spacing-vertical-top: 0;
-        --mod-badge-label-spacing-vertical-bottom: 0;
-        --mod-badge-label-spacing-horizontal: var(--finap-space-2);
-        --mod-badge-corner-radius: var(--finap-radius-full);
-      }
-
-      .card__date {
-        margin-left: auto;
-        font-family: var(--finap-font-family);
-        font-size: var(--finap-font-size-sm);
-        color: var(--finap-color-text-muted);
-      }
-
-      .card__actions {
-        display: flex;
-        justify-content: flex-end;
-        gap: var(--finap-space-2);
-      }
+    .card__actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: var(--finap-space-2);
     }
   `;
 
@@ -142,6 +127,28 @@ export class FinapMovementsList extends LitElement {
   categories: Category[] = [];
 
   private _localize = new LocalizeController(this);
+
+  private _media: MediaQueryList | null = null;
+
+  private _isMobile = false;
+
+  connectedCallback(): void {
+    super.connectedCallback();
+    if (typeof window !== 'undefined' && window.matchMedia) {
+      this._media = window.matchMedia(MOBILE_QUERY);
+      this._isMobile = this._media.matches;
+      this._media.addEventListener('change', this._onMediaChange);
+    }
+  }
+
+  disconnectedCallback(): void {
+    this._media?.removeEventListener('change', this._onMediaChange);
+    super.disconnectedCallback();
+  }
+
+  private _onMediaChange = (event: MediaQueryListEvent): void => {
+    this._isMobile = event.matches;
+  };
 
   private _categoryName(id: string): string {
     return this.categories.find((category) => category.id === id)?.name ?? id;
@@ -206,66 +213,7 @@ export class FinapMovementsList extends LitElement {
     `;
   }
 
-  private _tableRow(transaction: Transaction, t: (key: string) => string) {
-    return html`
-      <sp-table-row>
-        <sp-table-cell>${formatDate(transaction.date)}</sp-table-cell>
-        <sp-table-cell>
-          <div class="detail">
-            <span>${this._detail(transaction)}</span>
-            <span class="badges">
-              <sp-badge size="s"
-                >${this._categoryName(transaction.categoryId)}</sp-badge
-              >
-              <sp-badge
-                size="s"
-                variant=${transaction.type === 'income'
-                  ? 'positive'
-                  : 'negative'}
-              >
-                ${this._typeLabel(transaction, t)}
-              </sp-badge>
-            </span>
-          </div>
-        </sp-table-cell>
-        <sp-table-cell class="amount--${this._tone(transaction)}">
-          ${this._amount(transaction)}
-        </sp-table-cell>
-        <sp-table-cell>
-          <div class="actions">${this._actions(transaction, t)}</div>
-        </sp-table-cell>
-      </sp-table-row>
-    `;
-  }
-
-  private _card(transaction: Transaction, t: (key: string) => string) {
-    return html`
-      <li class="card">
-        <div class="card__row">
-          <span class="card__detail">${this._detail(transaction)}</span>
-          <span class="card__amount amount--${this._tone(transaction)}"
-            >${this._amount(transaction)}</span
-          >
-        </div>
-        <div class="card__meta">
-          <sp-badge size="s"
-            >${this._categoryName(transaction.categoryId)}</sp-badge
-          >
-          <sp-badge
-            size="s"
-            variant=${transaction.type === 'income' ? 'positive' : 'negative'}
-          >
-            ${this._typeLabel(transaction, t)}
-          </sp-badge>
-          <span class="card__date">${formatDate(transaction.date)}</span>
-        </div>
-        <div class="card__actions">${this._actions(transaction, t)}</div>
-      </li>
-    `;
-  }
-
-  render() {
-    const t = (key: string) => this._localize.t(key);
+  private _table(transactions: Transaction[], t: (key: string) => string) {
     return html`
       <div class="table-wrap">
         <sp-table>
@@ -276,16 +224,84 @@ export class FinapMovementsList extends LitElement {
             <sp-table-head-cell>${t('common.actions')}</sp-table-head-cell>
           </sp-table-head>
           <sp-table-body>
-            ${this.transactions.map((transaction) =>
-              this._tableRow(transaction, t),
+            ${transactions.map(
+              (transaction) => html`
+                <sp-table-row>
+                  <sp-table-cell>${formatDate(transaction.date)}</sp-table-cell>
+                  <sp-table-cell>
+                    <div class="detail">
+                      <span>${this._detail(transaction)}</span>
+                      <span class="badges">
+                        <sp-badge size="s"
+                          >${this._categoryName(
+                            transaction.categoryId,
+                          )}</sp-badge
+                        >
+                        <sp-badge
+                          size="s"
+                          variant=${transaction.type === 'income'
+                            ? 'positive'
+                            : 'negative'}
+                        >
+                          ${this._typeLabel(transaction, t)}
+                        </sp-badge>
+                      </span>
+                    </div>
+                  </sp-table-cell>
+                  <sp-table-cell class="amount--${this._tone(transaction)}">
+                    ${this._amount(transaction)}
+                  </sp-table-cell>
+                  <sp-table-cell>
+                    <div class="actions">${this._actions(transaction, t)}</div>
+                  </sp-table-cell>
+                </sp-table-row>
+              `,
             )}
           </sp-table-body>
         </sp-table>
       </div>
+    `;
+  }
+
+  private _cards(transactions: Transaction[], t: (key: string) => string) {
+    return html`
       <ul class="cards">
-        ${this.transactions.map((transaction) => this._card(transaction, t))}
+        ${transactions.map(
+          (transaction) => html`
+            <li class="card">
+              <div class="card__row">
+                <span class="card__detail">${this._detail(transaction)}</span>
+                <span class="card__amount amount--${this._tone(transaction)}"
+                  >${this._amount(transaction)}</span
+                >
+              </div>
+              <div class="card__meta">
+                <sp-badge size="s"
+                  >${this._categoryName(transaction.categoryId)}</sp-badge
+                >
+                <sp-badge
+                  size="s"
+                  variant=${transaction.type === 'income'
+                    ? 'positive'
+                    : 'negative'}
+                >
+                  ${this._typeLabel(transaction, t)}
+                </sp-badge>
+                <span class="card__date">${formatDate(transaction.date)}</span>
+              </div>
+              <div class="card__actions">${this._actions(transaction, t)}</div>
+            </li>
+          `,
+        )}
       </ul>
     `;
+  }
+
+  render() {
+    const t = (key: string) => this._localize.t(key);
+    return this._isMobile
+      ? this._cards(this.transactions, t)
+      : this._table(this.transactions, t);
   }
 }
 
