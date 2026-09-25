@@ -1,8 +1,6 @@
 import { LitElement, html, css } from 'lit';
 
 import '../components/container/index.js';
-import '../components/card/index.js';
-import '../components/button/index.js';
 import '../components/dashboard-summary/index.js';
 import '../components/dashboard-categories/index.js';
 import '../components/dashboard-debts/index.js';
@@ -123,7 +121,7 @@ export class DashboardPage extends LitElement {
         <finap-container>
           <div class="state">
             <p>${this.error}</p>
-            <finap-button @click=${this._retry}>Reintentar</finap-button>
+            <sp-button variant="accent" @click=${this._retry}>Reintentar</sp-button>
           </div>
         </finap-container>
       `;
@@ -150,28 +148,28 @@ export class DashboardPage extends LitElement {
             trend=${summary.trend}
           ></finap-dashboard-summary>
 
-          <finap-card>
+          <div class="finap-surface">
             <finap-dashboard-categories
               .categories=${summary.categories}
             ></finap-dashboard-categories>
-          </finap-card>
+          </div>
 
           <div class="two-col">
-            <finap-card>
+            <div class="finap-surface">
               <finap-dashboard-debts
                 .debts=${summary.debts}
               ></finap-dashboard-debts>
-            </finap-card>
-            <finap-card>
+            </div>
+            <div class="finap-surface">
               <finap-dashboard-recent
                 .transactions=${summary.recentTransactions}
               ></finap-dashboard-recent>
-            </finap-card>
+            </div>
           </div>
 
-          <finap-card>
+          <div class="finap-surface">
             <finap-assistant-chat></finap-assistant-chat>
-          </finap-card>
+          </div>
         </div>
       </finap-container>
     `;

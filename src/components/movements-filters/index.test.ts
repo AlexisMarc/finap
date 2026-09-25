@@ -12,7 +12,7 @@ describe('finap-movements-filters', () => {
       detail = (e as CustomEvent).detail;
     });
 
-    const chips = el.shadowRoot?.querySelectorAll('finap-chip');
+    const chips = el.shadowRoot?.querySelectorAll('sp-tag');
     (chips?.[1] as HTMLElement).click();
 
     expect(detail).toMatchObject({ type: 'expense' });

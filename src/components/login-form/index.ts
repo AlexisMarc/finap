@@ -1,7 +1,6 @@
 import { LitElement, html, css } from 'lit';
 
 import '../input/index.js';
-import '../button/index.js';
 import { LocalizeController } from '../../i18n/localize.js';
 
 const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
@@ -110,9 +109,9 @@ export class FinapLoginForm extends LitElement {
           @finap-input=${this._onPassword}
         ></finap-input>
         <p class="error" ?hidden=${!this.error}>${this.error}</p>
-        <finap-button @click=${this._submit}>
+        <sp-button variant="accent" @click=${this._submit}>
           ${this.loading ? t('login.submitting') : t('login.submit')}
-        </finap-button>
+        </sp-button>
       </form>
     `;
   }

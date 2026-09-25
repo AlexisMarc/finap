@@ -1,12 +1,12 @@
 import { LitElement, html, css, nothing } from 'lit';
 import { navigate } from '@open-cells/core';
 
-import '../icon/index.js';
-import '../avatar/index.js';
-import '../user-menu/index.js';
-import '../button/index.js';
-import '../input/index.js';
-import '../modal/index.js';
+import { finapIcon } from '../icons.js';
+import '@spectrum-web-components/action-menu/sp-action-menu.js';
+import '@spectrum-web-components/menu/sp-menu-item.js';
+import '@spectrum-web-components/sidenav/sp-sidenav.js';
+import '@spectrum-web-components/sidenav/sp-sidenav-item.js';
+import '@spectrum-web-components/search/sp-search.js';
 import '../transaction-form/index.js';
 
 import {
@@ -25,7 +25,6 @@ import { notifyTransactionsChanged } from '../../state/transactions.js';
 import { LocalizeController } from '../../i18n/localize.js';
 import type { Category } from '../../services/types.js';
 import type { TransactionFormValue } from '../transaction-form/index.js';
-import type { FinapInput } from '../input/index.js';
 
 export interface ShellSection {
   id: string;
@@ -189,7 +188,7 @@ export class FinapAppShell extends LitElement {
     }
 
     .bottom-nav a[aria-current='page'] {
-      color: var(--finap-color-primary);
+      color: var(--finap-color-accent-interactive);
     }
 
     @media (min-width: 1024px) {
@@ -245,6 +244,12 @@ export class FinapAppShell extends LitElement {
     navigate('landing');
   };
 
+  private _onUserMenuChange = (event: Event): void => {
+    if ((event.target as { value?: string }).value === 'logout') {
+      this._onLogout();
+    }
+  };
+
   connectedCallback(): void {
     super.connectedCallback();
     this.user = getSession()?.user ?? null;
@@ -252,7 +257,6 @@ export class FinapAppShell extends LitElement {
       SESSION_CHANGED_EVENT,
       this._onSessionChanged,
     );
-    this.addEventListener('finap-logout', this._onLogout);
 
     const app = this.querySelector('#app');
     if (app) {
@@ -273,7 +277,6 @@ export class FinapAppShell extends LitElement {
       SESSION_CHANGED_EVENT,
       this._onSessionChanged,
     );
-    this.removeEventListener('finap-logout', this._onLogout);
     super.disconnectedCallback();
   }
 
@@ -308,7 +311,16 @@ export class FinapAppShell extends LitElement {
 
   private _onSearchKeydown(event: Event): void {
     if ((event as KeyboardEvent).key !== 'Enter') return;
-    const value = (event.currentTarget as FinapInput).value.trim();
+    this._submitSearch((event.currentTarget as { value?: string }).value);
+  }
+
+  private _onSearchSubmit(event: Event): void {
+    event.preventDefault();
+    this._submitSearch((event.target as { value?: string }).value);
+  }
+
+  private _submitSearch(raw: string | undefined): void {
+    const value = raw?.trim();
     if (!value) return;
     setPendingSearch(value);
     navigate('movements');
@@ -355,20 +367,20 @@ export class FinapAppShell extends LitElement {
       <div class="layout">
         <aside class="sidebar">
           <span class="brand">Finap</span>
-          <nav class="nav" aria-label=${t('shell.primaryNav')}>
+          <sp-sidenav aria-label=${t('shell.primaryNav')}>
             ${SECTIONS.map(
               (item) => html`
-                <a
-                  href=${item.path}
-                  aria-current=${section === item.id ? 'page' : nothing}
+                <sp-sidenav-item
+                  value=${item.id}
+                  ?selected=${section === item.id}
                   @click=${this._go(item.id)}
                 >
-                  <finap-icon name=${item.icon} size="20"></finap-icon>
+                  ${finapIcon(item.icon, 20)}
                   ${t(item.labelKey)}
-                </a>
+                </sp-sidenav-item>
               `,
             )}
-          </nav>
+          </sp-sidenav>
         </aside>
 
         <div class="main-col">
@@ -379,20 +391,23 @@ export class FinapAppShell extends LitElement {
                 >${name ? `${name} 👋` : t('shell.greeting')}</span
               >
             </span>
-            <finap-input
+            <sp-search
               class="search"
-              type="text"
               placeholder=${t('shell.search')}
               @keydown=${this._onSearchKeydown}
-            ></finap-input>
-            <finap-button @click=${this._onAdd}>
+              @submit=${this._onSearchSubmit}
+            ></sp-search>
+            <sp-button variant="accent" @click=${this._onAdd}>
               ${t('shell.add')}
-            </finap-button>
-            <finap-user-menu
-              name=${this.user?.name ?? ''}
-              email=${this.user?.email ?? ''}
-              avatarUrl=${this.user?.avatarUrl ?? ''}
-            ></finap-user-menu>
+            </sp-button>
+            <sp-action-menu
+              label=${`${this.user?.name ?? ''} ${this.user?.email ?? ''}`.trim()}
+              @change=${this._onUserMenuChange}
+            >
+              <sp-menu-item value="logout">
+                ${t('userMenu.logout')}
+              </sp-menu-item>
+            </sp-action-menu>
           </header>
           <main class="content"><slot></slot></main>
         </div>
@@ -406,17 +421,18 @@ export class FinapAppShell extends LitElement {
               aria-current=${section === item.id ? 'page' : nothing}
               @click=${this._go(item.id)}
             >
-              <finap-icon name=${item.icon} size="20"></finap-icon>
+              ${finapIcon(item.icon, 20)}
               ${t(item.labelKey)}
             </a>
           `,
         )}
       </nav>
 
-      <finap-modal
+      <sp-dialog-wrapper
         ?open=${this.addOpen}
-        heading=${t('shell.addTitle')}
-        @finap-close=${this._closeAdd}
+        headline=${t('shell.addTitle')}
+        dismissable
+        @close=${this._closeAdd}
       >
         <div class="add-body">
           ${this.addOpen
@@ -431,7 +447,7 @@ export class FinapAppShell extends LitElement {
               `
             : ''}
         </div>
-      </finap-modal>
+      </sp-dialog-wrapper>
     `;
   }
 }

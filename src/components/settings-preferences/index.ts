@@ -1,10 +1,11 @@
 import { LitElement, html, css } from 'lit';
 
-import '../theme-toggle/index.js';
+import '@spectrum-web-components/switch/sp-switch.js';
 import '../select/index.js';
 import { setLocale, type Locale } from '../../i18n/i18n.js';
 import { LocalizeController } from '../../i18n/localize.js';
 import { getCurrency, setCurrency } from '../../state/session.js';
+import { resolveTheme, setTheme, type Theme } from '../../theme/theme.js';
 
 const LOCALE_OPTIONS = [
   { value: 'es', label: 'Español' },
@@ -45,13 +46,23 @@ export class FinapSettingsPreferences extends LitElement {
   static properties = {
     locale: { type: String },
     currency: { type: String },
+    theme: { type: String },
   };
 
   locale: Locale = 'es';
 
   currency = 'USD';
 
+  theme: Theme = resolveTheme();
+
   private _localize = new LocalizeController(this);
+
+  private _onTheme(event: Event): void {
+    const checked = (event.target as { checked?: boolean }).checked ?? false;
+    const theme: Theme = checked ? 'dark' : 'light';
+    setTheme(theme);
+    this.theme = theme;
+  }
 
   private _onLocale(event: Event): void {
     const locale = (event as CustomEvent<Locale>).detail;
@@ -78,7 +89,10 @@ export class FinapSettingsPreferences extends LitElement {
       <div class="prefs">
         <div class="row">
           <span>${t('settings.theme')}</span>
-          <finap-theme-toggle></finap-theme-toggle>
+          <sp-switch
+            .checked=${this.theme === 'dark'}
+            @change=${this._onTheme}
+          ></sp-switch>
         </div>
         <div class="row">
           <span>${t('settings.language')}</span>

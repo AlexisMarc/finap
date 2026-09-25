@@ -30,11 +30,7 @@ test.describe('Ajustes', () => {
 
   test('alterna el tema desde preferencias', async ({ page }) => {
     await page.goto('/settings');
-    await page
-      .locator('finap-settings-preferences')
-      .getByRole('button')
-      .first()
-      .click();
+    await page.locator('finap-settings-preferences sp-switch').click();
     await expect(page.locator('html')).toHaveAttribute(
       'data-theme',
       /light|dark/,

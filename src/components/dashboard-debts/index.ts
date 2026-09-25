@@ -1,35 +1,39 @@
 import { LitElement, html, css } from 'lit';
 
 import '../heading/index.js';
-import '../list-item/index.js';
-import '../progress/index.js';
+import { dataRowStyles, renderDataRow } from '../data-row.js';
+import '@spectrum-web-components/progress-bar/sp-progress-bar.js';
+import { progressPercent, isOver } from '../../utils/progress.js';
 import { LocalizeController } from '../../i18n/localize.js';
 import { formatCurrency } from '../../utils/format.js';
 import type { Debt } from '../../services/types.js';
 
 export class FinapDashboardDebts extends LitElement {
-  static styles = css`
-    :host {
-      display: block;
-    }
+  static styles = [
+    dataRowStyles,
+    css`
+      :host {
+        display: block;
+      }
 
-    .head {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      margin-bottom: var(--finap-space-3);
-    }
+      .head {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        margin-bottom: var(--finap-space-3);
+      }
 
-    .pending {
-      font-family: var(--finap-font-family);
-      font-size: var(--finap-font-size-sm);
-      color: var(--finap-color-text-muted);
-    }
+      .pending {
+        font-family: var(--finap-font-family);
+        font-size: var(--finap-font-size-sm);
+        color: var(--finap-color-text-muted);
+      }
 
-    .debt {
-      padding: var(--finap-space-2) 0;
-    }
-  `;
+      .debt {
+        padding: var(--finap-space-2) 0;
+      }
+    `,
+  ];
 
   static properties = {
     debts: { type: Array },
@@ -56,14 +60,14 @@ export class FinapDashboardDebts extends LitElement {
         ${this.debts.map(
           (debt) => html`
             <div class="debt">
-              <finap-list-item
-                title=${debt.name}
-                subtitle=${`${formatCurrency(debt.total - debt.paid)} ${t('dashboard.pending')}`}
-              ></finap-list-item>
-              <finap-progress
-                value=${debt.paid}
-                max=${debt.total}
-              ></finap-progress>
+              ${renderDataRow({
+                title: debt.name,
+                subtitle: `${formatCurrency(debt.total - debt.paid)} ${t('dashboard.pending')}`,
+              })}
+              <sp-progress-bar
+                .progress=${progressPercent(debt.paid, debt.total)}
+                ?over=${isOver(debt.paid, debt.total)}
+              ></sp-progress-bar>
             </div>
           `,
         )}

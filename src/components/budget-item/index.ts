@@ -1,6 +1,7 @@
 import { LitElement, html, css } from 'lit';
 
-import '../progress/index.js';
+import '@spectrum-web-components/progress-bar/sp-progress-bar.js';
+import { progressPercent, isOver } from '../../utils/progress.js';
 import { LocalizeController } from '../../i18n/localize.js';
 import { formatCurrency, formatPercent } from '../../utils/format.js';
 import type { Budget, Category } from '../../services/types.js';
@@ -90,10 +91,10 @@ export class FinapBudgetItem extends LitElement {
             ${formatCurrency(this.budget.limit)}
           </span>
         </div>
-        <finap-progress
-          value=${this.budget.spent}
-          max=${this.budget.limit}
-        ></finap-progress>
+        <sp-progress-bar
+          .progress=${progressPercent(this.budget.spent, this.budget.limit)}
+          ?over=${isOver(this.budget.spent, this.budget.limit)}
+        ></sp-progress-bar>
         <div class="meta">
           <span>${formatPercent(this._percent)}</span>
           ${over

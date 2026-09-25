@@ -12,7 +12,7 @@ describe('finap-debt-item', () => {
     expect(el.shadowRoot?.querySelector('.name')?.textContent).toContain(
       'Préstamo auto',
     );
-    expect(el.shadowRoot?.querySelector('finap-progress')).not.toBeNull();
+    expect(el.shadowRoot?.querySelector('sp-progress-bar')).not.toBeNull();
     teardown(el);
   });
 
@@ -20,7 +20,7 @@ describe('finap-debt-item', () => {
     const el = new FinapDebtItem();
     el.debt = { id: 'd1', name: 'X', total: 100, paid: 100 };
     await fixture(el);
-    expect(el.shadowRoot?.querySelector('.done')).not.toBeNull();
+    expect(el.shadowRoot?.querySelector('sp-badge')).not.toBeNull();
     teardown(el);
   });
 
@@ -33,7 +33,7 @@ describe('finap-debt-item', () => {
     el.addEventListener('finap-pay', () => {
       paid = true;
     });
-    (el.shadowRoot?.querySelector('finap-button') as HTMLElement).click();
+    (el.shadowRoot?.querySelector('sp-button') as HTMLElement).click();
 
     expect(paid).toBe(true);
     teardown(el);

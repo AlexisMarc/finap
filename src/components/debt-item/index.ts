@@ -1,7 +1,8 @@
 import { LitElement, html, css } from 'lit';
 
-import '../progress/index.js';
-import '../button/index.js';
+import '@spectrum-web-components/progress-bar/sp-progress-bar.js';
+import '@spectrum-web-components/badge/sp-badge.js';
+import { progressPercent, isOver } from '../../utils/progress.js';
 import { LocalizeController } from '../../i18n/localize.js';
 import { formatCurrency, formatPercent, formatDate } from '../../utils/format.js';
 import type { Debt } from '../../services/types.js';
@@ -92,36 +93,38 @@ export class FinapDebtItem extends LitElement {
             ${formatCurrency(this._pending)} ${t('debts.pending')}
           </span>
         </div>
-        <finap-progress
-          value=${this.debt.paid}
-          max=${this.debt.total}
-        ></finap-progress>
+        <sp-progress-bar
+          .progress=${progressPercent(this.debt.paid, this.debt.total)}
+          ?over=${isOver(this.debt.paid, this.debt.total)}
+        ></sp-progress-bar>
         <div class="meta">
           <span>${formatPercent(this._percent)}</span>
           ${this.debt.dueDate
             ? html`<span class="due">${t('debts.due')} ${formatDate(this.debt.dueDate)}</span>`
             : ''}
-          ${done ? html`<span class="done">${t('debts.paid')}</span>` : ''}
+          ${done
+            ? html`<sp-badge variant="positive">${t('debts.paid')}</sp-badge>`
+            : ''}
         </div>
         <div class="actions">
-          <finap-button
-            variant="text"
+          <sp-button
+            variant="secondary" treatment="outline"
             @click=${() => this._emit('finap-pay', this.debt as Debt)}
           >
             ${t('debts.pay')}
-          </finap-button>
-          <finap-button
-            variant="text"
+          </sp-button>
+          <sp-button
+            variant="secondary" treatment="outline"
             @click=${() => this._emit('finap-edit', this.debt as Debt)}
           >
             ${t('common.edit')}
-          </finap-button>
-          <finap-button
-            variant="text"
+          </sp-button>
+          <sp-button
+            variant="secondary" treatment="outline"
             @click=${() => this._emit('finap-delete', this.debt as Debt)}
           >
             ${t('common.delete')}
-          </finap-button>
+          </sp-button>
         </div>
       </div>
     `;

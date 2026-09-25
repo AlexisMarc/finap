@@ -23,7 +23,7 @@ export class FinapAssistantMessage extends LitElement {
 
     .bubble--user {
       margin-left: auto;
-      background-color: var(--finap-color-primary);
+      background-color: var(--finap-color-accent-interactive);
       color: var(--finap-color-on-primary);
       border-bottom-right-radius: var(--finap-radius-sm);
     }

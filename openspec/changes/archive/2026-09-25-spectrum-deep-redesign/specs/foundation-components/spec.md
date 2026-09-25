@@ -1,10 +1,38 @@
-# Foundation Components Specification
+# Spec Delta
 
-## Purpose
+## REMOVED Requirements
 
-Define los componentes web base que Finap conserva (títulos, texto, contenedor y marca) construidos con Lit sobre Spectrum; el resto de elementos se resuelven con componentes de Spectrum Web Components (`sp-button`, `sp-card`, `sp-icon`, `sp-switch`, `sp-picker`, …).
+### Requirement: finap-button
 
-## Requirements
+**Reason**: Sustituido por el componente `sp-button` de Spectrum Web Components, que ya cubre variantes, estados y accesibilidad.
+
+**Migration**: Usar `<sp-button>` directamente en las vistas (variante/treatment de Spectrum). `primary` → `accent`, `secondary` → `secondary`, `text` → `secondary` con `treatment="outline"`.
+
+### Requirement: finap-card
+
+**Reason**: Sustituido por `sp-card` de Spectrum para las superficies de contenido.
+
+**Migration**: Usar `<sp-card>` (o superficies con tokens de Spectrum para paneles de app) en lugar de `<finap-card>`.
+
+### Requirement: finap-icon
+
+**Reason**: Sustituido por `sp-icon` con el set `@spectrum-web-components/icons-workflow`.
+
+**Migration**: Usar `<sp-icon>` con el icono de workflow correspondiente en las vistas.
+
+### Requirement: finap-theme-toggle
+
+**Reason**: Sustituido por controles de Spectrum (`sp-switch` en Ajustes y `sp-action-button` con `sp-tooltip` en el header).
+
+**Migration**: Cambiar el tema con `sp-switch` en Ajustes o `sp-action-button` en el header, usando la misma lógica de `src/theme/`.
+
+### Requirement: finap-language-toggle
+
+**Reason**: Sustituido por `sp-picker` de Spectrum.
+
+**Migration**: Cambiar el idioma con un `sp-picker` (o `sp-action-menu`) conectado a `setLocale`.
+
+## MODIFIED Requirements
 
 ### Requirement: finap-heading
 
@@ -46,17 +74,3 @@ Todos los componentes propios que se conservan SHALL usar los tokens de diseño 
 
 - **WHEN** se cambia un token de color (por ejemplo, al alternar el tema)
 - **THEN** los componentes reflejan el nuevo valor automáticamente
-
-### Requirement: finap-brand-mark
-
-El sistema SHALL proporcionar un componente `<finap-brand-mark>` que renderiza el logo de Finap compuesto por dos rombos (diamantes) solapados, usando los colores de marca.
-
-#### Scenario: Logo de dos rombos
-
-- **WHEN** se renderiza `<finap-brand-mark>`
-- **THEN** se muestran dos rombos con los colores de marca
-
-#### Scenario: Forma propia, no círculos
-
-- **WHEN** se renderiza el logo de Finap
-- **THEN** la figura usada son rombos y no círculos

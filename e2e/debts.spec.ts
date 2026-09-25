@@ -30,16 +30,14 @@ test.describe('Deudas', () => {
     await expect(item).toBeVisible();
 
     await item.getByRole('button', { name: 'Registrar pago' }).click();
-    const payModal = page
-      .locator('finap-modal')
-      .filter({ has: page.locator('sp-dialog') });
+    const payModal = page.locator('sp-dialog-wrapper').filter({ hasText: marker });
     await payModal.locator('finap-input').getByRole('textbox').fill('100');
     await payModal.getByRole('button', { name: 'Registrar pago' }).click();
-    await expect(payModal).toHaveCount(0);
+    await expect(payModal).toBeHidden();
 
     await item.getByRole('button', { name: 'Eliminar' }).click();
     await page
-      .locator('finap-confirm-dialog')
+      .locator('sp-dialog-wrapper')
       .getByRole('button', { name: 'Eliminar' })
       .click();
     await expect(

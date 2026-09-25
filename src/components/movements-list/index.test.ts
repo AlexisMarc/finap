@@ -26,7 +26,7 @@ describe('finap-movements-list', () => {
     ];
     await fixture(el);
 
-    expect(el.shadowRoot?.querySelectorAll('finap-list-item').length).toBe(2);
+    expect(el.shadowRoot?.querySelectorAll('sp-table-row').length).toBe(2);
     teardown(el);
   });
 
@@ -47,7 +47,7 @@ describe('finap-movements-list', () => {
     el.addEventListener('finap-edit', () => events.push('edit'));
     el.addEventListener('finap-delete', () => events.push('delete'));
 
-    const buttons = el.shadowRoot?.querySelectorAll('finap-button');
+    const buttons = el.shadowRoot?.querySelectorAll('sp-button');
     (buttons?.[0] as HTMLElement).click();
     (buttons?.[1] as HTMLElement).click();
 

@@ -20,7 +20,7 @@ test.describe('Categorías', () => {
     await form.getByRole('button', { name: 'Guardar' }).click();
     await expect(form).toHaveCount(0);
 
-    let row = page.locator('categories-page .row', { hasText: marker });
+    let row = page.locator('categories-page sp-table-row', { hasText: marker });
     await expect(row).toBeVisible();
 
     await row.getByRole('button', { name: 'Editar' }).click();
@@ -29,16 +29,16 @@ test.describe('Categorías', () => {
     await form.getByRole('button', { name: 'Guardar' }).click();
     await expect(form).toHaveCount(0);
 
-    row = page.locator('categories-page .row', { hasText: edited });
+    row = page.locator('categories-page sp-table-row', { hasText: edited });
     await expect(row).toBeVisible();
 
     await row.getByRole('button', { name: 'Eliminar' }).click();
     await page
-      .locator('finap-confirm-dialog')
+      .locator('sp-dialog-wrapper')
       .getByRole('button', { name: 'Eliminar' })
       .click();
     await expect(
-      page.locator('categories-page .row', { hasText: edited }),
+      page.locator('categories-page sp-table-row', { hasText: edited }),
     ).toHaveCount(0);
   });
 });

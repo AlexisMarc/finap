@@ -1,7 +1,6 @@
 import { LitElement, html, css } from 'lit';
 import { navigate } from '@open-cells/core';
 
-import '../button/index.js';
 import { logout } from '../../services/auth-service.js';
 import { LocalizeController } from '../../i18n/localize.js';
 
@@ -32,9 +31,9 @@ export class FinapSettingsSession extends LitElement {
     return html`
       <div class="row">
         <span>${this._localize.t('settings.session')}</span>
-        <finap-button variant="secondary" @click=${this._logout}>
+        <sp-button variant="secondary" @click=${this._logout}>
           ${this._localize.t('userMenu.logout')}
-        </finap-button>
+        </sp-button>
       </div>
     `;
   }

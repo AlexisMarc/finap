@@ -2,13 +2,9 @@ import { LitElement, html, css } from 'lit';
 
 import '../components/container/index.js';
 import '../components/heading/index.js';
-import '../components/card/index.js';
-import '../components/button/index.js';
-import '../components/modal/index.js';
 import '../components/input/index.js';
 import '../components/debt-item/index.js';
 import '../components/debt-form/index.js';
-import '../components/confirm-dialog/index.js';
 import type { DebtFormValue } from '../components/debt-form/index.js';
 
 import {
@@ -266,13 +262,13 @@ export class DebtsPage extends LitElement {
         <div class="content">
           <div class="head">
             <finap-heading level="1">${t('debts.title')}</finap-heading>
-            <finap-button @click=${this._new}>${t('debts.new')}</finap-button>
+            <sp-button variant="accent" @click=${this._new}>${t('debts.new')}</sp-button>
           </div>
           <span class="total">
             ${t('dashboard.totalPending')}: ${formatCurrency(this._totalPending)}
           </span>
 
-          <finap-card>
+          <div class="finap-surface">
             ${this.debts.map(
               (debt) => html`
                 <finap-debt-item
@@ -283,12 +279,13 @@ export class DebtsPage extends LitElement {
                 ></finap-debt-item>
               `,
             )}
-          </finap-card>
+          </div>
 
-          <finap-modal
+          <sp-dialog-wrapper
             ?open=${this.formOpen}
-            heading=${this.editTarget ? t('debts.editTitle') : t('debts.new')}
-            @finap-close=${this._closeForm}
+            headline=${this.editTarget ? t('debts.editTitle') : t('debts.new')}
+            dismissable
+            @close=${this._closeForm}
           >
             <div class="form-body">
               ${this.formOpen
@@ -303,12 +300,13 @@ export class DebtsPage extends LitElement {
                   `
                 : ''}
             </div>
-          </finap-modal>
+          </sp-dialog-wrapper>
 
-          <finap-modal
+          <sp-dialog-wrapper
             ?open=${this.payOpen}
-            heading=${`${t('debts.payTitle')}${this.payTarget ? ` · ${this.payTarget.name}` : ''}`}
-            @finap-close=${this._closePay}
+            headline=${`${t('debts.payTitle')}${this.payTarget ? ` · ${this.payTarget.name}` : ''}`}
+            dismissable
+            @close=${this._closePay}
           >
             <div class="form">
               <finap-input
@@ -320,27 +318,30 @@ export class DebtsPage extends LitElement {
               ></finap-input>
               <p class="error" ?hidden=${!this.payError}>${this.payError}</p>
               <div class="actions">
-                <finap-button variant="secondary" @click=${this._closePay}>
+                <sp-button variant="secondary" @click=${this._closePay}>
                   ${t('common.cancel')}
-                </finap-button>
-                <finap-button
+                </sp-button>
+                <sp-button variant="accent"
                   ?disabled=${this.paySaving}
                   @click=${this._registerPayment}
                 >
                   ${this.paySaving ? t('common.saving') : t('debts.pay')}
-                </finap-button>
+                </sp-button>
               </div>
             </div>
-          </finap-modal>
+          </sp-dialog-wrapper>
 
-          <finap-confirm-dialog
+          <sp-dialog-wrapper
             ?open=${this.confirmOpen}
-            heading=${t('debts.deleteTitle')}
-            message=${t('debts.deleteMessage')}
-            confirmLabel=${t('common.delete')}
-            @finap-confirm=${this._confirmDelete}
-            @finap-cancel=${this._closeConfirm}
-          ></finap-confirm-dialog>
+            headline=${t('debts.deleteTitle')}
+            .confirmLabel=${t('common.delete')}
+            .cancelLabel=${t('common.cancel')}
+            @confirm=${this._confirmDelete}
+            @cancel=${this._closeConfirm}
+            @close=${this._closeConfirm}
+          >
+            ${t('debts.deleteMessage')}
+          </sp-dialog-wrapper>
         </div>
       </finap-container>
     `;

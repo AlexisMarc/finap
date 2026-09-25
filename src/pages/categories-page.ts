@@ -2,12 +2,9 @@ import { LitElement, html, css } from 'lit';
 
 import '../components/container/index.js';
 import '../components/heading/index.js';
-import '../components/card/index.js';
-import '../components/button/index.js';
-import '../components/icon/index.js';
-import '../components/modal/index.js';
+import { finapIcon } from '../components/icons.js';
+import '@spectrum-web-components/table/elements.js';
 import '../components/category-form/index.js';
-import '../components/confirm-dialog/index.js';
 import type { CategoryInput } from '../services/categories-service.js';
 import {
   list,
@@ -202,43 +199,60 @@ export class CategoriesPage extends LitElement {
         <div class="content">
           <div class="head">
             <finap-heading level="1">${t('categories.title')}</finap-heading>
-            <finap-button @click=${this._new}>${t('categories.new')}</finap-button>
+            <sp-button variant="accent" @click=${this._new}>${t('categories.new')}</sp-button>
           </div>
 
-          <finap-card>
-            <div class="list">
-              ${this.categories.map(
-                (category) => html`
-                  <div class="row">
-                    <span class="dot" style="--c: ${category.color}"></span>
-                    <span class="name">${category.name}</span>
-                    <finap-icon name=${category.icon} size="18"></finap-icon>
-                    <div class="actions">
-                      <finap-button
-                        variant="text"
-                        @click=${() => this._edit(category)}
+          <div class="finap-surface">
+            <sp-table>
+              <sp-table-head>
+                <sp-table-head-cell>${t('categories.name')}</sp-table-head-cell>
+                <sp-table-head-cell>${t('categories.icon')}</sp-table-head-cell>
+                <sp-table-head-cell>${t('common.actions')}</sp-table-head-cell>
+              </sp-table-head>
+              <sp-table-body>
+                ${this.categories.map(
+                  (category) => html`
+                    <sp-table-row>
+                      <sp-table-cell>
+                        <span
+                          class="dot"
+                          style="--c: ${category.color}"
+                        ></span>
+                        ${category.name}
+                      </sp-table-cell>
+                      <sp-table-cell
+                        >${finapIcon(category.icon, 18)}</sp-table-cell
                       >
-                        ${t('common.edit')}
-                      </finap-button>
-                      <finap-button
-                        variant="text"
-                        @click=${() => this._delete(category)}
-                      >
-                        ${t('common.delete')}
-                      </finap-button>
-                    </div>
-                  </div>
-                `,
-              )}
-            </div>
-          </finap-card>
+                      <sp-table-cell>
+                        <sp-button
+                          variant="secondary"
+                          treatment="outline"
+                          @click=${() => this._edit(category)}
+                        >
+                          ${t('common.edit')}
+                        </sp-button>
+                        <sp-button
+                          variant="secondary"
+                          treatment="outline"
+                          @click=${() => this._delete(category)}
+                        >
+                          ${t('common.delete')}
+                        </sp-button>
+                      </sp-table-cell>
+                    </sp-table-row>
+                  `,
+                )}
+              </sp-table-body>
+            </sp-table>
+          </div>
 
-          <finap-modal
+          <sp-dialog-wrapper
             ?open=${this.formOpen}
-            heading=${this.editTarget
+            headline=${this.editTarget
               ? t('categories.editTitle')
               : t('categories.new')}
-            @finap-close=${this._closeForm}
+            dismissable
+            @close=${this._closeForm}
           >
             <div class="form-body">
               ${this.formOpen
@@ -253,16 +267,19 @@ export class CategoriesPage extends LitElement {
                   `
                 : ''}
             </div>
-          </finap-modal>
+          </sp-dialog-wrapper>
 
-          <finap-confirm-dialog
+          <sp-dialog-wrapper
             ?open=${this.confirmOpen}
-            heading=${t('categories.deleteTitle')}
-            message=${t('categories.deleteMessage')}
-            confirmLabel=${t('common.delete')}
-            @finap-confirm=${this._confirmDelete}
-            @finap-cancel=${this._closeConfirm}
-          ></finap-confirm-dialog>
+            headline=${t('categories.deleteTitle')}
+            .confirmLabel=${t('common.delete')}
+            .cancelLabel=${t('common.cancel')}
+            @confirm=${this._confirmDelete}
+            @cancel=${this._closeConfirm}
+            @close=${this._closeConfirm}
+          >
+            ${t('categories.deleteMessage')}
+          </sp-dialog-wrapper>
         </div>
       </finap-container>
     `;

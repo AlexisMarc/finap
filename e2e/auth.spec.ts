@@ -11,7 +11,7 @@ test.describe('Autenticación', () => {
     await expect(page).toHaveURL(/\/dashboard$/);
 
     // Menú de usuario → cerrar sesión
-    await page.locator('finap-user-menu .trigger').click();
+    await page.getByRole('button', { name: /Marcos García/ }).click();
     await page.getByRole('menuitem', { name: /Cerrar sesión|Sign out/i }).click();
     await expect(page).toHaveURL(/\/$/);
   });

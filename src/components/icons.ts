@@ -1,4 +1,4 @@
-import { LitElement, html, type TemplateResult } from 'lit';
+import { html, nothing, type TemplateResult } from 'lit';
 import { html as staticHtml, literal } from 'lit/static-html.js';
 
 import '@spectrum-web-components/icon/sp-icon.js';
@@ -17,8 +17,6 @@ import '@spectrum-web-components/icons-workflow/icons/sp-icon-car.js';
 import '@spectrum-web-components/icons-workflow/icons/sp-icon-game.js';
 import '@spectrum-web-components/icons-workflow/icons/sp-icon-page-tag.js';
 import '@spectrum-web-components/icons-workflow/icons/sp-icon-refresh.js';
-
-import { styles } from './styles.js';
 
 /** Mapa de nombres propios de Finap → iconos de workflow de Spectrum. */
 const ICONS: Record<string, TemplateResult> = {
@@ -39,41 +37,27 @@ const ICONS: Record<string, TemplateResult> = {
   repeat: staticHtml`<${literal`sp-icon-refresh`}></${literal`sp-icon-refresh`}>`,
 };
 
-export class FinapIcon extends LitElement {
-  static styles = styles;
+/** Nombres de icono soportados (para tests y mapeos estáticos). */
+export const ICON_NAMES = Object.keys(ICONS);
 
-  static properties = {
-    name: { type: String },
-    size: { type: String },
-  };
-
-  name = '';
-
-  size = '24';
-
-  private get _spectrumSize(): string {
-    const value = Number(this.size);
-    if (!Number.isFinite(value)) return 'm';
-    if (value <= 16) return 's';
-    if (value <= 20) return 'm';
-    return 'l';
-  }
-
-  render() {
-    const icon = ICONS[this.name];
-    if (!icon) {
-      return html`<span class="icon-empty" aria-hidden="true"></span>`;
-    }
-    return html`
-      <sp-icon size=${this._spectrumSize} aria-hidden="true">${icon}</sp-icon>
-    `;
-  }
+export function isKnownIcon(name: string): boolean {
+  return name in ICONS;
 }
 
-customElements.define('finap-icon', FinapIcon);
-
-declare global {
-  interface HTMLElementTagNameMap {
-    'finap-icon': FinapIcon;
-  }
+/** Renderiza un `sp-icon` con el icono de workflow correspondiente. */
+export function finapIcon(
+  name: string,
+  size: string | number = '24',
+): TemplateResult | typeof nothing {
+  const icon = ICONS[name];
+  if (!icon) return nothing;
+  const value = Number(size);
+  const spectrumSize = !Number.isFinite(value)
+    ? 'm'
+    : value <= 16
+      ? 's'
+      : value <= 20
+        ? 'm'
+        : 'l';
+  return html`<sp-icon size=${spectrumSize} aria-hidden="true">${icon}</sp-icon>`;
 }

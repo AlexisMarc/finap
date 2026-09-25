@@ -26,7 +26,7 @@ describe('landing-page', () => {
     const root = el.shadowRoot as ShadowRoot;
     expect(root.querySelector('.site-header finap-brand-mark')).not.toBeNull();
     expect(root.querySelector('.nav')).not.toBeNull();
-    expect(root.querySelector('.site-header finap-theme-toggle')).not.toBeNull();
+    expect(root.querySelector('.site-header sp-switch')).not.toBeNull();
     teardown(el);
   });
 
@@ -35,8 +35,8 @@ describe('landing-page', () => {
 
     const root = el.shadowRoot as ShadowRoot;
     expect(root.querySelector('.hero finap-heading')).not.toBeNull();
-    expect(root.querySelector('.hero finap-button:not([variant])')).not.toBeNull();
-    expect(root.querySelector('.hero finap-button[variant="secondary"]')).not.toBeNull();
+    expect(root.querySelector('.hero sp-button[variant="accent"]')).not.toBeNull();
+    expect(root.querySelector('.hero sp-button[variant="secondary"]')).not.toBeNull();
     teardown(el);
   });
 
@@ -61,7 +61,7 @@ describe('landing-page', () => {
   it('muestra el selector de idioma en el header', async () => {
     const el = await fixture(new LandingPage());
     expect(
-      el.shadowRoot?.querySelector('.site-header finap-language-toggle'),
+      el.shadowRoot?.querySelector('.site-header sp-picker'),
     ).not.toBeNull();
     teardown(el);
   });

@@ -20,7 +20,7 @@ describe('finap-dashboard-summary', () => {
     const el = new FinapDashboardSummary();
     await fixture(el);
 
-    expect(el.shadowRoot?.querySelectorAll('finap-stat-card').length).toBe(3);
+    expect(el.shadowRoot?.querySelectorAll('.stat').length).toBe(3);
     teardown(el);
   });
 });

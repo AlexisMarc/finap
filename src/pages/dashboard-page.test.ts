@@ -69,7 +69,7 @@ describe('dashboard-page', () => {
     await el.updateComplete;
 
     expect(el.error).toBe('Fallo de red');
-    expect(el.shadowRoot?.querySelector('finap-button')).not.toBeNull();
+    expect(el.shadowRoot?.querySelector('sp-button')).not.toBeNull();
     teardown(el);
   });
 });

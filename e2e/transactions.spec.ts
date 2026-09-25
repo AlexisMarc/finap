@@ -25,16 +25,16 @@ test.describe('Transacciones', () => {
     await expect(form).toHaveCount(0);
 
     await page.goto('/movements');
-    const row = page.locator('finap-movements-list .row', { hasText: marker });
+    const row = page.locator('finap-movements-list sp-table-row', { hasText: marker });
     await expect(row).toBeVisible();
 
     await row.getByRole('button', { name: 'Eliminar' }).click();
     await page
-      .locator('finap-confirm-dialog')
+      .locator('sp-dialog-wrapper')
       .getByRole('button', { name: 'Eliminar' })
       .click();
     await expect(
-      page.locator('finap-movements-list .row', { hasText: marker }),
+      page.locator('finap-movements-list sp-table-row', { hasText: marker }),
     ).toHaveCount(0);
   });
 

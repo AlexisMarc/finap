@@ -1,7 +1,6 @@
 import { LitElement, html, css } from 'lit';
 
-import '../list-item/index.js';
-import '../button/index.js';
+import '@spectrum-web-components/table/elements.js';
 import { LocalizeController } from '../../i18n/localize.js';
 import { formatCurrency, formatDate } from '../../utils/format.js';
 import type { Transaction } from '../../services/types.js';
@@ -12,19 +11,16 @@ export class FinapMovementsList extends LitElement {
       display: block;
     }
 
-    .list {
-      display: grid;
+    sp-table {
+      width: 100%;
     }
 
-    .row {
-      display: flex;
-      align-items: center;
-      gap: var(--finap-space-2);
+    .amount--income {
+      color: var(--finap-color-income);
     }
 
-    .row finap-list-item {
-      flex: 1;
-      min-width: 0;
+    .amount--expense {
+      color: var(--finap-color-expense);
     }
 
     .actions {
@@ -64,36 +60,53 @@ export class FinapMovementsList extends LitElement {
   render() {
     const t = (key: string) => this._localize.t(key);
     return html`
-      <div class="list">
-        ${this.transactions.map(
-          (transaction) => html`
-            <div class="row">
-              <finap-list-item
-                title=${transaction.note ?? transaction.categoryId}
-                subtitle=${formatDate(transaction.date)}
-                value=${`${transaction.type === 'income' ? '+' : '-'}${formatCurrency(
-                  transaction.amount,
-                )}`}
-                tone=${transaction.type === 'income' ? 'income' : 'expense'}
-              ></finap-list-item>
-              <div class="actions">
-                <finap-button
-                  variant="text"
-                  @click=${() => this._edit(transaction)}
+      <sp-table>
+        <sp-table-head>
+          <sp-table-head-cell>${t('movements.col.date')}</sp-table-head-cell>
+          <sp-table-head-cell>${t('movements.col.detail')}</sp-table-head-cell>
+          <sp-table-head-cell>${t('movements.col.amount')}</sp-table-head-cell>
+          <sp-table-head-cell>${t('common.actions')}</sp-table-head-cell>
+        </sp-table-head>
+        <sp-table-body>
+          ${this.transactions.map(
+            (transaction) => html`
+              <sp-table-row>
+                <sp-table-cell>${formatDate(transaction.date)}</sp-table-cell>
+                <sp-table-cell
+                  >${transaction.note ?? transaction.categoryId}</sp-table-cell
                 >
-                  ${t('common.edit')}
-                </finap-button>
-                <finap-button
-                  variant="text"
-                  @click=${() => this._delete(transaction)}
+                <sp-table-cell
+                  class="amount--${transaction.type === 'income'
+                    ? 'income'
+                    : 'expense'}"
                 >
-                  ${t('common.delete')}
-                </finap-button>
-              </div>
-            </div>
-          `,
-        )}
-      </div>
+                  ${`${transaction.type === 'income' ? '+' : '-'}${formatCurrency(
+                    transaction.amount,
+                  )}`}
+                </sp-table-cell>
+                <sp-table-cell>
+                  <div class="actions">
+                    <sp-button
+                      variant="secondary"
+                      treatment="outline"
+                      @click=${() => this._edit(transaction)}
+                    >
+                      ${t('common.edit')}
+                    </sp-button>
+                    <sp-button
+                      variant="secondary"
+                      treatment="outline"
+                      @click=${() => this._delete(transaction)}
+                    >
+                      ${t('common.delete')}
+                    </sp-button>
+                  </div>
+                </sp-table-cell>
+              </sp-table-row>
+            `,
+          )}
+        </sp-table-body>
+      </sp-table>
     `;
   }
 }

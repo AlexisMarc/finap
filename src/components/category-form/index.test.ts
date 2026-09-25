@@ -12,7 +12,7 @@ describe('finap-category-form', () => {
       saved = true;
     });
 
-    (el.shadowRoot?.querySelectorAll('finap-button')[1] as HTMLElement).click();
+    (el.shadowRoot?.querySelectorAll('sp-button')[1] as HTMLElement).click();
     await el.updateComplete;
 
     expect(saved).toBe(false);
@@ -33,7 +33,7 @@ describe('finap-category-form', () => {
     );
     const swatches = el.shadowRoot?.querySelectorAll('.swatch');
     (swatches?.[2] as HTMLElement).click();
-    (el.shadowRoot?.querySelectorAll('finap-button')[1] as HTMLElement).click();
+    (el.shadowRoot?.querySelectorAll('sp-button')[1] as HTMLElement).click();
 
     expect(detail).toMatchObject({ name: 'Ocio', color: '#F79E1B' });
     teardown(el);

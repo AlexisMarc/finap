@@ -3,8 +3,6 @@ import type { ChartData } from 'chart.js';
 
 import '../components/container/index.js';
 import '../components/heading/index.js';
-import '../components/card/index.js';
-import '../components/chip/index.js';
 import '../components/chart/index.js';
 import '../components/analysis-metrics/index.js';
 
@@ -65,6 +63,12 @@ export class AnalysisPage extends LitElement {
   static styles = css`
     :host {
       display: block;
+    }
+
+    sp-tag[selected] {
+      --spectrum-tag-background-color: var(--finap-color-accent-interactive);
+      --spectrum-tag-border-color: transparent;
+      --spectrum-tag-content-color: var(--finap-color-on-primary);
     }
 
     .content {
@@ -220,13 +224,14 @@ export class AnalysisPage extends LitElement {
             <div class="periods">
               ${PERIODS.map(
                 (period) => html`
-                  <finap-chip
-                    clickable
+                  <sp-tag
+                    role="button"
+                    tabindex="0"
                     ?selected=${this.period === period.id}
                     @click=${() => this._setPeriod(period.id)}
                   >
                     ${t(period.labelKey)}
-                  </finap-chip>
+                  </sp-tag>
                 `,
               )}
             </div>
@@ -247,20 +252,20 @@ export class AnalysisPage extends LitElement {
           </div>
 
           <div class="charts">
-            <finap-card>
+            <div class="finap-surface">
               <finap-heading level="3">${t('analysis.evolution')}</finap-heading>
               <finap-chart
                 type="line"
                 .data=${this._evolutionData}
               ></finap-chart>
-            </finap-card>
-            <finap-card>
+            </div>
+            <div class="finap-surface">
               <finap-heading level="3">${t('analysis.byCategory')}</finap-heading>
               <finap-chart
                 type="doughnut"
                 .data=${this._categoryData}
               ></finap-chart>
-            </finap-card>
+            </div>
           </div>
         </div>
       </finap-container>

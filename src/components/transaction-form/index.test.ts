@@ -19,7 +19,7 @@ describe('finap-transaction-form', () => {
       saved = true;
     });
 
-    (el.shadowRoot?.querySelectorAll('finap-button')[1] as HTMLElement).click();
+    (el.shadowRoot?.querySelectorAll('sp-button')[1] as HTMLElement).click();
     await el.updateComplete;
 
     expect(saved).toBe(false);
@@ -45,7 +45,7 @@ describe('finap-transaction-form', () => {
     (el.shadowRoot?.querySelector('finap-select') as HTMLElement).dispatchEvent(
       new CustomEvent('finap-change', { detail: 'c_alim' }),
     );
-    (el.shadowRoot?.querySelectorAll('finap-button')[1] as HTMLElement).click();
+    (el.shadowRoot?.querySelectorAll('sp-button')[1] as HTMLElement).click();
 
     expect(detail).toMatchObject({
       type: 'expense',

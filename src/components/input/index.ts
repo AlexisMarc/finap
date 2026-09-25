@@ -45,7 +45,7 @@ export class FinapInput extends LitElement {
     }
 
     .native-input:focus-visible {
-      outline: 2px solid var(--finap-color-secondary);
+      outline: 2px solid var(--finap-color-accent-interactive);
       outline-offset: 1px;
     }
   `;

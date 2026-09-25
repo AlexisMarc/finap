@@ -4,14 +4,19 @@ import { navigate } from '@open-cells/core';
 import { RevealController } from '../motion/reveal.js';
 import { LocalizeController } from '../i18n/localize.js';
 
-import '../components/button/index.js';
 import '../components/heading/index.js';
 import '../components/text/index.js';
-import '../components/icon/index.js';
+import { finapIcon } from '../components/icons.js';
 import '../components/container/index.js';
 import '../components/brand-mark/index.js';
-import '../components/theme-toggle/index.js';
-import '../components/language-toggle/index.js';
+import '@spectrum-web-components/switch/sp-switch.js';
+import '@spectrum-web-components/picker/sp-picker.js';
+import '@spectrum-web-components/menu/sp-menu-item.js';
+import '@spectrum-web-components/card/sp-card.js';
+import '@spectrum-web-components/badge/sp-badge.js';
+import '@spectrum-web-components/link/sp-link.js';
+import { resolveTheme, setTheme, type Theme } from '../theme/theme.js';
+import { getLocale, setLocale, type Locale } from '../i18n/i18n.js';
 
 const FEATURES = [
   {
@@ -164,6 +169,22 @@ export class LandingPage extends LitElement {
 
   private _localize = new LocalizeController(this);
 
+  theme: Theme = resolveTheme();
+
+  locale: Locale = getLocale();
+
+  private _onTheme(event: Event): void {
+    const checked = (event.target as { checked?: boolean }).checked ?? false;
+    const theme: Theme = checked ? 'dark' : 'light';
+    setTheme(theme);
+    this.theme = theme;
+  }
+
+  private _onLocale(event: Event): void {
+    this.locale = (event.target as { value?: string }).value as Locale;
+    setLocale(this.locale);
+  }
+
   private _goLogin(event?: Event): void {
     event?.preventDefault();
     navigate('login');
@@ -192,16 +213,33 @@ export class LandingPage extends LitElement {
               <span class="brand__name">${t('app.name')}</span>
             </a>
             <nav class="nav" aria-label="Principal">
-              <a href="#funciones" @click=${this._scrollTo('funciones')}>
+              <sp-link href="#funciones" @click=${this._scrollTo('funciones')}>
                 ${t('nav.functions')}
-              </a>
-              <a href="#presupuestos" @click=${this._scrollTo('presupuestos')}>
+              </sp-link>
+              <sp-link
+                href="#presupuestos"
+                @click=${this._scrollTo('presupuestos')}
+              >
                 ${t('nav.budgets')}
-              </a>
-              <a href="/login" @click=${this._goLogin}>${t('nav.login')}</a>
+              </sp-link>
+              <sp-link href="/login" @click=${this._goLogin}>
+                ${t('nav.login')}
+              </sp-link>
             </nav>
-            <finap-language-toggle></finap-language-toggle>
-            <finap-theme-toggle></finap-theme-toggle>
+            <sp-picker
+              size="s"
+              quiet
+              .value=${this.locale}
+              @change=${this._onLocale}
+            >
+              <sp-menu-item value="es">Español</sp-menu-item>
+              <sp-menu-item value="en">English</sp-menu-item>
+            </sp-picker>
+            <sp-switch
+              size="s"
+              .checked=${this.theme === 'dark'}
+              @change=${this._onTheme}
+            ></sp-switch>
           </div>
         </finap-container>
       </header>
@@ -213,15 +251,15 @@ export class LandingPage extends LitElement {
               <finap-heading level="1">${t('landing.hero.headline')}</finap-heading>
               <finap-text variant="large">${t('landing.hero.subtitle')}</finap-text>
               <div class="hero__actions">
-                <finap-button @click=${this._goLogin}>
+                <sp-button variant="accent" @click=${this._goLogin}>
                   ${t('landing.hero.cta')}
-                </finap-button>
-                <finap-button
+                </sp-button>
+                <sp-button
                   variant="secondary"
                   @click=${this._scrollTo('funciones')}
                 >
                   ${t('landing.hero.secondary')}
-                </finap-button>
+                </sp-button>
               </div>
             </div>
             <div class="hero__mark" aria-hidden="true"></div>
@@ -235,14 +273,17 @@ export class LandingPage extends LitElement {
           <div class="features">
             ${FEATURES.map(
               (feature) => html`
-                <div class="feature">
-                  <finap-icon
-                    name=${feature.icon}
-                    style="color: ${feature.color}"
-                  ></finap-icon>
-                  <finap-heading level="3">${t(feature.titleKey)}</finap-heading>
-                  <finap-text>${t(feature.descriptionKey)}</finap-text>
-                </div>
+                <sp-card class="feature" size="s">
+                  <span slot="heading">${t(feature.titleKey)}</span>
+                  <div slot="description">
+                    <span
+                      class="feature__icon"
+                      style=${`color: ${feature.color}`}
+                      >${finapIcon(feature.icon, 24)}</span
+                    >
+                    <p class="feature__text">${t(feature.descriptionKey)}</p>
+                  </div>
+                </sp-card>
               `,
             )}
           </div>
@@ -251,13 +292,20 @@ export class LandingPage extends LitElement {
 
       <section class="section section--alt" id="presupuestos">
         <finap-container>
-          <div class="highlight">
-            <finap-heading level="2">${t('landing.highlight.title')}</finap-heading>
-            <finap-text>${t('landing.highlight.body')}</finap-text>
-            <finap-button @click=${this._goLogin}>
+          <sp-card class="highlight" size="m">
+            <span slot="heading">${t('landing.highlight.title')}</span>
+            <div slot="description" class="highlight__body">
+              <sp-badge variant="accent">${t('nav.budgets')}</sp-badge>
+              <p>${t('landing.highlight.body')}</p>
+            </div>
+            <sp-button
+              slot="footer"
+              variant="accent"
+              @click=${this._goLogin}
+            >
               ${t('landing.highlight.cta')}
-            </finap-button>
-          </div>
+            </sp-button>
+          </sp-card>
         </finap-container>
       </section>
 
@@ -266,6 +314,9 @@ export class LandingPage extends LitElement {
           <div class="footer-inner">
             <finap-brand-mark></finap-brand-mark>
             <finap-text variant="small">${t('landing.footer')}</finap-text>
+            <sp-link href="/login" @click=${this._goLogin}>
+              ${t('nav.login')}
+            </sp-link>
           </div>
         </finap-container>
       </footer>

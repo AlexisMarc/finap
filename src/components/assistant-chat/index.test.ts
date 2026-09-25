@@ -25,7 +25,7 @@ describe('finap-assistant-chat', () => {
     (el.shadowRoot?.querySelector('finap-input') as HTMLElement).dispatchEvent(
       new CustomEvent('finap-input', { detail: '¿En qué gasté más?' }),
     );
-    (el.shadowRoot?.querySelector('finap-button') as HTMLElement).click();
+    (el.shadowRoot?.querySelector('sp-button') as HTMLElement).click();
     await flush();
     await el.updateComplete;
 
@@ -39,7 +39,7 @@ describe('finap-assistant-chat', () => {
     mockedAsk.mockResolvedValue({ answer: 'ok' });
     const el = await fixture(new FinapAssistantChat());
 
-    (el.shadowRoot?.querySelector('finap-chip') as HTMLElement).click();
+    (el.shadowRoot?.querySelector('sp-tag') as HTMLElement).click();
     await flush();
     await el.updateComplete;
 
@@ -54,7 +54,7 @@ describe('finap-assistant-chat', () => {
     (el.shadowRoot?.querySelector('finap-input') as HTMLElement).dispatchEvent(
       new CustomEvent('finap-input', { detail: 'Hola' }),
     );
-    (el.shadowRoot?.querySelector('finap-button') as HTMLElement).click();
+    (el.shadowRoot?.querySelector('sp-button') as HTMLElement).click();
     await flush();
     await el.updateComplete;
 

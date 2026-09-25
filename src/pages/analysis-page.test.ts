@@ -68,7 +68,7 @@ describe('analysis-page', () => {
     await el.updateComplete;
     mockedSummary.mockClear();
 
-    const chips = el.shadowRoot?.querySelectorAll('finap-chip');
+    const chips = el.shadowRoot?.querySelectorAll('sp-tag');
     (chips?.[2] as HTMLElement).click();
     await flush();
     await el.updateComplete;

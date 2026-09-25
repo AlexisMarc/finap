@@ -4,6 +4,14 @@ sp-theme {
   display: block;
 }
 
+/* Superficie de panel (estilo Spectrum: plana, borde sutil, radio pequeño). */
+.finap-surface {
+  background-color: var(--finap-color-surface);
+  border: 1px solid var(--finap-color-border);
+  border-radius: var(--finap-radius-lg);
+  padding: var(--finap-space-5);
+}
+
 html,
 body {
   margin: 0;

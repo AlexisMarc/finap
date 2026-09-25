@@ -1,9 +1,9 @@
-/* Finap design tokens — color, spacing, radius, elevation, breakpoints.
-   Paleta de color inspirada en Mastercard (rojo/naranja/amarillo) con
-   neutros propios para garantizar contraste accesible. */
+/* Finap design tokens — basados en Adobe Spectrum.
+   Los neutros y el acento interactivo vienen de Spectrum; la paleta de marca
+   (rojo/naranja/amarillo) se reserva como acento de marca (logo, hero y gradiente). */
 
 :root {
-  /* Color — brand */
+  /* Color — marca (acento de marca, no de UI) */
   --finap-color-primary: #eb001b;
   --finap-color-primary-hover: #c7001a;
   --finap-color-on-primary: #ffffff;
@@ -11,6 +11,17 @@
   --finap-color-on-secondary: #ffffff;
   --finap-color-accent: #f79e1b;
   --finap-color-accent-2: #7c4dff;
+
+  /* Color — acento interactivo (Spectrum) */
+  --finap-color-accent-interactive: var(
+    --spectrum-accent-background-color-default
+  );
+  --finap-color-accent-interactive-hover: var(
+    --spectrum-accent-background-color-hover
+  );
+  --finap-color-accent-interactive-down: var(
+    --spectrum-accent-background-color-down
+  );
 
   /* Color — semánticos */
   --finap-color-income: #2fc78a;
@@ -46,11 +57,11 @@
   --finap-space-7: 48px;
   --finap-space-8: 64px;
 
-  /* Radio de esquina */
-  --finap-radius-sm: 8px;
-  --finap-radius-md: 12px;
-  --finap-radius-lg: 21px;
-  --finap-radius-xl: 32px;
+  /* Radio de esquina — escala sutil de Spectrum */
+  --finap-radius-sm: 4px;
+  --finap-radius-md: 6px;
+  --finap-radius-lg: 10px;
+  --finap-radius-xl: 14px;
   --finap-radius-full: 9999px;
 
   /* Elevación */

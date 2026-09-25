@@ -1,14 +1,11 @@
 import { LitElement, html, css } from 'lit';
 
 import '../components/container/index.js';
-import '../components/button/index.js';
-import '../components/card/index.js';
 import '../components/heading/index.js';
 import '../components/movements-filters/index.js';
 import '../components/movements-list/index.js';
-import '../components/modal/index.js';
 import '../components/transaction-form/index.js';
-import '../components/confirm-dialog/index.js';
+import '@spectrum-web-components/illustrated-message/sp-illustrated-message.js';
 import type { MovementFilters } from '../components/movements-filters/index.js';
 import type { TransactionFormValue } from '../components/transaction-form/index.js';
 
@@ -255,7 +252,7 @@ export class MovementsPage extends LitElement {
         <finap-container>
           <div class="state">
             <p>${this.error}</p>
-            <finap-button @click=${this._retry}>${t('common.retry')}</finap-button>
+            <sp-button variant="accent" @click=${this._retry}>${t('common.retry')}</sp-button>
           </div>
         </finap-container>
       `;
@@ -265,40 +262,40 @@ export class MovementsPage extends LitElement {
       <finap-container>
         <div class="content">
           <finap-heading level="1">${t('movements.title')}</finap-heading>
-          <finap-card>
+          <div class="finap-surface">
             <finap-movements-filters
               .categories=${this.categories}
               .filters=${this.filters}
               @finap-filter-change=${this._onFilterChange}
             ></finap-movements-filters>
-          </finap-card>
+          </div>
 
           <div class="results">
             ${this.transactions.length === 0
               ? html`
-                  <div class="state">
-                    <p>${t('movements.empty')}</p>
-                    <finap-button
+                  <sp-illustrated-message heading=${t('movements.empty')}>
+                    <sp-button
                       variant="secondary"
+                      treatment="outline"
                       @click=${this._clearFilters}
                     >
                       ${t('movements.clear')}
-                    </finap-button>
-                  </div>
+                    </sp-button>
+                  </sp-illustrated-message>
                 `
               : html`
                   <div class="list-wrap">
-                    <finap-card>
+                    <div class="finap-surface">
                       <finap-movements-list
                         .transactions=${this.transactions}
                         @finap-edit=${this._onEdit}
                         @finap-delete=${this._onDelete}
                       ></finap-movements-list>
-                    </finap-card>
+                    </div>
                     <div class="more">
                       ${this.hasMore
                         ? html`
-                            <finap-button
+                            <sp-button
                               variant="secondary"
                               ?disabled=${this.loadingMore}
                               @click=${this._loadMore}
@@ -306,7 +303,7 @@ export class MovementsPage extends LitElement {
                               ${this.loadingMore
                                 ? t('common.loading')
                                 : t('movements.loadMore')}
-                            </finap-button>
+                            </sp-button>
                           `
                         : ''}
                     </div>
@@ -314,10 +311,11 @@ export class MovementsPage extends LitElement {
                 `}
           </div>
 
-          <finap-modal
+          <sp-dialog-wrapper
             ?open=${this.formOpen}
-            heading=${t('transactions.editTitle')}
-            @finap-close=${this._closeForm}
+            headline=${t('transactions.editTitle')}
+            dismissable
+            @close=${this._closeForm}
           >
             <div class="form-body">
               ${this.formOpen
@@ -333,16 +331,19 @@ export class MovementsPage extends LitElement {
                   `
                 : ''}
             </div>
-          </finap-modal>
+          </sp-dialog-wrapper>
 
-          <finap-confirm-dialog
+          <sp-dialog-wrapper
             ?open=${this.confirmOpen}
-            heading=${t('transactions.deleteTitle')}
-            message=${t('transactions.deleteMessage')}
-            confirmLabel=${t('common.delete')}
-            @finap-confirm=${this._onConfirmDelete}
-            @finap-cancel=${this._closeConfirm}
-          ></finap-confirm-dialog>
+            headline=${t('transactions.deleteTitle')}
+            .confirmLabel=${t('common.delete')}
+            .cancelLabel=${t('common.cancel')}
+            @confirm=${this._onConfirmDelete}
+            @cancel=${this._closeConfirm}
+            @close=${this._closeConfirm}
+          >
+            ${t('transactions.deleteMessage')}
+          </sp-dialog-wrapper>
         </div>
       </finap-container>
     `;

@@ -17,7 +17,7 @@ describe('finap-settings-preferences', () => {
   it('renderiza el toggle de tema y los selectores', async () => {
     const el = await fixture(new FinapSettingsPreferences());
     const root = el.shadowRoot as ShadowRoot;
-    expect(root.querySelector('finap-theme-toggle')).not.toBeNull();
+    expect(root.querySelector('sp-switch')).not.toBeNull();
     expect(root.querySelectorAll('finap-select').length).toBe(2);
     teardown(el);
   });

@@ -47,13 +47,13 @@ describe('budgets-page', () => {
     await el.updateComplete;
 
     await el.updateComplete;
-    const buttons = el.shadowRoot?.querySelectorAll('finap-button');
+    const buttons = el.shadowRoot?.querySelectorAll('sp-button');
     // botón "Definir presupuesto"
     (buttons?.[0] as HTMLElement).click();
     await el.updateComplete;
 
     // botón "Guardar" del modal
-    const modalButtons = el.shadowRoot?.querySelectorAll('finap-button');
+    const modalButtons = el.shadowRoot?.querySelectorAll('sp-button');
     (modalButtons?.[2] as HTMLElement).click();
     await el.updateComplete;
 

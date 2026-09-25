@@ -9,6 +9,7 @@ export const translations: Record<Locale, Record<string, string>> = {
     'common.save': 'Guardar',
     'common.saving': 'Guardando…',
     'common.edit': 'Editar',
+    'common.actions': 'Acciones',
     'common.delete': 'Eliminar',
     'common.retry': 'Reintentar',
     'common.confirm': 'Confirmar',
@@ -89,6 +90,9 @@ export const translations: Record<Locale, Record<string, string>> = {
     'movements.empty': 'No hay movimientos que cumplan los filtros.',
     'movements.clear': 'Limpiar filtros',
     'movements.loadMore': 'Cargar más',
+    'movements.col.date': 'Fecha',
+    'movements.col.detail': 'Detalle',
+    'movements.col.amount': 'Importe',
     'movements.error': 'No se pudieron cargar los movimientos',
 
     // Transacciones
@@ -212,6 +216,7 @@ export const translations: Record<Locale, Record<string, string>> = {
     'common.save': 'Save',
     'common.saving': 'Saving…',
     'common.edit': 'Edit',
+    'common.actions': 'Actions',
     'common.delete': 'Delete',
     'common.retry': 'Retry',
     'common.confirm': 'Confirm',
@@ -292,6 +297,9 @@ export const translations: Record<Locale, Record<string, string>> = {
     'movements.empty': 'No transactions match the filters.',
     'movements.clear': 'Clear filters',
     'movements.loadMore': 'Load more',
+    'movements.col.date': 'Date',
+    'movements.col.detail': 'Detail',
+    'movements.col.amount': 'Amount',
     'movements.error': 'Could not load transactions',
 
     // Transactions

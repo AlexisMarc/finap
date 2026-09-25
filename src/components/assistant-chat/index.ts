@@ -2,8 +2,6 @@ import { LitElement, html, css } from 'lit';
 
 import '../heading/index.js';
 import '../input/index.js';
-import '../button/index.js';
-import '../chip/index.js';
 import '../assistant-message/index.js';
 
 import { ask } from '../../services/assistant-service.js';
@@ -133,9 +131,9 @@ export class FinapAssistantChat extends LitElement {
         <div class="quick">
           ${QUICK_KEYS.map(
             (key) => html`
-              <finap-chip clickable @click=${this._quick(key)}>
+              <sp-tag role="button" tabindex="0" @click=${this._quick(key)}>
                 ${t(key)}
-              </finap-chip>
+              </sp-tag>
             `,
           )}
         </div>
@@ -147,9 +145,9 @@ export class FinapAssistantChat extends LitElement {
             .value=${this.draft}
             @finap-input=${this._onInput}
           ></finap-input>
-          <finap-button @click=${() => this._send()}>
+          <sp-button variant="accent" @click=${() => this._send()}>
             ${t('assistant.send')}
-          </finap-button>
+          </sp-button>
         </div>
       </div>
     `;

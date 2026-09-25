@@ -8,24 +8,23 @@ test.describe('Landing', () => {
     await page.goto('/');
     await expect(page.getByText(/Tu dinero, en orden/).first()).toBeVisible();
     await expect(
-      page.getByRole('link', { name: /Iniciar sesión|Sign in/i }),
+      page.getByRole('link', { name: /Iniciar sesión|Sign in/i }).first(),
     ).toBeVisible();
   });
 
   test('cambia de idioma ES↔EN', async ({ page }) => {
     await page.goto('/');
     await expect(page.getByText(/Tu dinero, en orden/).first()).toBeVisible();
-    await page.getByRole('button', { name: /Idioma|Language/i }).click();
+    await page.locator('sp-picker').first().click();
+    await page.getByRole('option', { name: 'English' }).click();
     await expect(page.getByText(/Your money, in order/).first()).toBeVisible();
   });
 
   test('alterna el tema y navega a login', async ({ page }) => {
     await page.goto('/');
-    await page
-      .getByRole('button', { name: /Cambiar a tema|Switch to/i })
-      .click();
+    await page.locator('sp-switch').first().click();
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
-    await page.getByRole('link', { name: /Iniciar sesión|Sign in/i }).click();
+    await page.getByRole('link', { name: /Iniciar sesión|Sign in/i }).first().click();
     await expect(page).toHaveURL(/\/login$/);
   });
 });

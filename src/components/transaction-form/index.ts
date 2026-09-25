@@ -2,8 +2,6 @@ import { LitElement, html, css } from 'lit';
 
 import '../input/index.js';
 import '../select/index.js';
-import '../chip/index.js';
-import '../button/index.js';
 import { LocalizeController } from '../../i18n/localize.js';
 import type {
   Category,
@@ -39,6 +37,12 @@ export class FinapTransactionForm extends LitElement {
   static styles = css`
     :host {
       display: block;
+    }
+
+    sp-tag[selected] {
+      --spectrum-tag-background-color: var(--finap-color-accent-interactive);
+      --spectrum-tag-border-color: transparent;
+      --spectrum-tag-content-color: var(--finap-color-on-primary);
     }
 
     .form {
@@ -183,13 +187,14 @@ export class FinapTransactionForm extends LitElement {
         <div class="types">
           ${TYPE_OPTIONS.map(
             (option) => html`
-              <finap-chip
-                clickable
+              <sp-tag
+                role="button"
+                tabindex="0"
                 ?selected=${this.type === option.id}
                 @click=${() => (this.type = option.id)}
               >
                 ${t(option.labelKey)}
-              </finap-chip>
+              </sp-tag>
             `,
           )}
         </div>
@@ -224,12 +229,12 @@ export class FinapTransactionForm extends LitElement {
         ></finap-input>
         <p class="error" ?hidden=${!this.error}>${this.error}</p>
         <div class="actions">
-          <finap-button variant="secondary" @click=${this._cancel}>
+          <sp-button variant="secondary" @click=${this._cancel}>
             ${t('common.cancel')}
-          </finap-button>
-          <finap-button ?disabled=${this.saving} @click=${this._submit}>
+          </sp-button>
+          <sp-button variant="accent" ?disabled=${this.saving} @click=${this._submit}>
             ${this.saving ? t('common.saving') : t('common.save')}
-          </finap-button>
+          </sp-button>
         </div>
       </div>
     `;

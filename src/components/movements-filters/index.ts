@@ -1,6 +1,5 @@
 import { LitElement, html, css } from 'lit';
 
-import '../chip/index.js';
 import '../input/index.js';
 import '../select/index.js';
 import { LocalizeController } from '../../i18n/localize.js';
@@ -33,6 +32,12 @@ export class FinapMovementsFilters extends LitElement {
   static styles = css`
     :host {
       display: block;
+    }
+
+    sp-tag[selected] {
+      --spectrum-tag-background-color: var(--finap-color-accent-interactive);
+      --spectrum-tag-border-color: transparent;
+      --spectrum-tag-content-color: var(--finap-color-on-primary);
     }
 
     .filters {
@@ -113,13 +118,14 @@ export class FinapMovementsFilters extends LitElement {
         <div class="types">
           ${TYPE_OPTIONS.map(
             (option) => html`
-              <finap-chip
-                clickable
+              <sp-tag
+                role="button"
+                tabindex="0"
                 ?selected=${this.filters.type === option.id}
                 @click=${() => this._emit({ type: option.id })}
               >
                 ${t(option.labelKey)}
-              </finap-chip>
+              </sp-tag>
             `,
           )}
         </div>

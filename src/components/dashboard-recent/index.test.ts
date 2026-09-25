@@ -26,7 +26,7 @@ describe('finap-dashboard-recent', () => {
     ];
     await fixture(el);
 
-    const items = el.shadowRoot?.querySelectorAll('finap-list-item');
+    const items = el.shadowRoot?.querySelectorAll('sp-table-row');
     expect(items?.length).toBe(2);
     expect(el.shadowRoot?.querySelector('.more')).not.toBeNull();
     teardown(el);

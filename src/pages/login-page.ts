@@ -1,7 +1,6 @@
 import { LitElement, html, css } from 'lit';
 import { navigate } from '@open-cells/core';
 
-import '../components/card/index.js';
 import '../components/heading/index.js';
 import '../components/text/index.js';
 import '../components/login-form/index.js';
@@ -69,13 +68,13 @@ export class LoginPage extends LitElement {
         <div class="panel">
           <finap-heading level="1">${this._localize.t('app.name')}</finap-heading>
           <finap-text>${this._localize.t('login.subtitle')}</finap-text>
-          <finap-card>
+          <div class="finap-surface">
             <finap-login-form
               ?loading=${this.loading}
               error=${this.error}
               @finap-login=${this._onLogin}
             ></finap-login-form>
-          </finap-card>
+          </div>
         </div>
       </div>
     `;

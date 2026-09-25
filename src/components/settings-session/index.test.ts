@@ -21,7 +21,7 @@ describe('finap-settings-session', () => {
     });
     const el = await fixture(new FinapSettingsSession());
 
-    (el.shadowRoot?.querySelector('finap-button') as HTMLElement).click();
+    (el.shadowRoot?.querySelector('sp-button') as HTMLElement).click();
 
     expect(hasSession()).toBe(false);
     teardown(el);
