@@ -22,4 +22,15 @@ test.describe('Movimientos', () => {
     await expect(page.getByText('Netflix').first()).toBeVisible();
     await expect(page.getByText('Salario')).toHaveCount(0);
   });
+
+  test('busca desde el header del shell', async ({ page }) => {
+    await page.goto('/dashboard');
+    const headerSearch = page.locator('input[placeholder="Buscar..."]');
+    await headerSearch.fill('Netflix');
+    await headerSearch.press('Enter');
+
+    await expect(page).toHaveURL(/\/movements$/);
+    await expect(page.getByText('Netflix').first()).toBeVisible();
+    await expect(page.getByText('Salario')).toHaveCount(0);
+  });
 });

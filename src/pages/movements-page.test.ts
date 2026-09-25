@@ -7,6 +7,7 @@ import { MovementsPage } from './movements-page.js';
 import { fixture, teardown } from '../test/fixture.js';
 import { list as listTransactions } from '../services/transactions-service.js';
 import { list as listCategories } from '../services/categories-service.js';
+import { setPendingSearch, consumePendingSearch } from '../state/search.js';
 
 const mockedList = vi.mocked(listTransactions);
 const mockedCategories = vi.mocked(listCategories);
@@ -28,6 +29,7 @@ describe('movements-page', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     mockedCategories.mockResolvedValue([]);
+    consumePendingSearch();
   });
 
   it('lista los movimientos', async () => {
@@ -71,6 +73,26 @@ describe('movements-page', () => {
 
     expect(el.error).toBe('Fallo de red');
     expect(el.shadowRoot?.querySelector('finap-button')).not.toBeNull();
+    teardown(el);
+  });
+
+  it('siembra la búsqueda pendiente en el primer fetch', async () => {
+    setPendingSearch('alquiler');
+    mockedList.mockResolvedValue({
+      items: [],
+      total: 0,
+      page: 1,
+      pageSize: 20,
+    });
+    const el = await fixture(new MovementsPage());
+    await flush();
+    await el.updateComplete;
+
+    expect(el.filters.search).toBe('alquiler');
+    expect(mockedList).toHaveBeenCalledWith(
+      expect.objectContaining({ search: 'alquiler' }),
+    );
+    expect(consumePendingSearch()).toBe('');
     teardown(el);
   });
 

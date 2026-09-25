@@ -1,4 +1,4 @@
-import { LitElement, html, css } from 'lit';
+import { LitElement, html, css, nothing } from 'lit';
 import { navigate } from '@open-cells/core';
 
 import '../icon/index.js';
@@ -14,6 +14,7 @@ import {
   SESSION_CHANGED_EVENT,
   type SessionUser,
 } from '../../state/session.js';
+import { setPendingSearch } from '../../state/search.js';
 import { logout } from '../../services/auth-service.js';
 import { list as listCategories } from '../../services/categories-service.js';
 import {
@@ -24,6 +25,7 @@ import { notifyTransactionsChanged } from '../../state/transactions.js';
 import { LocalizeController } from '../../i18n/localize.js';
 import type { Category } from '../../services/types.js';
 import type { TransactionFormValue } from '../transaction-form/index.js';
+import type { FinapInput } from '../input/index.js';
 
 export interface ShellSection {
   id: string;
@@ -304,6 +306,14 @@ export class FinapAppShell extends LitElement {
     void this._loadAddCategories();
   }
 
+  private _onSearchKeydown(event: Event): void {
+    if ((event as KeyboardEvent).key !== 'Enter') return;
+    const value = (event.currentTarget as FinapInput).value.trim();
+    if (!value) return;
+    setPendingSearch(value);
+    navigate('movements');
+  }
+
   private async _loadAddCategories(): Promise<void> {
     try {
       this.addCategories = await listCategories();
@@ -339,9 +349,7 @@ export class FinapAppShell extends LitElement {
 
     const section = this.currentSection;
     const t = (key: string) => this._localize.t(key);
-    const hello = this.user
-      ? `${t('shell.greeting')}, ${this.user.name}`
-      : t('shell.greeting');
+    const name = this.user?.name ?? '';
 
     return html`
       <div class="layout">
@@ -352,7 +360,7 @@ export class FinapAppShell extends LitElement {
               (item) => html`
                 <a
                   href=${item.path}
-                  aria-current=${section === item.id ? 'page' : 'false'}
+                  aria-current=${section === item.id ? 'page' : nothing}
                   @click=${this._go(item.id)}
                 >
                   <finap-icon name=${item.icon} size="20"></finap-icon>
@@ -366,13 +374,16 @@ export class FinapAppShell extends LitElement {
         <div class="main-col">
           <header class="topbar">
             <span class="greeting">
-              <span class="greeting__hello">${t('shell.greeting')}</span>
-              <span class="greeting__name">${hello} 👋</span>
+              <span class="greeting__hello">${t('shell.greeting')},</span>
+              <span class="greeting__name"
+                >${name ? `${name} 👋` : t('shell.greeting')}</span
+              >
             </span>
             <finap-input
               class="search"
               type="text"
               placeholder=${t('shell.search')}
+              @keydown=${this._onSearchKeydown}
             ></finap-input>
             <finap-button @click=${this._onAdd}>
               ${t('shell.add')}
@@ -392,7 +403,7 @@ export class FinapAppShell extends LitElement {
           (item) => html`
             <a
               href=${item.path}
-              aria-current=${section === item.id ? 'page' : 'false'}
+              aria-current=${section === item.id ? 'page' : nothing}
               @click=${this._go(item.id)}
             >
               <finap-icon name=${item.icon} size="20"></finap-icon>

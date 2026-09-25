@@ -21,6 +21,7 @@ import {
 } from '../services/transactions-service.js';
 import { list as listCategories } from '../services/categories-service.js';
 import { notifyTransactionsChanged } from '../state/transactions.js';
+import { consumePendingSearch } from '../state/search.js';
 import { LocalizeController } from '../i18n/localize.js';
 import type { Category, Transaction } from '../services/types.js';
 
@@ -119,6 +120,10 @@ export class MovementsPage extends LitElement {
   }
 
   private async _init(): Promise<void> {
+    const pending = consumePendingSearch();
+    if (pending) {
+      this.filters = { ...this.filters, search: pending };
+    }
     await this._loadCategories();
     await this._fetch(true);
   }

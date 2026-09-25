@@ -1,14 +1,20 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { navigate } from '@open-cells/core';
+
+vi.mock('@open-cells/core', () => ({ navigate: vi.fn() }));
 
 import { FinapAppShell } from './index.js';
 import { fixture, teardown } from '../../test/fixture.js';
 import { setSession } from '../../state/session.js';
+import { consumePendingSearch } from '../../state/search.js';
 import { setLocale } from '../../i18n/i18n.js';
 
 describe('finap-app-shell', () => {
   beforeEach(() => {
     localStorage.clear();
     setLocale('es');
+    consumePendingSearch();
+    vi.mocked(navigate).mockClear();
   });
 
   it('en modo público solo renderiza el slot (sin chrome)', async () => {
@@ -40,6 +46,61 @@ describe('finap-app-shell', () => {
 
     const active = el.shadowRoot?.querySelector('[aria-current="page"]');
     expect(active?.textContent).toContain('Movimientos');
+    teardown(el);
+  });
+
+  it('solo marca aria-current en la sección activa', async () => {
+    const el = new FinapAppShell();
+    el.currentPage = 'dashboard-page';
+    await fixture(el);
+
+    const links = Array.from(
+      el.shadowRoot?.querySelectorAll('.sidebar .nav a') ?? [],
+    );
+    const home = links.find((a) => a.textContent?.includes('Inicio'));
+    const movements = links.find((a) =>
+      a.textContent?.includes('Movimientos'),
+    );
+
+    expect(home?.getAttribute('aria-current')).toBe('page');
+    expect(movements?.hasAttribute('aria-current')).toBe(false);
+    teardown(el);
+  });
+
+  it('muestra un único saludo con el nombre', async () => {
+    setSession({
+      token: 't',
+      user: { id: 'u1', name: 'Marcos García', email: 'm@finap.app' },
+    });
+    const el = new FinapAppShell();
+    el.currentPage = 'dashboard-page';
+    await fixture(el);
+
+    const greeting =
+      el.shadowRoot?.querySelector('.greeting')?.textContent ?? '';
+    expect(greeting).not.toContain('Hola Hola');
+    expect((greeting.match(/Hola/g) ?? []).length).toBe(1);
+    expect(greeting).toContain('Marcos García');
+    teardown(el);
+  });
+
+  it('busca desde el header y navega a movimientos', async () => {
+    const el = new FinapAppShell();
+    el.currentPage = 'dashboard-page';
+    await fixture(el);
+
+    const search = el.shadowRoot?.querySelector(
+      'finap-input.search',
+    ) as HTMLElement & { value: string };
+
+    search.dispatchEvent(new KeyboardEvent('keydown', { key: 'a' }));
+    expect(navigate).not.toHaveBeenCalled();
+
+    search.value = '  alquiler  ';
+    search.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+
+    expect(navigate).toHaveBeenCalledWith('movements');
+    expect(consumePendingSearch()).toBe('alquiler');
     teardown(el);
   });
 

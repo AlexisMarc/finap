@@ -117,7 +117,11 @@ export class FinapUserMenu extends LitElement {
         aria-expanded=${this.open}
         @click=${this._toggle}
       >
-        <finap-avatar name=${this.name} src=${this.avatarUrl}></finap-avatar>
+        <finap-avatar
+          name=${this.name}
+          src=${this.avatarUrl}
+          aria-hidden="true"
+        ></finap-avatar>
         <span class="info">
           <span class="name">${this.name}</span>
           <span class="email">${this.email}</span>
