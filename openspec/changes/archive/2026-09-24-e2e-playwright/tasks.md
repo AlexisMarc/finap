@@ -27,7 +27,7 @@
 
 ## 4. Integración continua (opcional)
 
-- [ ] 4.1 Workflow de CI que instale navegadores y ejecute `npm run test:e2e` contra un backend accesible (`E2E_API_BASE_URL` + secretos `E2E_EMAIL`/`E2E_PASSWORD`); verificar que pasa en un PR
+- [x] 4.1 Workflow de CI que instale navegadores y ejecute `npm run test:e2e` contra un backend accesible (`E2E_API_BASE_URL` + secretos `E2E_EMAIL`/`E2E_PASSWORD`); verificar que pasa en un PR
 
 ## 5. Validación
 
