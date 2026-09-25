@@ -1,8 +1,9 @@
 import { LitElement, html, css } from 'lit';
 
-import '@spectrum-web-components/switch/sp-switch.js';
 import '@spectrum-web-components/field-group/sp-field-group.js';
 import '@spectrum-web-components/contextual-help/sp-contextual-help.js';
+import '@spectrum-web-components/action-button/sp-action-button.js';
+import { finapIcon } from '../icons.js';
 import '../select/index.js';
 import { setLocale, type Locale } from '../../i18n/i18n.js';
 import { LocalizeController } from '../../i18n/localize.js';
@@ -59,9 +60,8 @@ export class FinapSettingsPreferences extends LitElement {
 
   private _localize = new LocalizeController(this);
 
-  private _onTheme(event: Event): void {
-    const checked = (event.target as { checked?: boolean }).checked ?? false;
-    const theme: Theme = checked ? 'dark' : 'light';
+  private _toggleTheme(): void {
+    const theme: Theme = this.theme === 'dark' ? 'light' : 'dark';
     setTheme(theme);
     this.theme = theme;
   }
@@ -90,10 +90,10 @@ export class FinapSettingsPreferences extends LitElement {
     return html`
       <div class="prefs">
         <sp-field-group horizontal label=${t('settings.theme')}>
-          <sp-switch
-            .checked=${this.theme === 'dark'}
-            @change=${this._onTheme}
-          ></sp-switch>
+          <sp-action-button class="theme-button" @click=${this._toggleTheme}>
+            ${finapIcon('theme', 18, 'icon')}
+            ${this.theme === 'dark' ? t('theme.dark') : t('theme.light')}
+          </sp-action-button>
           <sp-contextual-help label=${t('settings.themeHelp')}>
             <span slot="heading">${t('settings.theme')}</span>
             ${t('settings.themeHelp')}

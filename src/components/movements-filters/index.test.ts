@@ -12,8 +12,10 @@ describe('finap-movements-filters', () => {
       detail = (e as CustomEvent).detail;
     });
 
-    const chips = el.shadowRoot?.querySelectorAll('sp-tag');
-    (chips?.[1] as HTMLElement).click();
+    const chips = el.shadowRoot?.querySelectorAll('sp-action-button');
+    const expense = chips?.[1] as HTMLElement & { value: string };
+    expense.value = 'expense';
+    expense.dispatchEvent(new Event('change', { bubbles: true, composed: true }));
 
     expect(detail).toMatchObject({ type: 'expense' });
     teardown(el);
@@ -22,6 +24,7 @@ describe('finap-movements-filters', () => {
   it('lista las categorías en el select', async () => {
     const el = new FinapMovementsFilters();
     el.categories = [{ id: 'c1', name: 'Vivienda', color: '#f00', icon: 'home' }];
+    el.popoverOpen = true;
     await fixture(el);
 
     const select = el.shadowRoot?.querySelector('finap-select') as HTMLElement & {
@@ -39,10 +42,11 @@ describe('finap-movements-filters', () => {
       detail = (e as CustomEvent).detail;
     });
 
-    const inputs = el.shadowRoot?.querySelectorAll('finap-input');
-    (inputs?.[2] as HTMLElement).dispatchEvent(
-      new CustomEvent('finap-input', { detail: 'renta' }),
-    );
+    const search = el.shadowRoot?.querySelector(
+      '.row sp-search',
+    ) as HTMLElement & { value: string };
+    search.value = 'renta';
+    search.dispatchEvent(new Event('input', { bubbles: true, composed: true }));
 
     expect(detail).toMatchObject({ search: 'renta' });
     teardown(el);

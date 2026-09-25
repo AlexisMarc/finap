@@ -26,7 +26,7 @@ describe('landing-page', () => {
     const root = el.shadowRoot as ShadowRoot;
     expect(root.querySelector('.site-header finap-brand-mark')).not.toBeNull();
     expect(root.querySelector('.nav')).not.toBeNull();
-    expect(root.querySelector('.site-header sp-switch')).not.toBeNull();
+    expect(root.querySelector('.site-header sp-action-button')).not.toBeNull();
     teardown(el);
   });
 

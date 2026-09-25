@@ -9,9 +9,9 @@ import '../components/text/index.js';
 import { finapIcon } from '../components/icons.js';
 import '../components/container/index.js';
 import '../components/brand-mark/index.js';
-import '@spectrum-web-components/switch/sp-switch.js';
 import '@spectrum-web-components/picker/sp-picker.js';
 import '@spectrum-web-components/menu/sp-menu-item.js';
+import '@spectrum-web-components/action-button/sp-action-button.js';
 import '@spectrum-web-components/card/sp-card.js';
 import '@spectrum-web-components/badge/sp-badge.js';
 import '@spectrum-web-components/link/sp-link.js';
@@ -174,9 +174,8 @@ export class LandingPage extends LitElement {
 
   locale: Locale = getLocale();
 
-  private _onTheme(event: Event): void {
-    const checked = (event.target as { checked?: boolean }).checked ?? false;
-    const theme: Theme = checked ? 'dark' : 'light';
+  private _toggleTheme(): void {
+    const theme: Theme = this.theme === 'dark' ? 'light' : 'dark';
     setTheme(theme);
     this.theme = theme;
   }
@@ -236,11 +235,14 @@ export class LandingPage extends LitElement {
               <sp-menu-item value="es">Español</sp-menu-item>
               <sp-menu-item value="en">English</sp-menu-item>
             </sp-picker>
-            <sp-switch
-              size="s"
-              .checked=${this.theme === 'dark'}
-              @change=${this._onTheme}
-            ></sp-switch>
+            <sp-action-button
+              label=${this.theme === 'dark'
+                ? t('theme.toggle.toLight')
+                : t('theme.toggle.toDark')}
+              @click=${this._toggleTheme}
+            >
+              ${finapIcon('theme', 18, 'icon')}
+            </sp-action-button>
           </div>
         </finap-container>
       </header>

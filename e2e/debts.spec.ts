@@ -9,6 +9,15 @@ test.describe('Deudas', () => {
     await expect(page.getByText('Préstamo personal').first()).toBeVisible();
   });
 
+  test('alterna entre lista y galería', async ({ page }) => {
+    await page.goto('/debts');
+    await page.getByRole('radio', { name: 'Galería' }).click();
+    await expect(page.locator('debts-page .gallery')).toBeVisible();
+
+    await page.getByRole('radio', { name: 'Lista' }).click();
+    await expect(page.locator('debts-page .gallery')).toHaveCount(0);
+  });
+
   test('crea una deuda, registra un pago y la elimina', async ({ page }) => {
     const marker = uniqueMarker();
 
@@ -29,13 +38,21 @@ test.describe('Deudas', () => {
     const item = page.locator('finap-debt-item', { hasText: marker });
     await expect(item).toBeVisible();
 
-    await item.getByRole('button', { name: 'Registrar pago' }).click();
+    await item
+      .getByRole('button', { name: /Acciones|Actions/i })
+      .click();
+    await page
+      .getByRole('menuitem', { name: 'Registrar pago' })
+      .click();
     const payModal = page.locator('sp-dialog-wrapper').filter({ hasText: marker });
     await payModal.locator('finap-input').getByRole('textbox').fill('100');
     await payModal.getByRole('button', { name: 'Registrar pago' }).click();
     await expect(payModal).toBeHidden();
 
-    await item.getByRole('button', { name: 'Eliminar' }).click();
+    await item
+      .getByRole('button', { name: /Acciones|Actions/i })
+      .click();
+    await page.getByRole('menuitem', { name: 'Eliminar' }).click();
     await page
       .locator('sp-dialog-wrapper')
       .getByRole('button', { name: 'Eliminar' })

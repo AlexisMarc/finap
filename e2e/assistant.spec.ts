@@ -4,6 +4,7 @@ test.describe('Asistente IA', () => {
   test('responde a una pregunta', async ({ page }) => {
     await page.goto('/dashboard');
 
+    await page.locator('finap-assistant-chat .fab').click();
     const chat = page.locator('finap-assistant-chat');
     await chat.locator('input[type="text"]').fill('¿En qué gasté más?');
     await chat.getByRole('button', { name: /Enviar|Send/i }).click();
@@ -15,6 +16,7 @@ test.describe('Asistente IA', () => {
 
   test('usa una pregunta rápida', async ({ page }) => {
     await page.goto('/dashboard');
+    await page.locator('finap-assistant-chat .fab').click();
     const chat = page.locator('finap-assistant-chat');
     await chat.getByRole('button', { name: /gasté|spend|debo|owe/i }).first().click();
     await expect(chat.locator('finap-assistant-message').first()).toBeVisible();

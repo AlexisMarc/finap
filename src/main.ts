@@ -3,10 +3,8 @@ import '@spectrum-web-components/theme/theme-light.js';
 import '@spectrum-web-components/theme/theme-dark.js';
 import '@spectrum-web-components/theme/scale-medium.js';
 import '@spectrum-web-components/button/sp-button.js';
-import '@spectrum-web-components/tags/sp-tag.js';
 import '@spectrum-web-components/dialog/sp-dialog-wrapper.js';
 import '@spectrum-web-components/badge/sp-badge.js';
-import '@spectrum-web-components/switch/sp-switch.js';
 import '@spectrum-web-components/styles/typography.css';
 
 import './tokens/tokens.css';

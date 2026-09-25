@@ -12,7 +12,7 @@ describe('finap-debt-item', () => {
     expect(el.shadowRoot?.querySelector('.name')?.textContent).toContain(
       'Préstamo auto',
     );
-    expect(el.shadowRoot?.querySelector('sp-progress-bar')).not.toBeNull();
+    expect(el.shadowRoot?.querySelector('sp-meter')).not.toBeNull();
     teardown(el);
   });
 
@@ -33,7 +33,12 @@ describe('finap-debt-item', () => {
     el.addEventListener('finap-pay', () => {
       paid = true;
     });
-    (el.shadowRoot?.querySelector('sp-button') as HTMLElement).click();
+    (el.shadowRoot?.querySelector('sp-action-menu') as HTMLElement & {
+      value: string;
+    }).value = 'pay';
+    (
+      el.shadowRoot?.querySelector('sp-action-menu') as HTMLElement
+    ).dispatchEvent(new Event('change', { bubbles: true, composed: true }));
 
     expect(paid).toBe(true);
     teardown(el);

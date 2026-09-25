@@ -14,10 +14,10 @@ test.describe('Análisis', () => {
     await page.goto('/analysis');
     await expect(page.locator('finap-analysis-metrics')).toBeVisible();
 
-    await page.getByRole('button', { name: 'Trimestre', exact: true }).click();
+    await page.getByRole('radio', { name: 'Trimestre' }).click();
     await expect(page.locator('finap-analysis-metrics')).toBeVisible();
 
-    await page.getByRole('button', { name: 'Año', exact: true }).click();
+    await page.getByRole('radio', { name: 'Año' }).click();
     await expect(page.locator('finap-analysis-metrics')).toBeVisible();
   });
 });

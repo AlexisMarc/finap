@@ -6,6 +6,12 @@ import '../components/heading/index.js';
 import '../components/input/index.js';
 import '../components/debt-item/index.js';
 import '../components/debt-form/index.js';
+import '@spectrum-web-components/action-group/sp-action-group.js';
+import '@spectrum-web-components/action-button/sp-action-button.js';
+import '@spectrum-web-components/action-menu/sp-action-menu.js';
+import '@spectrum-web-components/menu/sp-menu-item.js';
+import '@spectrum-web-components/meter/sp-meter.js';
+import { progressPercent, progressVariant } from '../utils/progress.js';
 import type { DebtFormValue } from '../components/debt-form/index.js';
 
 import {
@@ -37,6 +43,29 @@ export class DebtsPage extends LitElement {
       align-items: center;
       justify-content: space-between;
       gap: var(--finap-space-4);
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: var(--finap-space-4);
+    }
+
+    .gallery-card {
+      display: grid;
+      gap: var(--finap-space-2);
+    }
+
+    .gallery-card__name {
+      font-family: var(--finap-font-family);
+      font-weight: var(--finap-font-weight-semibold);
+      color: var(--finap-color-text);
+    }
+
+    .gallery-card__meta {
+      font-family: var(--finap-font-family);
+      font-size: var(--finap-font-size-sm);
+      color: var(--finap-color-text-muted);
     }
 
     .total {
@@ -78,6 +107,7 @@ export class DebtsPage extends LitElement {
     loading: { type: Boolean },
     error: { type: String },
     debts: { type: Array },
+    view: { type: String },
     formOpen: { type: Boolean },
     editTarget: { type: Object },
     saving: { type: Boolean },
@@ -96,6 +126,8 @@ export class DebtsPage extends LitElement {
   error = '';
 
   debts: Debt[] = [];
+
+  view: 'list' | 'gallery' = 'list';
 
   formOpen = false;
 
@@ -152,6 +184,21 @@ export class DebtsPage extends LitElement {
     this.editTarget = null;
     this.saveError = '';
     this.formOpen = true;
+  }
+
+  private _onViewChange(event: Event): void {
+    const target = event.target as { value?: string; selected?: string[] };
+    this.view = (target.value ?? target.selected?.[0] ?? 'list') as
+      | 'list'
+      | 'gallery';
+  }
+
+  private _onCardAction(event: Event, debt: Debt): void {
+    const value = (event.target as { value?: string }).value;
+    if (value === 'pay') this._pay(new CustomEvent('x', { detail: debt }));
+    if (value === 'edit') this._edit(new CustomEvent('x', { detail: debt }));
+    if (value === 'delete')
+      this._delete(new CustomEvent('x', { detail: debt }));
   }
 
   private _edit(event: Event): void {
@@ -263,24 +310,77 @@ export class DebtsPage extends LitElement {
         <div class="content">
           <div class="head">
             <finap-heading level="1">${t('debts.title')}</finap-heading>
-            <sp-button variant="accent" @click=${this._new}>${t('debts.new')}</sp-button>
+            <sp-action-group selects="single" @change=${this._onViewChange}>
+              <sp-action-button
+                value="list"
+                ?selected=${this.view === 'list'}
+              >
+                ${t('debts.view.list')}
+              </sp-action-button>
+              <sp-action-button
+                value="gallery"
+                ?selected=${this.view === 'gallery'}
+              >
+                ${t('debts.view.gallery')}
+              </sp-action-button>
+            </sp-action-group>
+            <sp-button variant="accent" @click=${this._new}
+              >${t('debts.new')}</sp-button
+            >
           </div>
           <span class="total">
             ${t('dashboard.totalPending')}: ${formatCurrency(this._totalPending)}
           </span>
 
-          <div class="finap-surface">
-            ${this.debts.map(
-              (debt) => html`
-                <finap-debt-item
-                  .debt=${debt}
-                  @finap-pay=${this._pay}
-                  @finap-edit=${this._edit}
-                  @finap-delete=${this._delete}
-                ></finap-debt-item>
-              `,
-            )}
-          </div>
+          ${this.view === 'gallery'
+            ? html`<div class="gallery">
+                ${this.debts.map(
+                  (debt) => html`
+                    <div class="finap-surface gallery-card">
+                      <span class="gallery-card__name">${debt.name}</span>
+                      <span class="gallery-card__meta"
+                        >${formatCurrency(
+                          Math.max(debt.total - debt.paid, 0),
+                        )}
+                        ${t('debts.pending')}</span
+                      >
+                      <sp-meter
+                        .value=${progressPercent(debt.paid, debt.total)}
+                        variant=${progressVariant(
+                          progressPercent(debt.paid, debt.total),
+                        )}
+                      ></sp-meter>
+                      <sp-action-menu
+                        label=${t('common.actions')}
+                        @change=${(event: Event) =>
+                          this._onCardAction(event, debt)}
+                      >
+                        <sp-menu-item value="pay"
+                          >${t('debts.pay')}</sp-menu-item
+                        >
+                        <sp-menu-item value="edit"
+                          >${t('common.edit')}</sp-menu-item
+                        >
+                        <sp-menu-item value="delete"
+                          >${t('common.delete')}</sp-menu-item
+                        >
+                      </sp-action-menu>
+                    </div>
+                  `,
+                )}
+              </div>`
+            : html`<div class="finap-surface">
+                ${this.debts.map(
+                  (debt) => html`
+                    <finap-debt-item
+                      .debt=${debt}
+                      @finap-pay=${this._pay}
+                      @finap-edit=${this._edit}
+                      @finap-delete=${this._delete}
+                    ></finap-debt-item>
+                  `,
+                )}
+              </div>`}
 
           <sp-dialog-wrapper
             ?open=${this.formOpen}

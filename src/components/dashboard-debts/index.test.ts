@@ -14,7 +14,7 @@ describe('finap-dashboard-debts', () => {
 
     const root = el.shadowRoot as ShadowRoot;
     expect(root.querySelector('.pending')?.textContent).toContain('$1,044.00');
-    expect(root.querySelectorAll('sp-progress-bar').length).toBe(2);
+    expect(root.querySelectorAll('sp-meter').length).toBe(2);
     expect(root.querySelector('.item')).not.toBeNull();
     teardown(el);
   });

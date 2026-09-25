@@ -1,11 +1,14 @@
 import { LitElement, html, css } from 'lit';
 
 import '../components/container/index.js';
+import '../components/skeleton/index.js';
 import '../components/dashboard-summary/index.js';
 import '../components/dashboard-categories/index.js';
 import '../components/dashboard-debts/index.js';
 import '../components/dashboard-recent/index.js';
 import '../components/assistant-chat/index.js';
+import '@spectrum-web-components/card/sp-card.js';
+import { LocalizeController } from '../i18n/localize.js';
 
 import { getDashboard } from '../services/dashboard-service.js';
 import { getUser } from '../state/session.js';
@@ -39,6 +42,25 @@ export class DashboardPage extends LitElement {
       color: var(--finap-color-text-muted);
     }
 
+    .suggestions {
+      display: grid;
+      gap: var(--finap-space-3);
+    }
+
+    .carousel {
+      display: flex;
+      gap: var(--finap-space-4);
+      overflow-x: auto;
+      padding-bottom: var(--finap-space-2);
+      scroll-snap-type: x mandatory;
+    }
+
+    .carousel sp-card {
+      flex: none;
+      width: 260px;
+      scroll-snap-align: start;
+    }
+
     @media (min-width: 1024px) {
       .two-col {
         grid-template-columns: 1fr 1fr;
@@ -59,6 +81,8 @@ export class DashboardPage extends LitElement {
   summary: DashboardSummary | null = null;
 
   private _userName = '';
+
+  private _localize = new LocalizeController(this);
 
   connectedCallback(): void {
     super.connectedCallback();
@@ -108,10 +132,11 @@ export class DashboardPage extends LitElement {
   }
 
   render() {
+    const t = (key: string) => this._localize.t(key);
     if (this.loading) {
       return html`
         <finap-container>
-          <div class="state">Cargando…</div>
+          <finap-skeleton variant="rect" height="240px"></finap-skeleton>
         </finap-container>
       `;
     }
@@ -167,9 +192,26 @@ export class DashboardPage extends LitElement {
             </div>
           </div>
 
-          <div class="finap-surface">
-            <finap-assistant-chat></finap-assistant-chat>
-          </div>
+          <finap-assistant-chat></finap-assistant-chat>
+
+          <section class="suggestions">
+            <finap-heading level="3">${t('dashboard.suggestions')}</finap-heading>
+            <div class="carousel">
+              <sp-card size="s">
+                <span slot="heading"
+                  >${t('dashboard.suggestion.budgets')}</span
+                >
+              </sp-card>
+              <sp-card size="s">
+                <span slot="heading"
+                  >${t('dashboard.suggestion.savings')}</span
+                >
+              </sp-card>
+              <sp-card size="s">
+                <span slot="heading">${t('dashboard.suggestion.debts')}</span>
+              </sp-card>
+            </div>
+          </section>
         </div>
       </finap-container>
     `;

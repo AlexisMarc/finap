@@ -18,6 +18,8 @@ import '@spectrum-web-components/icons-workflow/icons/sp-icon-game.js';
 import '@spectrum-web-components/icons-workflow/icons/sp-icon-page-tag.js';
 import '@spectrum-web-components/icons-workflow/icons/sp-icon-refresh.js';
 import '@spectrum-web-components/icons-workflow/icons/sp-icon-help.js';
+import '@spectrum-web-components/icons-workflow/icons/sp-icon-brightness-contrast.js';
+import '@spectrum-web-components/icons-workflow/icons/sp-icon-chat.js';
 
 /** Mapa de nombres propios de Finap → iconos de workflow de Spectrum. */
 const ICONS: Record<string, TemplateResult> = {
@@ -37,6 +39,8 @@ const ICONS: Record<string, TemplateResult> = {
   tag: staticHtml`<${literal`sp-icon-page-tag`}></${literal`sp-icon-page-tag`}>`,
   repeat: staticHtml`<${literal`sp-icon-refresh`}></${literal`sp-icon-refresh`}>`,
   help: staticHtml`<${literal`sp-icon-help`}></${literal`sp-icon-help`}>`,
+  theme: staticHtml`<${literal`sp-icon-brightness-contrast`}></${literal`sp-icon-brightness-contrast`}>`,
+  chat: staticHtml`<${literal`sp-icon-chat`}></${literal`sp-icon-chat`}>`,
 };
 
 /** Nombres de icono soportados (para tests y mapeos estáticos). */
@@ -50,6 +54,7 @@ export function isKnownIcon(name: string): boolean {
 export function finapIcon(
   name: string,
   size: string | number = '24',
+  slot = '',
 ): TemplateResult | typeof nothing {
   const icon = ICONS[name];
   if (!icon) return nothing;
@@ -61,5 +66,10 @@ export function finapIcon(
       : value <= 20
         ? 'm'
         : 'l';
-  return html`<sp-icon size=${spectrumSize} aria-hidden="true">${icon}</sp-icon>`;
+  return html`<sp-icon
+    slot=${slot || nothing}
+    size=${spectrumSize}
+    aria-hidden="true"
+    >${icon}</sp-icon
+  >`;
 }

@@ -7,7 +7,7 @@ test.describe('Dashboard', () => {
     await expect(page.getByText('Balance total')).toBeVisible();
     await expect(page.getByText('Gastos por categoría')).toBeVisible();
     await expect(page.getByText('Últimos movimientos')).toBeVisible();
-    await expect(page.getByText('Asistente IA')).toBeVisible();
+    await expect(page.locator('finap-assistant-chat .fab')).toBeVisible();
 
     // Chrome del shell (nav)
     await expect(

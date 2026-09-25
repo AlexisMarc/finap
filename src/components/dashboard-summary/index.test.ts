@@ -4,14 +4,14 @@ import { FinapDashboardSummary } from './index.js';
 import { fixture, teardown } from '../../test/fixture.js';
 
 describe('finap-dashboard-summary', () => {
-  it('muestra el saludo y el balance', async () => {
+  it('muestra el balance sin repetir el saludo del header', async () => {
     const el = new FinapDashboardSummary();
     el.name = 'Marcos';
     el.balance = 24580;
     await fixture(el);
 
     const root = el.shadowRoot as ShadowRoot;
-    expect(root.querySelector('.hello')?.textContent).toContain('Marcos');
+    expect(root.querySelector('.hello')).toBeNull();
     expect(root.querySelector('.balance')?.textContent).toContain('$24,580.00');
     teardown(el);
   });

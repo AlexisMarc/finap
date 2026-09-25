@@ -1,8 +1,10 @@
 import { LitElement, html, css } from 'lit';
 
-import '@spectrum-web-components/progress-bar/sp-progress-bar.js';
+import '@spectrum-web-components/meter/sp-meter.js';
 import '@spectrum-web-components/status-light/sp-status-light.js';
-import { progressPercent, isOver } from '../../utils/progress.js';
+import '@spectrum-web-components/action-menu/sp-action-menu.js';
+import '@spectrum-web-components/menu/sp-menu-item.js';
+import { progressPercent, progressVariant } from '../../utils/progress.js';
 import { LocalizeController } from '../../i18n/localize.js';
 import { formatCurrency, formatPercent, formatDate } from '../../utils/format.js';
 import type { Debt } from '../../services/types.js';
@@ -80,6 +82,20 @@ export class FinapDebtItem extends LitElement {
     );
   }
 
+  private _onAction = (event: Event): void => {
+    if (!this.debt) return;
+    const value = (event.target as { value?: string }).value;
+    const name =
+      value === 'pay'
+        ? 'finap-pay'
+        : value === 'edit'
+          ? 'finap-edit'
+          : value === 'delete'
+            ? 'finap-delete'
+            : '';
+    if (name) this._emit(name, this.debt);
+  };
+
   render() {
     if (!this.debt) return html`<div class="debt"></div>`;
     const done = this.debt.paid >= this.debt.total;
@@ -93,10 +109,12 @@ export class FinapDebtItem extends LitElement {
             ${formatCurrency(this._pending)} ${t('debts.pending')}
           </span>
         </div>
-        <sp-progress-bar
-          .progress=${progressPercent(this.debt.paid, this.debt.total)}
-          ?over=${isOver(this.debt.paid, this.debt.total)}
-        ></sp-progress-bar>
+        <sp-meter
+          .value=${progressPercent(this.debt.paid, this.debt.total)}
+          variant=${progressVariant(
+            progressPercent(this.debt.paid, this.debt.total),
+          )}
+        ></sp-meter>
         <div class="meta">
           <span>${formatPercent(this._percent)}</span>
           ${this.debt.dueDate
@@ -109,24 +127,14 @@ export class FinapDebtItem extends LitElement {
               >`}
         </div>
         <div class="actions">
-          <sp-button
-            variant="secondary" treatment="outline"
-            @click=${() => this._emit('finap-pay', this.debt as Debt)}
+          <sp-action-menu
+            label=${t('common.actions')}
+            @change=${this._onAction}
           >
-            ${t('debts.pay')}
-          </sp-button>
-          <sp-button
-            variant="secondary" treatment="outline"
-            @click=${() => this._emit('finap-edit', this.debt as Debt)}
-          >
-            ${t('common.edit')}
-          </sp-button>
-          <sp-button
-            variant="secondary" treatment="outline"
-            @click=${() => this._emit('finap-delete', this.debt as Debt)}
-          >
-            ${t('common.delete')}
-          </sp-button>
+            <sp-menu-item value="pay">${t('debts.pay')}</sp-menu-item>
+            <sp-menu-item value="edit">${t('common.edit')}</sp-menu-item>
+            <sp-menu-item value="delete">${t('common.delete')}</sp-menu-item>
+          </sp-action-menu>
         </div>
       </div>
     `;

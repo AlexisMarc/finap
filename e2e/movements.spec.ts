@@ -11,7 +11,7 @@ test.describe('Movimientos', () => {
     await page.goto('/movements');
     await expect(page.getByText('Salario').first()).toBeVisible();
 
-    await page.getByRole('button', { name: 'Gasto', exact: true }).click();
+    await page.getByRole('radio', { name: 'Gasto' }).click();
     await expect(page.getByText('Salario')).toHaveCount(0);
     await expect(page.getByText('Renta').first()).toBeVisible();
   });

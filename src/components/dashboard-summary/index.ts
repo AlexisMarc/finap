@@ -37,12 +37,6 @@ export class FinapDashboardSummary extends LitElement {
       gap: var(--finap-space-2);
     }
 
-    .hello {
-      font-family: var(--finap-font-family);
-      font-size: var(--finap-font-size-sm);
-      color: var(--finap-color-text-muted);
-    }
-
     .balance-label {
       font-family: var(--finap-font-family);
       font-size: var(--finap-font-size-sm);
@@ -113,7 +107,6 @@ export class FinapDashboardSummary extends LitElement {
     const trendTone = this.trend >= 0 ? 'up' : 'down';
     return html`
       <section class="summary">
-        <span class="hello">${t('shell.greeting')}, ${this.name} 👋</span>
         <span class="balance-label">${t('dashboard.balance')}</span>
         <span class="balance">${formatCurrency(this.balance)}</span>
         <span class="trend trend--${trendTone}">

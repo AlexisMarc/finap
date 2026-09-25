@@ -1,6 +1,7 @@
 import { LitElement, html, css } from 'lit';
 
 import '@spectrum-web-components/table/elements.js';
+import '@spectrum-web-components/badge/sp-badge.js';
 import { LocalizeController } from '../../i18n/localize.js';
 import { formatCurrency, formatDate } from '../../utils/format.js';
 import type { Transaction } from '../../services/types.js';
@@ -21,6 +22,16 @@ export class FinapMovementsList extends LitElement {
 
     .amount--expense {
       color: var(--finap-color-expense);
+    }
+
+    .detail {
+      display: grid;
+      gap: var(--finap-space-1);
+    }
+
+    .badges {
+      display: flex;
+      gap: var(--finap-space-1);
     }
 
     .actions {
@@ -72,9 +83,25 @@ export class FinapMovementsList extends LitElement {
             (transaction) => html`
               <sp-table-row>
                 <sp-table-cell>${formatDate(transaction.date)}</sp-table-cell>
-                <sp-table-cell
-                  >${transaction.note ?? transaction.categoryId}</sp-table-cell
-                >
+                <sp-table-cell>
+                  <div class="detail">
+                    <span
+                      >${transaction.note ?? transaction.categoryId}</span
+                    >
+                    <span class="badges">
+                      <sp-badge>${transaction.categoryId}</sp-badge>
+                      <sp-badge
+                        variant=${transaction.type === 'income'
+                          ? 'positive'
+                          : 'negative'}
+                      >
+                        ${transaction.type === 'income'
+                          ? t('movements.filter.income')
+                          : t('movements.filter.expense')}
+                      </sp-badge>
+                    </span>
+                  </div>
+                </sp-table-cell>
                 <sp-table-cell
                   class="amount--${transaction.type === 'income'
                     ? 'income'
@@ -94,7 +121,7 @@ export class FinapMovementsList extends LitElement {
                       ${t('common.edit')}
                     </sp-button>
                     <sp-button
-                      variant="secondary"
+                      variant="negative"
                       treatment="outline"
                       @click=${() => this._delete(transaction)}
                     >

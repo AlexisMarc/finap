@@ -39,7 +39,7 @@ describe('finap-assistant-chat', () => {
     mockedAsk.mockResolvedValue({ answer: 'ok' });
     const el = await fixture(new FinapAssistantChat());
 
-    (el.shadowRoot?.querySelector('sp-tag') as HTMLElement).click();
+    (el.shadowRoot?.querySelector('.quick sp-action-button') as HTMLElement).click();
     await flush();
     await el.updateComplete;
 

@@ -7,6 +7,7 @@ import '../components/settings-profile/index.js';
 import '../components/settings-preferences/index.js';
 import '../components/settings-session/index.js';
 import '@spectrum-web-components/link/sp-link.js';
+import '@spectrum-web-components/divider/sp-divider.js';
 
 import {
   getUser,
@@ -85,6 +86,8 @@ export class SettingsPage extends LitElement {
             ></finap-settings-profile>
           </div>
 
+          <sp-divider size="s"></sp-divider>
+
           <div class="finap-surface">
             <finap-heading level="3">${t('settings.preferences')}</finap-heading>
             <finap-settings-preferences
@@ -92,6 +95,8 @@ export class SettingsPage extends LitElement {
               .currency=${this.currency}
             ></finap-settings-preferences>
           </div>
+
+          <sp-divider size="s"></sp-divider>
 
           <div class="finap-surface">
             <finap-heading level="3">${t('settings.data')}</finap-heading>
@@ -104,6 +109,8 @@ export class SettingsPage extends LitElement {
               </sp-link>
             </div>
           </div>
+
+          <sp-divider size="s"></sp-divider>
 
           <div class="finap-surface">
             <finap-heading level="3">${t('settings.session')}</finap-heading>
