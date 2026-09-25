@@ -18,11 +18,16 @@ La app es una SPA (Lit + Open Cells) con routing por **history**, i18n (es/en), 
 - **Alternativas**: `vite dev` (más rápido pero sin PWA y con HMR).
 - **Racional**: valida el artefacto real que se despliega.
 
-### 3. API mockeada (determinismo) + smoke real opcional
+### 3. Backend real (enfoque principal) + mock solo para casos límite
 
-- **Decisión**: interceptar la API con `page.route('**/api/v1/**')` y responder desde **fixtures** (coherentes con `docs/api/examples.md`) para login, categorías, transacciones, dashboard, deudas, presupuestos, análisis y asistente. Así las pruebas no dependen del backend ni de credenciales ni de fechas. Un proyecto/tag **`@smoke`** (opcional, `E2E_BASE_URL`) apunta al despliegue real con credenciales por variable de entorno.
-- **Alternativas**: E2E contra el backend real en todas las pruebas (frágil: red, datos por mes, credenciales).
-- **Racional**: determinismo y velocidad; el smoke cubre la integración real.
+- **Decisión**: las pruebas E2E se ejecutan **contra el backend real** (el desplegado `https://finap-service.vercel.app` o uno local vía `E2E_API_BASE_URL`), usando credenciales por entorno (`E2E_EMAIL`/`E2E_PASSWORD`). Se mockea (`page.route`) **solo** para estados difíciles de provocar de forma controlada: errores `5xx`, `offline`/fallo de red y estados vacíos concretos.
+- **Mitigaciones al backend real**:
+  - **Datos mutables**: los movimientos de prueba llevan un marcador único (p. ej. nota `E2E-<timestamp>`) y se **limpian** al final (borrado por UI/API); los tests no dependen de datos preexistentes.
+  - **Fechas**: el backend tiene datos de 2025-05 y el dashboard usa el mes actual → se **assertan por estructura** (secciones, gráficas, estados) en vez de valores exactos, o se usa un "mes de demo" configurable.
+  - **Credenciales/secretos**: nunca en el repo; por variables de entorno (y `skip` si faltan).
+  - **Red**: `retries` en CI y esperas con auto-wait.
+- **Alternativas**: mock total de la API (más determinista pero **no valida la integración** y oculta bugs de contrato como el `422` de `/dashboard`); se descarta como enfoque principal.
+- **Racional**: en E2E el valor está en probar el sistema completo; el mock se limita a casos donde el backend real no puede provocar el estado de forma fiable.
 
 ### 4. Autenticación: por UI con API mockeada
 
@@ -46,5 +51,6 @@ La app es una SPA (Lit + Open Cells) con routing por **history**, i18n (es/en), 
 ## Risks / Trade-offs
 
 - **[Riesgo] Flakiness** (esperas, animaciones reveal, SW) → usar locators por rol/texto, `expect` con auto-wait, y desactivar animaciones (`prefers-reduced-motion`) o esperar estados estables.
-- **[Riesgo] Service worker cacheando entre runs** → en `preview` usar contexto limpio por test (Playwright aísla contextos) y/o `baseURL` con puerto dedicado.
-- **[Trade-off] Mock vs real** → se prioriza determinismo; el smoke `@smoke` cubre el backend real.
+- **[Riesgo] Service worker cacheando entre runs** → contextos aislados por test y `baseURL` con puerto dedicado.
+- **[Riesgo] CORS al probar local contra el backend desplegado** (el backend solo permite el origen del front desplegado) → por defecto usar el **backend local** (`http://localhost:3000`, CORS `*`) o proxear; si se apunta al desplegado, añadir su origen.
+- **[Trade-off] Backend real vs mock** → se prioriza el backend real (prueba la integración); el mock queda acotado a estados límite (5xx/offline). Los datos mutables se aíslan con marcador + limpieza.
