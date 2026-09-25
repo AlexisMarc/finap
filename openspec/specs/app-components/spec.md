@@ -102,3 +102,92 @@ El sistema SHALL estructurar el layout de las vistas (chrome, dashboard y págin
 
 - **WHEN** la viewport cruza un breakpoint
 - **THEN** las columnas del grid se reorganizan de forma coherente
+
+### Requirement: Campos de fecha y área de texto coherentes
+
+El sistema SHALL estilizar el campo de fecha (`finap-input type="date"`) y el área de texto nativos con el mismo diseño que `sp-textfield` (etiqueta, borde, foco y mensaje de error), al no existir un componente de fecha ni `sp-textarea` en Spectrum.
+
+#### Scenario: Campo de fecha con el diseño del textfield
+
+- **WHEN** se renderiza `<finap-input type="date">`
+- **THEN** el campo nativo muestra el mismo aspecto que un `sp-textfield` (etiqueta, borde y foco)
+
+#### Scenario: Área de texto coherente
+
+- **WHEN** se renderiza `<finap-input type="textarea">`
+- **THEN** el textarea nativo se muestra con el mismo aspecto que un campo de Spectrum
+
+### Requirement: Estados de carga con skeleton
+
+El sistema SHALL mostrar skeletons (placeholders con shimmer) con tokens de Spectrum durante la carga, en lugar del texto "Cargando…".
+
+#### Scenario: Skeleton durante la carga
+
+- **WHEN** una vista está cargando datos
+- **THEN** se muestra un skeleton con shimmer en lugar de un texto de carga
+
+### Requirement: Ayuda contextual
+
+El sistema SHALL proporcionar ayuda contextual mediante el componente oficial `sp-contextual-help` (icono + popover con heading/cuerpo/enlace), `sp-coachmark` (tours de pasos) y `sp-tooltip`/`sp-help-text` para guiar campos y controles.
+
+#### Scenario: Ayuda de campo o vista
+
+- **WHEN** un usuario necesita explicación de un campo o vista
+- **THEN** dispone de `sp-contextual-help` con su popover de ayuda
+
+#### Scenario: Tour de ayuda
+
+- **WHEN** el usuario abre la ayuda
+- **THEN** se muestra un tour de pasos con `sp-coachmark` que explica las secciones
+
+#### Scenario: Ayuda en campos
+
+- **WHEN** un campo tiene ayuda asociada
+- **THEN** se muestra con `sp-help-text` o `sp-tooltip`
+
+### Requirement: Badges y estados
+
+El sistema SHALL usar `sp-badge` y `sp-status-light` para indicar el estado de los datos (ingreso, gasto, deuda, pagado/pendiente) de forma coherente.
+
+#### Scenario: Estado de un movimiento
+
+- **WHEN** se muestra un movimiento
+- **THEN** se indica con un `sp-badge` si es ingreso o gasto
+
+#### Scenario: Estado de una deuda
+
+- **WHEN** se muestra una deuda
+- **THEN** se indica con un `sp-badge` o `sp-status-light` si está pagada o pendiente
+
+### Requirement: Grupos de acciones y campos
+
+El sistema SHALL usar `sp-action-group` para agrupar botones relacionados y `sp-field-group` para agrupar campos con una etiqueta común, aportando jerarquía visual.
+
+#### Scenario: Grupo de acciones
+
+- **WHEN** varios botones están relacionados (por ejemplo, periodos o filtros)
+- **THEN** se agrupan con `sp-action-group`
+
+#### Scenario: Grupo de campos
+
+- **WHEN** varios campos comparten un contexto
+- **THEN** se agrupan con `sp-field-group` y su etiqueta
+
+### Requirement: Uso conforme a la API de Spectrum
+
+El sistema SHALL usar los componentes de Spectrum Web Components conforme a su API documentada: slots correctos (`slot="icon"` en `sp-sidenav-item`/`sp-action-button`), variantes oficiales y propiedades soportadas, sin sobrescribir variables internas del componente.
+
+#### Scenario: Iconos en su slot
+
+- **WHEN** un componente Spectrum recibe un icono (navegación lateral, botones de acción)
+- **THEN** el icono se coloca en `slot="icon"`
+
+#### Scenario: Grupos de opciones con API oficial
+
+- **WHEN** se presenta un grupo de opciones seleccionables (filtros de tipo, periodos)
+- **THEN** se usa `sp-action-group` con `sp-action-button` y su propiedad `selected`, no `sp-tag`
+
+#### Scenario: Sin sobrescrituras internas
+
+- **WHEN** se necesita ajustar el aspecto de un componente Spectrum
+- **THEN** se usan variantes/slots oficiales o la capa de personalización documentada (`--mod-*`), sin redefinir variables internas del componente

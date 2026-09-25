@@ -22,12 +22,22 @@ El sistema SHALL exponer los tokens de diseño como CSS custom properties dispon
 
 ### Requirement: Paleta de color
 
-El sistema SHALL usar la paleta de color de Spectrum como base: los neutros (fondos, superficies, bordes y texto) provienen de los tokens semánticos de Spectrum, el acento interactivo usa el acento de Spectrum, y la paleta de marca de Finap (rojo/naranja/amarillo) se reserva como acento de marca (logo, hero y gradiente), sin dominar la interfaz.
+El sistema SHALL usar la paleta de color de Spectrum como base: los neutros (fondos, superficies, bordes y texto) provienen de los tokens semánticos de Spectrum con su tono cálido natural, el acento interactivo usa el acento de Spectrum, y la paleta de marca de Finap (rojo/naranja/amarillo) se reserva como acento de marca (logo, hero y gradiente), sin dominar la interfaz.
 
 #### Scenario: Neutros de Spectrum
 
 - **WHEN** se consultan los tokens de fondo, superficie, borde y texto
 - **THEN** derivan de los tokens neutros semánticos de Spectrum (`--spectrum-background-*`, escala de grises)
+
+#### Scenario: Tono cálido coherente
+
+- **WHEN** se renderiza la interfaz
+- **THEN** los neutros reflejan el tono cálido de Spectrum, sin parecer más fríos que la librería
+
+#### Scenario: Contraste fondo/superficie en modo claro
+
+- **WHEN** se renderiza una superficie sobre el fondo en modo claro
+- **THEN** la superficie se distingue del fondo (borde y/o tono con contraste suficiente)
 
 #### Scenario: Color primario definido
 
